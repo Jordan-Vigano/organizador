@@ -1,35 +1,39 @@
 # Ficha de direção — Organizador
 
-Criada em 26/11/2026 com a skill `estudio-design` (pesquisa: ui-ux-pro-max; ideia visual: frontend-design).
+Versão 2 (26/11/2026): **estilo inspirado no Kan**, escolhido pelo dono entre os protótipos "Plane" e "Kan"
+(`prototipos/`). Feita com a skill `estudio-design`. Inspiração só visual: nada de código do Kan (licença AGPL).
 Fonte única para qualquer mudança visual no app: mudou aqui, muda no `index.html`, e vice-versa.
 
 - **Peça:** app kanban pessoal (`index.html`) · **Onde:** PC (Chrome, janela de app) e celular (tela inicial).
 - **Público e objetivo:** só o dono. Ver de relance o que está em andamento e não pegar coisa demais ao mesmo tempo.
-- **Marca:** ícone de 3 barras decrescentes em verde (`icon.svg`); o mesmo desenho no logo do topo.
-- **Estilo:** minimalismo suíço calmo: funcional, pouco enfeite, contraste bom, cinza-esverdeado frio.
-- **Personalidade (o único ponto ousado):** a coluna **Fazendo** é o centro: fundo verde suave, título em verde e um
-  medidor de 3 vagas (fica vermelho se passar do limite). Todo o resto fica quieto.
+- **Estilo:** calmo, limpo, quase monocromático (cinza 100% neutro). Cor aparece só onde informa: pontinho da área,
+  prazo atrasado/hoje, prioridade e o medidor de vagas da coluna Fazendo.
+- **Estrutura:** PC com barra lateral (logo, áreas como filtro, atalhos) e o quadro numa área branca de cantos
+  arredondados; topo com título, sincronização, busca, Foco, **botão claro/escuro** e configurações; barra de nova
+  tarefa com botão preto "Adicionar". Abaixo de 900 px a barra lateral some e as áreas viram chips.
+- **Colunas:** caixas cinza-claras com borda suave (raio 8), nome 13 px/600 + contagem pequena. Fazendo tem o
+  medidor de 3 vagas (verde; vermelho se passar). Dicas das colunas ficam no `title` (passar o mouse).
+- **Cartões:** fundo quase branco, anel 1 px sutil, raio 8, título 13,5 px; embaixo, etiqueta redonda da área à
+  esquerda e prazo, checklist, notas e prioridade em ícones pequenos à direita.
 - **Cores (tokens no `:root`):**
 
   | Token | Claro | Escuro |
   |---|---|---|
-  | `--bg` fundo | `#eef1ef` | `#0f1312` |
-  | `--surface` cartão | `#ffffff` | `#1a201e` |
-  | `--col` coluna | `#e2e7e4` | `#151a18` |
-  | `--col-focus` coluna Fazendo | `#d9e7e0` | `#16251f` |
-  | `--text` | `#16201c` | `#e6ece9` |
-  | `--muted` | `#56635d` | `#97a59f` |
-  | `--accent` destaque | `#2f5d50` | `#7fbfa9` |
-  | `--accent-soft` | `#c9ddd4` | `#2a4a3f` |
-  | `--danger` | `#b3261e` | `#ee7a71` |
+  | `--canvas` fundo geral | `#f8f8f8` | `#0e0e10` |
+  | `--panel` área do quadro | `#ffffff` | `#121214` |
+  | `--list` coluna | `#efefef` | `#17171a` |
+  | `--card` cartão | `#fcfcfc` | `#1e1f22` |
+  | `--txt` | `#171717` | `#f7f8f8` |
+  | `--muted` | `#666666` | `#8f939b` |
+  | `--btn` botão principal | `#171717` | `#f7f8f8` |
+  | `--accent` (medidor, foco do teclado) | `#2f5d50` | `#7fbfa9` |
+  | `--danger` | `#b42318` | `#f97066` |
 
-  Cores das áreas (Trabalho, Projetos…) são do usuário e ficam só na barrinha e no nome da área.
-- **Tipografia:** Plus Jakarta Sans 400–700, arquivo local em `fonts/` (funciona offline). Base 14,5 px; títulos
-  de coluna 15 px/700 em caixa normal; campos com 16 px no celular (evita zoom no iPhone).
-- **Forma:** raio 12 px colunas, 8 px cartões e botões, 999 px chips; sombra mínima; espaçamento 4/6/8/12/16.
-- **Ícones:** SVG traço 2 px (estilo Lucide) pela função `icon()`; nada de emoji como ícone.
+- **Tema:** botão sol/lua no topo alterna claro e escuro (fica salvo no aparelho); "Automático" (segue o sistema)
+  nas configurações.
+- **Tipografia:** Plus Jakarta Sans 400–700, arquivo local em `fonts/`. Campos com 16 px no celular.
+- **Ícones:** SVG traço 1,8 px (estilo Lucide) pela função `icon()`; nada de emoji como ícone.
 - **Tom do texto:** direto, frases curtas, sem jargão.
-- **Evitar:** fundo creme, títulos em CAIXA ALTA, emojis como ícone, travessão "—" nas mensagens da interface,
-  animações decorativas.
+- **Evitar:** fundo creme, CAIXA ALTA, emojis como ícone, cor decorativa, animações decorativas.
 - **Pronto quando:** funciona em 390 px e 1440 px, claro e escuro, foco visível no teclado, toque ≥ 44 px no
   celular, contraste AA, `prefers-reduced-motion` respeitado.
