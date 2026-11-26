@@ -504,7 +504,7 @@ details.hist ul{margin:6px 0 0;padding-left:18px;font-size:12px;color:var(--mute
 
     <section class="set-sec">
       <h3>Em breve</h3>
-      <div class="future"><b>Membros:</b> dar acesso à Tatiana pelo celular dela, com quadros compartilhados e quadros só seus.</div>
+      <div class="future"><b>Membros:</b> dar acesso a outra pessoa da casa pelo celular dela, com quadros compartilhados e quadros só seus.</div>
     </section>
 
     <section class="set-sec">
@@ -524,7 +524,7 @@ details.hist ul{margin:6px 0 0;padding-left:18px;font-size:12px;color:var(--mute
   <form method="dialog" class="dlg" autocomplete="off">
     <div class="dlg-head"><h2 id="iTitle" style="flex:1;margin:0;font-size:17px">Conta</h2><button class="icon-btn" value="close" aria-label="Fechar" data-ico="x"></button></div>
     <div class="fields">
-      <label style="grid-column:1/-1">Nome<input id="iName" type="text" placeholder="Ex.: Aluguel, Salário Tati"></label>
+      <label style="grid-column:1/-1">Nome<input id="iName" type="text" placeholder="Ex.: Aluguel, Salário"></label>
       <label>Tipo<select id="iKind"><option value="income">Entrada</option><option value="fixed">Conta fixa</option><option value="variable">Variável ou parcelado</option></select></label>
       <label>Valor (R$)<input id="iAmount" type="text" inputmode="decimal" placeholder="0,00"></label>
       <label>De quem<select id="iWho"></select></label>
@@ -1399,7 +1399,7 @@ const parseMoney = s => { const t = String(s).replace(/\s/g, '').replace(/r\$/i,
 function finDefaults() {
   return {
     metaAt: 0,
-    people: [{ id: 'jordan', name: 'Jordan' }, { id: 'tati', name: 'Tati' }],
+    people: [{ id: 'p1', name: 'Eu' }, { id: 'p2', name: 'Outra pessoa' }],
     cats: ['Mercado', 'Comida fora', 'Transporte', 'Casa', 'Saúde', 'Lazer', 'Pessoal', 'Outros'],
     dailyDefault: 0, dailyLimit: {}, items: [], debts: [], expenses: [], marks: {},
   };
