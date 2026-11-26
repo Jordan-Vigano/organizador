@@ -287,6 +287,88 @@ details.hist ul{margin:6px 0 0;padding-left:18px;font-size:12px;color:var(--mute
   .vbtn{min-height:40px}
 }
 
+
+/* ---------- Finanças ---------- */
+.fin-tabs{display:flex;gap:6px;margin-bottom:14px;overflow-x:auto;scrollbar-width:none}
+.fin-tabs::-webkit-scrollbar{display:none}
+.fin-tabs .vbtn{flex-shrink:0}
+.fin .cal-head{margin-bottom:12px}
+.kpis{display:grid;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));gap:8px;margin-bottom:14px}
+.kpi{background:var(--list);border:1px solid var(--list-b);border-radius:8px;padding:10px 12px}
+.kpi .lbl{font-size:11.5px;color:var(--muted)}
+.kpi .v{font-size:19px;font-weight:600;letter-spacing:-.01em;font-variant-numeric:tabular-nums;margin-top:2px}
+.kpi .sub{font-size:11.5px;color:var(--muted);margin-top:2px}
+.kpi.neg .v{color:var(--danger)}
+.kpi.pos .v{color:var(--ok)}
+.fin-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:10px;align-items:start}
+.fin-sec{background:var(--list);border:1px solid var(--list-b);border-radius:8px;padding:8px 8px 4px}
+.fin-sec header{display:flex;align-items:baseline;justify-content:space-between;padding:2px 6px 6px}
+.fin-sec h3{margin:0;font-size:13px;font-weight:600}
+.fin-sec .tot{font-size:12.5px;font-weight:600;font-variant-numeric:tabular-nums}
+.fin-row{display:flex;align-items:center;gap:10px;background:var(--card);border-radius:8px;padding:7px 10px;box-shadow:var(--shadow),0 0 0 1px var(--ring);margin-bottom:6px}
+.fin-row .nm{flex:1;min-width:0;text-align:left;background:none;border:0;padding:0;color:var(--txt);font-size:13px;display:flex;flex-direction:column;gap:1px;cursor:pointer}
+.fin-row .nm.static{cursor:default}
+.fin-row .nm .sub{font-size:11.5px;color:var(--muted)}
+.fin-row .amt{font-variant-numeric:tabular-nums;font-weight:600;font-size:13px;white-space:nowrap}
+.fin-row.late .amt,.fin-row.late .nm .sub{color:var(--danger)}
+.chk{width:20px;height:20px;border-radius:6px;border:1.5px solid var(--chip-b);background:none;display:grid;place-items:center;flex-shrink:0;padding:0;color:var(--btn-txt)}
+.chk.on{background:var(--accent);border-color:var(--accent)}
+.chk.auto{opacity:.55;cursor:default}
+.chk .ico{width:13px;height:13px;stroke-width:3}
+.empty-s{font-size:12px;color:var(--muted);padding:2px 6px 8px;margin:0}
+.fin-chart{background:var(--list);border:1px solid var(--list-b);border-radius:8px;padding:12px;margin-bottom:12px}
+.chart-title{font-size:12.5px;font-weight:600;margin-bottom:8px}
+.bars{display:flex;align-items:flex-end;gap:2px;height:110px}
+.bar{flex:1;background:var(--chip-b);border-radius:2px 2px 0 0;min-width:3px}
+.bar:hover,.bar.peak{background:var(--accent)}
+.bar-labels{display:flex;gap:2px;margin-top:4px}
+.bar-labels span{flex:1;font-size:10px;color:var(--muted);white-space:nowrap;overflow:visible;min-width:3px}
+.debts{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:8px;margin-bottom:12px}
+.debt{display:flex;flex-direction:column;gap:6px;text-align:left;background:var(--card);border:0;border-radius:8px;padding:10px 12px;box-shadow:var(--shadow),0 0 0 1px var(--ring);color:var(--txt);font-size:13px}
+.debt:hover{background:var(--card-h)}
+.debt-top{display:flex;align-items:center;justify-content:space-between;gap:6px}
+.debt-nums{display:flex;justify-content:space-between;gap:8px;font-variant-numeric:tabular-nums;font-size:12.5px}
+.debt .sub{font-size:11.5px;color:var(--muted)}
+.prog{height:6px;border-radius:3px;background:var(--chip-b);overflow:hidden}
+.prog i{display:block;height:100%;background:var(--accent);border-radius:3px}
+.prog.big{height:8px;margin:-4px 0 12px}
+.prog.over i{background:var(--danger)}
+.exp-form{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:12px}
+.exp-form #expInput{flex:2 1 220px}
+.exp-form select,.exp-form input[type=date]{flex:1 1 120px}
+.cat-chips{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:12px}
+.exp-list{display:flex;flex-direction:column;gap:12px;max-width:760px}
+.exp-list .fin-row{margin-bottom:4px}
+.table-wrap{overflow-x:auto;border:1px solid var(--list-b);border-radius:8px;margin-bottom:8px}
+.fin-table{border-collapse:collapse;width:100%;font-size:12.5px;font-variant-numeric:tabular-nums}
+.fin-table th{background:var(--list);text-align:right;font-weight:600;padding:8px 10px;color:var(--txt-2);white-space:nowrap}
+.fin-table td{text-align:right;padding:7px 10px;border-top:1px solid var(--list-b);white-space:nowrap}
+.fin-table th:first-child,.fin-table td:first-child{text-align:left}
+.fin-table tbody tr{cursor:pointer}
+.fin-table tbody tr:hover{background:var(--hover)}
+.fin-table .neg{color:var(--danger)}
+.fin-table .pos{color:var(--ok)}
+.cal-item.bill{background:none;border:1px dashed var(--chip-b);color:var(--txt-2)}
+.cal-item.bill .ico{width:12px;height:12px;flex-shrink:0}
+.cal-item.bill.done .t{text-decoration:line-through;color:var(--muted)}
+.ag-day .cal-item.bill{margin-top:4px;padding:6px 8px}
+#billsBar:empty{display:none}
+.bills{display:flex;align-items:center;flex-wrap:wrap;gap:6px 10px;margin:0 22px 10px;padding:8px 12px;border-radius:8px;background:var(--list);border:1px solid var(--list-b);font-size:12.5px}
+.bills .ico{width:15px;height:15px;color:var(--warn)}
+.bill-chip{display:inline-flex;align-items:center;gap:4px;color:var(--txt-2)}
+.bill-chip.late{color:var(--danger)}
+.bill-chip .link-btn{padding:0 0 0 2px;font-size:11.5px}
+#finDlg .fields,#debtDlg .fields{grid-template-columns:repeat(auto-fit,minmax(150px,1fr))}
+.scope{display:flex;flex-direction:column;gap:4px;font-size:13px;background:var(--input);border-radius:8px;padding:8px 10px}
+.scope label{display:flex;align-items:center;gap:8px}
+@media (max-width:640px){
+  .bills{margin:0 12px 8px}
+  .kpis{grid-template-columns:1fr 1fr}
+  .kpi .v{font-size:16px}
+  .fin-grid{grid-template-columns:1fr}
+  .chk{width:26px;height:26px}
+  .exp-form #expInput{flex-basis:100%}
+}
 </style>
 </head>
 <body>
@@ -319,6 +401,7 @@ details.hist ul{margin:6px 0 0;padding-left:18px;font-size:12px;color:var(--mute
   </form>
   <div class="views" id="views"></div>
   <nav id="filters"></nav>
+  <div id="billsBar"></div>
   <main id="board"></main>
 </div>
 
@@ -412,6 +495,8 @@ details.hist ul{margin:6px 0 0;padding-left:18px;font-size:12px;color:var(--mute
         <button type="button" class="btn" id="exportBtn">Exportar backup (.json)</button>
         <button type="button" class="btn" id="importBtn">Importar backup</button>
         <input type="file" id="importFile" accept=".json,application/json" hidden>
+        <button type="button" class="btn" id="importFinBtn">Importar finanças (.json)</button>
+        <input type="file" id="importFinFile" accept=".json,application/json" hidden>
       </div>
       <div class="small muted" id="fileInfo"></div>
       <div class="row" id="fileActions"></div>
@@ -432,6 +517,48 @@ details.hist ul{margin:6px 0 0;padding-left:18px;font-size:12px;color:var(--mute
         <li>No celular, abra o cartão e troque a coluna; puxe a tela para baixo para atualizar.</li>
       </ul>
     </section>
+  </form>
+</dialog>
+
+<dialog id="finDlg">
+  <form method="dialog" class="dlg" autocomplete="off">
+    <div class="dlg-head"><h2 id="iTitle" style="flex:1;margin:0;font-size:17px">Conta</h2><button class="icon-btn" value="close" aria-label="Fechar" data-ico="x"></button></div>
+    <div class="fields">
+      <label style="grid-column:1/-1">Nome<input id="iName" type="text" placeholder="Ex.: Aluguel, Salário Tati"></label>
+      <label>Tipo<select id="iKind"><option value="income">Entrada</option><option value="fixed">Conta fixa</option><option value="variable">Variável ou parcelado</option></select></label>
+      <label>Valor (R$)<input id="iAmount" type="text" inputmode="decimal" placeholder="0,00"></label>
+      <label>De quem<select id="iWho"></select></label>
+      <label>Dia do vencimento<input id="iDay" type="number" min="1" max="31" placeholder="opcional"></label>
+      <label>Começa em<input id="iStart" type="month"></label>
+      <label id="iEndWrap">Termina em<input id="iEnd" type="month"></label>
+      <label class="check"><input id="iOnce" type="checkbox"> Só neste mês</label>
+    </div>
+    <div class="scope" id="iScopeWrap"><span class="small muted">Se mudar o valor:</span>
+      <label><input type="radio" name="iScope" id="iScopeFrom" checked> A partir de <span id="iScopeMonth"></span></label>
+      <label><input type="radio" name="iScope" id="iScopeOnly"> Só neste mês</label>
+    </div>
+    <label class="block">Notas<textarea id="iNotes" rows="3"></textarea></label>
+    <div class="dlg-foot"><button type="button" id="iDel" class="danger-btn">Excluir</button><span class="grow"></span><button type="button" class="primary" id="iSave">Salvar</button></div>
+  </form>
+</dialog>
+
+<dialog id="debtDlg">
+  <form method="dialog" class="dlg" autocomplete="off">
+    <div class="dlg-head"><h2 id="dTitle" style="flex:1;margin:0;font-size:17px">Empréstimo</h2><button class="icon-btn" value="close" aria-label="Fechar" data-ico="x"></button></div>
+    <div class="fields">
+      <label style="grid-column:1/-1">Nome<input id="dName" type="text" placeholder="Ex.: PicPay R$ 1.350"></label>
+      <label>Banco ou loja<input id="dLender" type="text"></label>
+      <label>Nº do contrato<input id="dContract" type="text"></label>
+      <label>Valor da parcela (R$)<input id="dInst" type="text" inputmode="decimal"></label>
+      <label>Quantidade de parcelas<input id="dCount" type="number" min="1"></label>
+      <label>Mês da 1ª parcela<input id="dFirst" type="month"></label>
+      <label>Dia do vencimento<input id="dDay" type="number" min="1" max="31" placeholder="opcional"></label>
+      <label>Juros (% ao mês)<input id="dRate" type="text" inputmode="decimal" placeholder="opcional"></label>
+      <label>Valor recebido (R$)<input id="dReceived" type="text" inputmode="decimal" placeholder="opcional"></label>
+      <label class="check"><input id="dPayroll" type="checkbox"> Desconto em folha</label>
+    </div>
+    <label class="block">Notas<textarea id="dNotes" rows="3"></textarea></label>
+    <div class="dlg-foot"><button type="button" id="dDel" class="danger-btn">Excluir</button><span class="grow"></span><button type="button" class="primary" id="dSave">Salvar</button></div>
   </form>
 </dialog>
 
@@ -486,6 +613,8 @@ const ICONS = {
   left: '<path d="m15 18-6-6 6-6"/>',
   right: '<path d="m9 18 6-6-6-6"/>',
   msg: '<path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/>',
+  wallet: '<path d="M19 7V4a1 1 0 0 0-1-1H5a2 2 0 0 0 0 4h15a1 1 0 0 1 1 1v4h-3a2 2 0 0 0 0 4h3a1 1 0 0 0 1-1v-2a1 1 0 0 0-1-1"/><path d="M3 5v14a2 2 0 0 0 2 2h15a1 1 0 0 0 1-1v-4"/>',
+  tick: '<path d="M20 6 9 17l-5-5"/>',
 };
 const icon = (n, cls = '') => `<svg class="ico ${cls}" viewBox="0 0 24 24" aria-hidden="true">${ICONS[n]}</svg>`;
 document.querySelectorAll('[data-ico]').forEach(el => el.insertAdjacentHTML('afterbegin', icon(el.dataset.ico)));
@@ -519,6 +648,7 @@ function defaults() {
       { id: 'pagar', name: 'Pagar', color: '#b54708' },
     ],
     templates: [],
+    fin: finDefaults(),
     columns: [
       { id: 'entrada', name: 'Entrada', hint: 'Tudo que surgir cai aqui primeiro' },
       { id: 'proximas', name: 'Próximas', hint: 'Decidido: vai ser feito em breve' },
@@ -551,12 +681,13 @@ function normalize(data) {
     areas: arr(data.areas, d.areas),
     labels: arr(data.labels, d.labels),
     templates: arr(data.templates, []),
+    fin: normFin(data.fin),
     columns: arr(data.columns, d.columns).length ? arr(data.columns, d.columns) : d.columns,
     cards: data.cards.map(makeCard),
   };
 }
 
-const content = s => JSON.stringify({ b: s.boards, a: s.areas, l: s.labels, t: s.templates, k: s.columns, c: s.cards, d: s.deleted });
+const content = s => JSON.stringify({ b: s.boards, a: s.areas, l: s.labels, t: s.templates, k: s.columns, c: s.cards, d: s.deleted, f: s.fin });
 
 /* Junta duas versões: cada cartão fica com a edição mais recente; exclusões vencem edições mais antigas;
    quadros, áreas, etiquetas, modelos e colunas vêm da versão com "metaAt" mais novo. */
@@ -578,6 +709,7 @@ function mergeStates(local, remote) {
     savedAt: Math.max(local.savedAt, remote.savedAt),
     metaAt: Math.max(local.metaAt, remote.metaAt),
     boards: meta.boards, areas: meta.areas, labels: meta.labels, templates: meta.templates, columns: meta.columns,
+    fin: mergeFin(local.fin, remote.fin, deleted),
     deleted, cards,
   };
 }
@@ -585,7 +717,7 @@ function mergeStates(local, remote) {
 let state;
 try { const raw = lsGet(KEY); state = raw ? normalize(JSON.parse(raw)) : defaults(); } catch { state = defaults(); }
 
-let prefs = { theme: 'auto', focus: false, filter: 'all', label: null, board: MAIN_BOARD, view: 'board', calMonth: null };
+let prefs = { theme: 'auto', focus: false, filter: 'all', label: null, board: MAIN_BOARD, view: 'board', calMonth: null, finTab: 'mes', finMonth: null };
 try { prefs = { ...prefs, ...(JSON.parse(lsGet(PREFS_KEY)) || {}) }; } catch {}
 const savePrefs = () => lsSet(PREFS_KEY, JSON.stringify(prefs));
 
@@ -744,6 +876,9 @@ function renderCalendar(q) {
   const noDue = cards.filter(c => !c.due && c.col !== 'feito').length;
   const byDay = {};
   for (const c of withDue) (byDay[c.due] = byDay[c.due] || []).push(c);
+  const bills = {};
+  for (const b of billsOfMonth(y + '-' + pad(m + 1))) { const k = dstr(billDate(b)); (bills[k] = bills[k] || []).push(b); }
+  const billItem = b => `<button class="cal-item bill ${b.paid ? 'done' : ''}" data-finopen="${b.M}" title="${esc(b.name)} ${brl(b.amount)}">${icon('wallet')}<span class="t">${esc(b.name)} ${brl(b.amount)}</span></button>`;
   const head = `<div class="cal-head">
       <h2>${MONTHS[m][0].toUpperCase() + MONTHS[m].slice(1)} de ${y}</h2>
       <button class="btn icon" data-cal="-1" aria-label="Mês anterior">${icon('left')}</button>
@@ -762,13 +897,13 @@ function renderCalendar(q) {
       if (late.length) groups.push({ title: 'Atrasadas de meses anteriores', late: true, cards: late });
     }
     for (let d = new Date(first); d <= last; d = addDays(d, 1)) {
-      const k = dstr(d), list = byDay[k];
-      if (!list) continue;
+      const k = dstr(d), list = byDay[k] || [], bl = bills[k] || [];
+      if (!list.length && !bl.length) continue;
       const lateDay = d < T && list.some(c => c.col !== 'feito');
-      groups.push({ title: (k === tStr ? 'Hoje, ' : '') + WD[d.getDay()] + ' ' + pad(d.getDate()) + '/' + pad(m + 1), late: lateDay, cards: list });
+      groups.push({ title: (k === tStr ? 'Hoje, ' : '') + WD[d.getDay()] + ' ' + pad(d.getDate()) + '/' + pad(m + 1), late: lateDay, cards: list, bills: bl });
     }
     body = groups.length
-      ? `<div class="agenda">${groups.map(g => `<div class="ag-day"><h3 class="${g.late ? 'late' : ''}">${g.title}</h3><div class="list">${g.cards.map(cardHTML).join('')}</div></div>`).join('')}</div>`
+      ? `<div class="agenda">${groups.map(g => `<div class="ag-day"><h3 class="${g.late ? 'late' : ''}">${g.title}</h3><div class="list">${g.cards.map(cardHTML).join('')}${(g.bills || []).map(billItem).join('')}</div></div>`).join('')}</div>`
       : '<p class="empty">Nenhuma tarefa com prazo neste mês.</p>';
   } else {
     const first = new Date(y, m, 1);
@@ -779,7 +914,7 @@ function renderCalendar(q) {
     let cells = ['seg', 'ter', 'qua', 'qui', 'sex', 'sáb', 'dom'].map(d => `<div class="cal-dow">${d}</div>`).join('');
     for (let i = 0; i < weeks * 7; i++) {
       const d = addDays(start, i), k = dstr(d);
-      cells += `<div class="cal-day ${d.getMonth() !== m ? 'out' : ''} ${k === tStr ? 'today' : ''}"><span class="dn">${d.getDate()}</span>${(byDay[k] || []).map(calItem).join('')}</div>`;
+      cells += `<div class="cal-day ${d.getMonth() !== m ? 'out' : ''} ${k === tStr ? 'today' : ''}"><span class="dn">${d.getDate()}</span>${(byDay[k] || []).map(calItem).join('')}${(bills[k] || []).map(billItem).join('')}</div>`;
     }
     body = `<div class="cal-grid">${cells}</div>`;
   }
@@ -803,12 +938,13 @@ function renderMain() {
   const scroll = $('#board').scrollLeft;
   if (prefs.view === 'cal') renderCalendar(q);
   else if (prefs.view === 'arch') renderArchive(q);
+  else if (prefs.view === 'fin') renderFinance();
   else { renderKanban(q); $('#board').scrollLeft = scroll; }
 }
 const renderBoard = renderMain;
 
 /* ---------- Barra lateral, chips e vistas ---------- */
-const VIEWS = [{ id: 'board', name: 'Quadro', ico: 'kanban' }, { id: 'cal', name: 'Calendário', ico: 'cal' }, { id: 'arch', name: 'Arquivados', ico: 'archive' }];
+const VIEWS = [{ id: 'board', name: 'Quadro', ico: 'kanban' }, { id: 'cal', name: 'Calendário', ico: 'cal' }, { id: 'fin', name: 'Finanças', ico: 'wallet' }, { id: 'arch', name: 'Arquivados', ico: 'archive' }];
 function renderNav() {
   const mine = boardCards();
   const live = mine.filter(c => !c.archived && c.col !== 'feito');
@@ -836,7 +972,7 @@ function renderNav() {
   const parts = [];
   if (f !== 'all') parts.push(f === 'none' ? 'Sem área' : areaById(f)?.name);
   if (prefs.label && labelById(prefs.label)) parts.push(labelById(prefs.label).name);
-  if (prefs.view === 'cal') parts.unshift('Calendário'); else if (prefs.view === 'arch') parts.unshift('Arquivados');
+  if (prefs.view === 'cal') parts.unshift('Calendário'); else if (prefs.view === 'arch') parts.unshift('Arquivados'); else if (prefs.view === 'fin') { parts.length = 0; parts.push('Finanças da casa'); }
   $('#filterTitle').textContent = parts.filter(Boolean).length ? '/ ' + parts.filter(Boolean).join(' / ') : '';
 }
 
@@ -858,8 +994,10 @@ function render() {
   applyTheme();
   $('#focusBtn').classList.toggle('on', !!prefs.focus);
   $('#focusBtn').style.display = prefs.view === 'board' ? '' : 'none';
+  for (const s of ['#quick', '#filters', '#search']) $(s).style.display = prefs.view === 'fin' ? 'none' : '';
   renderNav();
   renderMain();
+  renderBillsBar();
   renderStatus();
 }
 
@@ -914,6 +1052,8 @@ board.addEventListener('click', e => {
     const d = step === 0 ? today() : new Date(y, m + step, 1);
     prefs.calMonth = d.getFullYear() + '-' + pad(d.getMonth() + 1); savePrefs(); renderMain(); return;
   }
+  const fo = e.target.closest('[data-finopen]');
+  if (fo) { prefs.view = 'fin'; prefs.finTab = 'mes'; prefs.finMonth = fo.dataset.finopen; savePrefs(); return render(); }
   const open = e.target.closest('[data-open]');
   if (open) return openCard(open.dataset.open);
   const card = e.target.closest('.card');
@@ -1242,6 +1382,412 @@ $('#importFile').addEventListener('change', async e => {
     data.cards.forEach(c => { c.updated = now; });
     data.metaAt = now;
     state = data; save(); renderSettings(); render(); toast('Backup importado');
+  } catch { toast('Arquivo inválido'); }
+});
+
+/* ---------- Finanças ---------- */
+const brl = n => (Math.round((+n || 0) * 100) / 100).toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' });
+const mkey = d => d.getFullYear() + '-' + pad(d.getMonth() + 1);
+const mparse = k => { const [y, m] = k.split('-').map(Number); return new Date(y, m - 1, 1); };
+const maddK = (k, n) => { const d = mparse(k); d.setMonth(d.getMonth() + n); return mkey(d); };
+const mdiff = (a, b) => { const A = mparse(a), B = mparse(b); return (B.getFullYear() - A.getFullYear()) * 12 + B.getMonth() - A.getMonth(); };
+const mlabel = (k, short) => { const d = mparse(k); const n = MONTHS[d.getMonth()]; return short ? n.slice(0, 3) + '/' + String(d.getFullYear()).slice(2) : n[0].toUpperCase() + n.slice(1) + ' de ' + d.getFullYear(); };
+const FIN_KINDS = { income: 'Entradas', fixed: 'Contas fixas', variable: 'Variáveis e parcelados' };
+const FIN_TABS = [{ id: 'mes', name: 'Mês' }, { id: 'dividas', name: 'Dívidas' }, { id: 'gastos', name: 'Gastos do dia' }, { id: 'projecao', name: 'Próximos meses' }];
+const parseMoney = s => { const t = String(s).replace(/\s/g, '').replace(/r\$/i, ''); if (!t) return NaN; return +(t.includes(',') ? t.replace(/\./g, '').replace(',', '.') : t); };
+
+function finDefaults() {
+  return {
+    metaAt: 0,
+    people: [{ id: 'jordan', name: 'Jordan' }, { id: 'tati', name: 'Tati' }],
+    cats: ['Mercado', 'Comida fora', 'Transporte', 'Casa', 'Saúde', 'Lazer', 'Pessoal', 'Outros'],
+    dailyDefault: 0, dailyLimit: {}, items: [], debts: [], expenses: [], marks: {},
+  };
+}
+function normFin(f) {
+  const d = finDefaults();
+  if (!f || typeof f !== 'object') return d;
+  const arr = v => Array.isArray(v) ? v : [];
+  return {
+    metaAt: +f.metaAt || 0,
+    people: arr(f.people).length ? f.people : d.people,
+    cats: arr(f.cats).length ? f.cats : d.cats,
+    dailyDefault: +f.dailyDefault || 0,
+    dailyLimit: f.dailyLimit && typeof f.dailyLimit === 'object' ? f.dailyLimit : {},
+    items: arr(f.items).filter(x => x && x.id).map(x => ({ updated: 0, notes: '', who: null, day: null, end: null, kind: 'fixed', ...x, amount: +x.amount || 0 })),
+    debts: arr(f.debts).filter(x => x && x.id).map(x => ({ updated: 0, notes: '', lender: '', contract: '', payroll: false, rate: 0, day: null, ...x, installment: +x.installment || 0, count: +x.count || 0 })),
+    expenses: arr(f.expenses).filter(x => x && x.id).map(x => ({ updated: 0, cat: 'Outros', who: null, desc: '', ...x, amount: +x.amount || 0 })),
+    marks: f.marks && typeof f.marks === 'object' ? f.marks : {},
+  };
+}
+function mergeById(a, b, deleted) {
+  const map = new Map();
+  for (const x of [...a, ...b]) { const ex = map.get(x.id); if (!ex || (x.updated || 0) > (ex.updated || 0)) map.set(x.id, x); }
+  return [...map.values()].filter(x => !(deleted[x.id] && deleted[x.id] >= (x.updated || 0)));
+}
+function mergeFin(l, r, deleted) {
+  const meta = r.metaAt > l.metaAt ? r : l;
+  const marks = { ...l.marks };
+  for (const [k, v] of Object.entries(r.marks)) if (!marks[k] || (v.t || 0) > (marks[k].t || 0)) marks[k] = v;
+  return { ...meta, metaAt: Math.max(l.metaAt, r.metaAt), items: mergeById(l.items, r.items, deleted), debts: mergeById(l.debts, r.debts, deleted), expenses: mergeById(l.expenses, r.expenses, deleted), marks };
+}
+
+const F = () => state.fin;
+const personName = id => F().people.find(p => p.id === id)?.name || '';
+const itemActive = (it, M) => it.start <= M && (!it.end || M <= it.end);
+const markOf = (id, M) => F().marks[id + '|' + M];
+const itemAmount = (it, M) => { const m = markOf(it.id, M); return m && m.amount != null ? +m.amount : it.amount; };
+const debtInst = (d, M) => { const k = mdiff(d.first, M); return k >= 0 && k < d.count ? k + 1 : 0; };
+const debtLast = d => maddK(d.first, d.count - 1);
+const debtRemaining = (d, M) => d.count - Math.max(0, Math.min(d.count, mdiff(d.first, M)));
+function debtBalance(d, M) {
+  const n = debtRemaining(d, M), r = (+d.rate || 0) / 100;
+  if (!n) return 0;
+  return r ? d.installment * (1 - Math.pow(1 + r, -n)) / r : d.installment * n;
+}
+function finTouch() { save(); renderMain(); renderBillsBar(); }
+function setMark(id, M, patch) {
+  const k = id + '|' + M;
+  F().marks[k] = { ...(F().marks[k] || {}), ...patch, t: Date.now() };
+}
+function finRemove(kind, id) {
+  F()[kind] = F()[kind].filter(x => x.id !== id);
+  state.deleted[id] = Date.now();
+}
+
+function monthData(M) {
+  const f = F();
+  const rows = { income: [], fixed: [], variable: [] };
+  for (const it of f.items) if (itemActive(it, M) && rows[it.kind]) rows[it.kind].push({ type: 'item', it, amount: itemAmount(it, M), paid: !!markOf(it.id, M)?.paid });
+  for (const k of Object.keys(rows)) rows[k].sort((a, b) => (a.it.day || 99) - (b.it.day || 99) || b.amount - a.amount);
+  const debts = f.debts.map(d => ({ d, n: debtInst(d, M) })).filter(x => x.n)
+    .map(x => ({ type: 'debt', d: x.d, n: x.n, amount: x.d.installment, paid: x.d.payroll || !!markOf(x.d.id, M)?.paid }))
+    .sort((a, b) => b.amount - a.amount);
+  const exp = f.expenses.filter(e => (e.date || '').slice(0, 7) === M).sort((a, b) => b.date.localeCompare(a.date) || (b.updated || 0) - (a.updated || 0));
+  const sum = a => a.reduce((s, x) => s + x.amount, 0);
+  const tot = { income: sum(rows.income), fixed: sum(rows.fixed), variable: sum(rows.variable), debts: sum(debts), daily: sum(exp) };
+  const limit = f.dailyLimit[M] != null ? +f.dailyLimit[M] : f.dailyDefault;
+  tot.dailyPlan = Math.max(tot.daily, limit || 0);
+  tot.outPlan = tot.fixed + tot.variable + tot.debts + tot.dailyPlan;
+  tot.leftPlan = tot.income - tot.outPlan;
+  return { rows, debts, exp, tot, limit };
+}
+function finMonthKey() { return /^\d{4}-\d{2}$/.test(prefs.finMonth || '') ? prefs.finMonth : mkey(today()); }
+
+/* Contas com vencimento (para calendário e aviso no quadro) */
+function billsOfMonth(M) {
+  const out = [];
+  for (const it of F().items) if (it.kind !== 'income' && it.day && itemActive(it, M)) out.push({ id: it.id, name: it.name, day: +it.day, amount: itemAmount(it, M), paid: !!markOf(it.id, M)?.paid, M });
+  for (const d of F().debts) if (!d.payroll && d.day && debtInst(d, M)) out.push({ id: d.id, debt: true, name: d.name, day: +d.day, amount: d.installment, paid: !!markOf(d.id, M)?.paid, M });
+  return out.sort((a, b) => a.day - b.day);
+}
+function billDate(b) { const d = mparse(b.M); const last = new Date(d.getFullYear(), d.getMonth() + 1, 0).getDate(); return new Date(d.getFullYear(), d.getMonth(), Math.min(b.day, last)); }
+function renderBillsBar() {
+  const bar = $('#billsBar'); if (!bar) return;
+  if (prefs.view !== 'board') { bar.innerHTML = ''; return; }
+  const T = today(), M = mkey(T), limit = addDays(T, 7);
+  const list = billsOfMonth(M).concat(billsOfMonth(maddK(M, 1))).filter(b => !b.paid && billDate(b) <= limit);
+  if (!list.length) { bar.innerHTML = ''; return; }
+  bar.innerHTML = `<div class="bills">${icon('wallet')}<b>${list.length === 1 ? '1 conta' : list.length + ' contas'} para os próximos 7 dias:</b>${list.map(b => {
+    const d = billDate(b), late = d < T;
+    return `<span class="bill-chip ${late ? 'late' : ''}">${esc(b.name)} ${brl(b.amount)}, ${late ? 'venceu' : 'vence'} dia ${b.day}<button class="link-btn" data-billpay="${esc(b.id)}" data-billm="${b.M}">marcar paga</button></span>`;
+  }).join('')}</div>`;
+}
+
+/* ---------- Telas de Finanças ---------- */
+function renderFinance() {
+  const tab = FIN_TABS.some(t => t.id === prefs.finTab) ? prefs.finTab : 'mes';
+  const M = finMonthKey();
+  const tabs = `<div class="fin-tabs">${FIN_TABS.map(t => `<button class="vbtn ${tab === t.id ? 'on' : ''}" data-fintab="${t.id}">${t.name}</button>`).join('')}</div>`;
+  const nav = `<div class="cal-head"><h2>${mlabel(M)}</h2><button class="btn icon" data-finm="-1" aria-label="Mês anterior">${icon('left')}</button><button class="btn icon" data-finm="1" aria-label="Próximo mês">${icon('right')}</button><button class="btn" data-finm="0">Este mês</button></div>`;
+  let body;
+  if (tab === 'dividas') body = finDebtsHTML();
+  else if (tab === 'gastos') body = nav + finDailyHTML(M);
+  else if (tab === 'projecao') body = finProjectionHTML();
+  else body = nav + finMonthHTML(M);
+  const empty = !F().items.length && !F().debts.length && !F().expenses.length
+    ? '<div class="info-box">Ainda não há dados financeiros. Use os botões "Adicionar" ou importe o arquivo de dados em Configurações › Backup › Importar finanças.</div>' : '';
+  $('#board').innerHTML = `<div class="scrollv fin">${tabs}${empty}${body}</div>`;
+}
+
+const kpi = (lbl, v, cls = '', sub = '') => `<div class="kpi ${cls}"><div class="lbl">${lbl}</div><div class="v">${brl(v)}</div>${sub ? `<div class="sub">${sub}</div>` : ''}</div>`;
+const chk = (on, attrs, title) => `<button type="button" class="chk ${on ? 'on' : ''}" ${attrs} role="checkbox" aria-checked="${on}" title="${title}" aria-label="${title}">${on ? icon('tick') : ''}</button>`;
+
+function finRow(r, M) {
+  if (r.type === 'debt') {
+    const d = r.d;
+    const sub = `parcela ${r.n} de ${d.count}${d.payroll ? ', desconto em folha' : d.day ? ', dia ' + d.day : ''}`;
+    const c = d.payroll ? `<span class="chk on auto" title="Descontado do salário">${icon('tick')}</span>` : chk(r.paid, `data-paydebt="${esc(d.id)}"`, 'Paga');
+    return `<div class="fin-row">${c}<button type="button" class="nm" data-editdebt="${esc(d.id)}">${esc(d.name)}<span class="sub">${sub}</span></button><div class="amt">${brl(r.amount)}</div></div>`;
+  }
+  const it = r.it;
+  const sub = [it.who ? personName(it.who) : '', it.day ? 'dia ' + it.day : '', it.start === it.end ? 'só neste mês' : it.end ? 'até ' + mlabel(it.end, true) : ''].filter(Boolean).join(', ');
+  const late = !r.paid && it.kind !== 'income' && it.day && M === mkey(today()) && today().getDate() > +it.day;
+  return `<div class="fin-row ${late ? 'late' : ''}">${chk(r.paid, `data-pay="${esc(it.id)}"`, it.kind === 'income' ? 'Recebido' : 'Pago')}<button type="button" class="nm" data-edititem="${esc(it.id)}">${esc(it.name)}${sub || late ? `<span class="sub">${late ? 'atrasada, ' : ''}${esc(sub)}</span>` : ''}</button><div class="amt">${brl(r.amount)}</div></div>`;
+}
+function finMonthHTML(M) {
+  const { rows, debts, tot, limit } = monthData(M);
+  const tiles = `<div class="kpis">
+    ${kpi('Entradas', tot.income)}
+    ${kpi('Saídas previstas', tot.outPlan, '', 'contas, parcelas e gastos do dia')}
+    ${kpi('Sobra prevista', tot.leftPlan, tot.leftPlan < 0 ? 'neg' : 'pos')}
+    ${kpi('Gastos do dia', tot.daily, limit && tot.daily > limit ? 'neg' : '', limit ? 'de ' + brl(limit) + ' planejados' : 'sem limite definido')}
+  </div>`;
+  const total = list => brl(list.reduce((s, x) => s + x.amount, 0));
+  const sec = (kind, list) => `<section class="fin-sec"><header><h3>${FIN_KINDS[kind]}</h3><span class="tot">${total(list)}</span></header>
+    ${list.map(r => finRow(r, M)).join('') || '<p class="empty-s">Nada neste mês.</p>'}
+    <button class="add-btn" data-additem="${kind}">${icon('plus')}Adicionar</button></section>`;
+  const debtSec = `<section class="fin-sec"><header><h3>Empréstimos e parcelamentos</h3><span class="tot">${brl(tot.debts)}</span></header>
+    ${debts.map(r => finRow(r, M)).join('') || '<p class="empty-s">Nenhuma parcela neste mês.</p>'}
+    <button class="add-btn" data-fintab="dividas">${icon('right')}Ver todas as dívidas</button></section>`;
+  return tiles + `<div class="fin-grid">${sec('income', rows.income)}${sec('fixed', rows.fixed)}${debtSec}${sec('variable', rows.variable)}</div>`;
+}
+
+function finDebtsHTML() {
+  const M = mkey(today()), f = F();
+  const active = f.debts.filter(d => debtRemaining(d, M) > 0).sort((a, b) => debtLast(a).localeCompare(debtLast(b)));
+  const done = f.debts.filter(d => debtRemaining(d, M) === 0);
+  const nowMonthly = f.debts.reduce((s, d) => s + (debtInst(d, M) ? d.installment : 0), 0);
+  const totalLeft = active.reduce((s, d) => s + debtRemaining(d, M) * d.installment, 0);
+  const balance = active.reduce((s, d) => s + debtBalance(d, M), 0);
+  const lastAll = active.length ? active.map(debtLast).sort().pop() : null;
+  const months = lastAll ? Math.min(48, mdiff(M, lastAll) + 1) : 0;
+  const series = Array.from({ length: months }, (_, i) => { const k = maddK(M, i); return { k, v: f.debts.reduce((s, d) => s + (debtInst(d, k) ? d.installment : 0), 0) }; });
+  const max = Math.max(1, ...series.map(s => s.v));
+  const peak = series.reduce((a, b) => b.v > a.v ? b : a, { v: 0 });
+  const chart = series.length ? `<div class="fin-chart">
+      <div class="chart-title">Quanto sai por mês em parcelas</div>
+      <div class="bars">${series.map(s => `<div class="bar ${s.k === peak.k ? 'peak' : ''}" style="height:${Math.max(2, s.v / max * 100)}%" title="${mlabel(s.k, true)}: ${brl(s.v)}"></div>`).join('')}</div>
+      <div class="bar-labels">${series.map((s, i) => `<span>${i === 0 || s.k.endsWith('-01') ? mlabel(s.k, true) : ''}</span>`).join('')}</div>
+      <p class="small muted">Maior mês: ${mlabel(peak.k)}, ${brl(peak.v)} em parcelas. Passe o dedo ou o mouse nas barras para ver cada mês.</p>
+    </div>` : '';
+  const card = d => {
+    const rem = debtRemaining(d, M), paid = d.count - rem, started = mdiff(d.first, M) >= 0;
+    const totalPay = d.installment * d.count;
+    return `<button type="button" class="debt" data-editdebt="${esc(d.id)}">
+      <div class="debt-top"><b>${esc(d.name)}</b>${d.payroll ? '<span class="label">desconto em folha</span>' : ''}</div>
+      <div class="debt-nums"><span>${d.count}× ${brl(d.installment)}</span><span>${rem ? `faltam ${rem} (${brl(rem * d.installment)})` : 'quitado'}</span></div>
+      <div class="prog"><i style="width:${d.count ? paid / d.count * 100 : 0}%"></i></div>
+      <div class="sub">${started ? `${paid} de ${d.count} pagas` : 'começa em ' + mlabel(d.first, true)}, termina em ${mlabel(debtLast(d), true)}${d.rate ? `, juros ${String(d.rate).replace('.', ',')}% ao mês` : ''}</div>
+      ${d.received ? `<div class="sub">Recebeu ${brl(d.received)}; vai pagar ${brl(totalPay)} no total${rem && d.rate ? `; para quitar hoje, cerca de ${brl(debtBalance(d, M))}` : ''}</div>` : ''}
+    </button>`;
+  };
+  return `<div class="kpis">
+      ${kpi('Parcelas neste mês', nowMonthly)}
+      ${kpi('Ainda a pagar', totalLeft, '', 'soma das parcelas que faltam')}
+      ${kpi('Para quitar hoje (estimativa)', balance, '', 'saldo devedor com desconto dos juros')}
+      ${kpi('Última parcela', 0, '', lastAll ? mlabel(lastAll) : 'sem dívidas').replace(/<div class="v">.*?<\/div>/, `<div class="v">${lastAll ? mlabel(lastAll, true) : '—'}</div>`)}
+    </div>
+    ${chart}
+    <div class="debts">${active.map(card).join('')}</div>
+    ${done.length ? `<details class="hist"><summary>Quitadas (${done.length})</summary><div class="debts">${done.map(card).join('')}</div></details>` : ''}
+    <button class="btn" data-adddebt>${icon('plus')}Adicionar empréstimo ou parcelamento</button>
+    <p class="small muted">A estimativa para quitar usa a taxa de juros do contrato (Tabela Price). O valor exato está no app do banco.</p>`;
+}
+
+function finDailyHTML(M) {
+  const f = F(), { exp, tot, limit } = monthData(M);
+  const T = today(), isCur = M === mkey(T);
+  const date = isCur ? dstr(T) : M + '-01';
+  const byCat = {};
+  for (const e of exp) byCat[e.cat] = (byCat[e.cat] || 0) + e.amount;
+  const pct = limit ? Math.min(100, tot.daily / limit * 100) : 0;
+  const days = {};
+  for (const e of exp) (days[e.date] = days[e.date] || []).push(e);
+  return `<form id="expForm" class="exp-form" autocomplete="off">
+      <input id="expInput" type="text" inputmode="text" placeholder="Ex.: 45,90 mercado" aria-label="Valor e descrição">
+      <select id="expCat" aria-label="Categoria">${f.cats.map(c => `<option>${esc(c)}</option>`).join('')}</select>
+      <select id="expWho" aria-label="Quem gastou">${f.people.map(p => `<option value="${esc(p.id)}">${esc(p.name)}</option>`).join('')}</select>
+      <input id="expDate" type="date" value="${date}" aria-label="Data">
+      <button class="primary" type="submit">${icon('plus')}<span class="t">Lançar</span></button>
+    </form>
+    <div class="kpis">
+      ${kpi('Gasto no mês', tot.daily, limit && tot.daily > limit ? 'neg' : '')}
+      ${kpi('Limite planejado', limit || 0, '', `<button type="button" class="link-btn" data-setlimit style="padding:0">${limit ? 'alterar' : 'definir'}</button>`)}
+      ${kpi('Ainda pode gastar', Math.max(0, (limit || 0) - tot.daily), limit && tot.daily > limit ? 'neg' : 'pos', limit ? '' : 'defina um limite')}
+    </div>
+    ${limit ? `<div class="prog big ${tot.daily > limit ? 'over' : ''}"><i style="width:${pct}%"></i></div>` : ''}
+    ${Object.keys(byCat).length ? `<div class="cat-chips">${Object.entries(byCat).sort((a, b) => b[1] - a[1]).map(([c, v]) => `<span class="label">${esc(c)} ${brl(v)}</span>`).join('')}</div>` : ''}
+    <div class="exp-list">${Object.keys(days).length ? Object.entries(days).map(([d, list]) => `
+      <div class="ag-day"><h3>${WD[parseD(d).getDay()]} ${d.slice(8, 10)}/${d.slice(5, 7)}</h3>
+      ${list.map(e => `<div class="fin-row"><div class="nm static">${esc(e.desc || e.cat)}<span class="sub">${esc(e.cat)}${e.who ? ', ' + esc(personName(e.who)) : ''}</span></div><div class="amt">${brl(e.amount)}</div><button type="button" class="icon-btn" data-delexp="${esc(e.id)}" aria-label="Apagar gasto">${icon('x')}</button></div>`).join('')}</div>`).join('') : '<p class="empty">Nenhum gasto lançado neste mês. Digite o valor e o que foi, por exemplo "32 lanche".</p>'}</div>`;
+}
+
+function finProjectionHTML() {
+  const start = mkey(today());
+  const rows = Array.from({ length: 12 }, (_, i) => { const k = maddK(start, i); return { k, ...monthData(k).tot }; });
+  const neg = rows.filter(r => r.leftPlan < 0);
+  return `${neg.length ? `<div class="info-box err">${neg.length === 1 ? 'Um mês fica' : neg.length + ' meses ficam'} no vermelho: ${neg.map(r => mlabel(r.k, true)).join(', ')}. Veja onde dá para ajustar.</div>` : ''}
+    <div class="table-wrap"><table class="fin-table">
+      <thead><tr><th>Mês</th><th>Entradas</th><th>Contas fixas</th><th>Parcelas</th><th>Variáveis</th><th>Gastos do dia</th><th>Sobra</th></tr></thead>
+      <tbody>${rows.map(r => `<tr data-gomonth="${r.k}"><td>${mlabel(r.k, true)}</td><td>${brl(r.income)}</td><td>${brl(r.fixed)}</td><td>${brl(r.debts)}</td><td>${brl(r.variable)}</td><td>${brl(r.dailyPlan)}</td><td class="${r.leftPlan < 0 ? 'neg' : 'pos'}"><b>${brl(r.leftPlan)}</b></td></tr>`).join('')}</tbody>
+    </table></div>
+    <p class="small muted">Conta as entradas e contas cadastradas como estão hoje, as parcelas dos contratos e o limite de gastos do dia (ou o que já foi gasto, se for maior). Toque num mês para abrir.</p>`;
+}
+
+/* ---------- Eventos de Finanças ---------- */
+board.addEventListener('click', e => {
+  if (prefs.view !== 'fin') return;
+  const t = e.target.closest('[data-fintab],[data-finm],[data-pay],[data-paydebt],[data-edititem],[data-editdebt],[data-additem],[data-adddebt],[data-delexp],[data-setlimit],[data-gomonth]');
+  if (!t) return;
+  const M = finMonthKey();
+  if (t.dataset.fintab) { prefs.finTab = t.dataset.fintab; savePrefs(); return renderMain(); }
+  if (t.dataset.finm != null) {
+    const s = +t.dataset.finm; prefs.finMonth = s === 0 ? mkey(today()) : maddK(M, s); savePrefs(); return renderMain();
+  }
+  if (t.dataset.gomonth) { prefs.finMonth = t.dataset.gomonth; prefs.finTab = 'mes'; savePrefs(); return renderMain(); }
+  if (t.dataset.pay) { setMark(t.dataset.pay, M, { paid: !markOf(t.dataset.pay, M)?.paid }); return finTouch(); }
+  if (t.dataset.paydebt) { setMark(t.dataset.paydebt, M, { paid: !markOf(t.dataset.paydebt, M)?.paid }); return finTouch(); }
+  if (t.dataset.edititem) return openItem(t.dataset.edititem);
+  if (t.dataset.additem) return openItem(null, t.dataset.additem);
+  if (t.dataset.editdebt) return openDebt(t.dataset.editdebt);
+  if (t.hasAttribute('data-adddebt')) return openDebt(null);
+  if (t.dataset.delexp) { if (confirm('Apagar este gasto?')) { finRemove('expenses', t.dataset.delexp); finTouch(); } return; }
+  if (t.hasAttribute('data-setlimit')) {
+    const cur = F().dailyLimit[M] ?? F().dailyDefault;
+    const v = prompt('Limite para gastos do dia em ' + mlabel(M) + ' (R$). Deixe vazio para tirar:', cur ? String(cur).replace('.', ',') : '');
+    if (v === null) return;
+    const n = parseMoney(v);
+    if (v.trim() && !(n >= 0)) return toast('Valor inválido');
+    if (confirm('Usar esse limite também para os próximos meses?')) { F().dailyDefault = v.trim() ? n : 0; for (const k of Object.keys(F().dailyLimit)) if (k >= M) delete F().dailyLimit[k]; }
+    else { if (v.trim()) F().dailyLimit[M] = n; else delete F().dailyLimit[M]; }
+    F().metaAt = Date.now(); return finTouch();
+  }
+});
+board.addEventListener('submit', e => {
+  if (e.target.id !== 'expForm') return;
+  e.preventDefault();
+  const raw = $('#expInput').value.trim();
+  const m = raw.match(/(\d{1,3}(?:\.\d{3})*(?:,\d{1,2})?|\d+(?:[.,]\d{1,2})?)/);
+  if (!m) return toast('Digite o valor, por exemplo "45,90 mercado"');
+  const amount = parseMoney(m[1]);
+  if (!(amount > 0)) return toast('Valor inválido');
+  const desc = (raw.slice(0, m.index) + raw.slice(m.index + m[1].length)).replace(/r\$/i, '').trim();
+  let cat = $('#expCat').value;
+  const guess = F().cats.find(c => desc && norm(desc).includes(norm(c).split(' ')[0]));
+  if (guess) cat = guess;
+  F().expenses.push({ id: uid(), date: $('#expDate').value || dstr(today()), amount, desc, cat, who: $('#expWho').value, updated: Date.now() });
+  save(); renderMain(); renderBillsBar();
+  setTimeout(() => $('#expInput')?.focus(), 0);
+  toast('Gasto de ' + brl(amount) + ' lançado');
+});
+$('#billsBar').addEventListener('click', e => {
+  const b = e.target.closest('[data-billpay]'); if (!b) return;
+  setMark(b.dataset.billpay, b.dataset.billm, { paid: true }); save(); renderBillsBar(); toast('Marcada como paga');
+});
+
+/* Janela: entrada ou conta */
+const finDlg = $('#finDlg');
+let finEditId = null;
+function fillWho(sel, val) { sel.innerHTML = '<option value="">Casa</option>' + F().people.map(p => `<option value="${esc(p.id)}">${esc(p.name)}</option>`).join(''); sel.value = val || ''; }
+function openItem(id, kind) {
+  const M = finMonthKey();
+  const it = id ? F().items.find(x => x.id === id) : null;
+  finEditId = id;
+  $('#iTitle').textContent = it ? 'Editar' : 'Nova ' + (kind === 'income' ? 'entrada' : 'conta');
+  $('#iName').value = it?.name || '';
+  $('#iKind').value = it?.kind || kind || 'fixed';
+  $('#iAmount').value = it ? String(itemAmount(it, M)).replace('.', ',') : '';
+  fillWho($('#iWho'), it?.who);
+  $('#iDay').value = it?.day || '';
+  $('#iStart').value = it?.start || M;
+  $('#iOnce').checked = it ? it.start === it.end : false;
+  $('#iEnd').value = it && it.start !== it.end ? it.end || '' : '';
+  $('#iNotes').value = it?.notes || '';
+  const recurring = it && it.start !== it.end;
+  $('#iScopeWrap').style.display = recurring ? '' : 'none';
+  $('#iScopeMonth').textContent = mlabel(M);
+  $('#iScopeOnly').checked = false; $('#iScopeFrom').checked = true;
+  $('#iDel').style.display = it ? '' : 'none';
+  $('#iEndWrap').style.display = $('#iOnce').checked ? 'none' : '';
+  finDlg.showModal();
+  if (!it) $('#iName').focus();
+}
+$('#iOnce').addEventListener('change', e => { $('#iEndWrap').style.display = e.target.checked ? 'none' : ''; });
+$('#iSave').addEventListener('click', () => {
+  const M = finMonthKey();
+  const name = $('#iName').value.trim(), amount = parseMoney($('#iAmount').value);
+  if (!name) return toast('Dê um nome');
+  if (!(amount >= 0)) return toast('Valor inválido');
+  const start = $('#iStart').value || M;
+  const once = $('#iOnce').checked;
+  const end = once ? start : ($('#iEnd').value || null);
+  if (end && end < start) return toast('O fim não pode ser antes do começo');
+  const data = { name, kind: $('#iKind').value, who: $('#iWho').value || null, day: +$('#iDay').value || null, start, end, notes: $('#iNotes').value, updated: Date.now() };
+  const it = finEditId ? F().items.find(x => x.id === finEditId) : null;
+  if (!it) F().items.push({ id: uid(), amount, ...data });
+  else if (it.start !== it.end && itemAmount(it, M) !== amount) {
+    if ($('#iScopeOnly').checked) { Object.assign(it, data); setMark(it.id, M, { amount }); }
+    else if (M > it.start) { const oldEnd = data.end; Object.assign(it, data, { start: it.start, end: maddK(M, -1) }); F().items.push({ id: uid(), ...data, amount, start: M, end: oldEnd }); }
+    else Object.assign(it, data, { amount });
+  } else Object.assign(it, data, it.start === it.end || itemAmount(it, M) === it.amount ? { amount } : {});
+  finDlg.close(); finTouch();
+});
+$('#iDel').addEventListener('click', () => {
+  if (!finEditId || !confirm('Excluir em todos os meses?')) return;
+  finRemove('items', finEditId); finDlg.close(); finTouch();
+});
+
+/* Janela: empréstimo ou parcelamento */
+const debtDlg = $('#debtDlg');
+let debtEditId = null;
+const num = v => String(v ?? '').replace('.', ',');
+function openDebt(id) {
+  const d = id ? F().debts.find(x => x.id === id) : null;
+  debtEditId = id;
+  $('#dTitle').textContent = d ? 'Editar empréstimo' : 'Novo empréstimo ou parcelamento';
+  $('#dName').value = d?.name || '';
+  $('#dLender').value = d?.lender || '';
+  $('#dContract').value = d?.contract || '';
+  $('#dInst').value = d ? num(d.installment) : '';
+  $('#dCount').value = d?.count || '';
+  $('#dFirst').value = d?.first || maddK(mkey(today()), 1);
+  $('#dDay').value = d?.day || '';
+  $('#dRate').value = d?.rate ? num(d.rate) : '';
+  $('#dReceived').value = d?.received ? num(d.received) : '';
+  $('#dPayroll').checked = !!d?.payroll;
+  $('#dNotes').value = d?.notes || '';
+  $('#dDel').style.display = d ? '' : 'none';
+  debtDlg.showModal();
+  if (!d) $('#dName').focus();
+}
+$('#dSave').addEventListener('click', () => {
+  const name = $('#dName').value.trim(), inst = parseMoney($('#dInst').value), count = +$('#dCount').value;
+  if (!name) return toast('Dê um nome');
+  if (!(inst > 0) || !(count > 0)) return toast('Preencha o valor da parcela e a quantidade');
+  const data = { name, lender: $('#dLender').value.trim(), contract: $('#dContract').value.trim(), installment: inst, count, first: $('#dFirst').value || mkey(today()),
+    day: +$('#dDay').value || null, rate: parseMoney($('#dRate').value) || 0, received: parseMoney($('#dReceived').value) || 0,
+    payroll: $('#dPayroll').checked, notes: $('#dNotes').value, updated: Date.now() };
+  const d = debtEditId ? F().debts.find(x => x.id === debtEditId) : null;
+  if (d) Object.assign(d, data); else F().debts.push({ id: uid(), ...data });
+  debtDlg.close(); finTouch();
+});
+$('#dDel').addEventListener('click', () => {
+  if (!debtEditId || !confirm('Excluir este empréstimo?')) return;
+  finRemove('debts', debtEditId); debtDlg.close(); finTouch();
+});
+
+/* Importar finanças (arquivo .json gerado fora do app) */
+$('#importFinBtn').addEventListener('click', () => $('#importFinFile').click());
+$('#importFinFile').addEventListener('change', async e => {
+  const file = e.target.files[0]; e.target.value = ''; if (!file) return;
+  try {
+    const raw = JSON.parse(await file.text());
+    const inc = normFin(raw.fin || raw);
+    const n = inc.items.length + inc.debts.length + inc.expenses.length;
+    if (!n) return toast('Nenhum dado financeiro no arquivo');
+    if (!confirm(`Importar ${inc.items.length} entradas/contas, ${inc.debts.length} dívidas e ${inc.expenses.length} gastos? Itens com o mesmo código são atualizados.`)) return;
+    const now = Date.now();
+    for (const kind of ['items', 'debts', 'expenses']) for (const x of inc[kind]) {
+      x.updated = now; delete state.deleted[x.id];
+      const i = F()[kind].findIndex(y => y.id === x.id);
+      if (i >= 0) F()[kind][i] = x; else F()[kind].push(x);
+    }
+    Object.assign(F().marks, Object.fromEntries(Object.entries(inc.marks).map(([k, v]) => [k, { ...v, t: now }])));
+    F().people = inc.people; F().cats = inc.cats;
+    if (inc.dailyDefault) F().dailyDefault = inc.dailyDefault;
+    F().metaAt = now;
+    save(); render(); toast('Finanças importadas');
   } catch { toast('Arquivo inválido'); }
 });
 
