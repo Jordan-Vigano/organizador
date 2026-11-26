@@ -352,6 +352,7 @@ details.hist ul{margin:6px 0 0;padding-left:18px;font-size:12px;color:var(--mute
 .cal-item.bill .ico{width:12px;height:12px;flex-shrink:0}
 .cal-item.bill.done .t{text-decoration:line-through;color:var(--muted)}
 .ag-day .cal-item.bill{margin-top:4px;padding:6px 8px}
+.vale-line{font-size:12px;color:var(--muted);padding:0 6px 6px;margin:0}
 #billsBar:empty{display:none}
 .bills{display:flex;align-items:center;flex-wrap:wrap;gap:6px 10px;margin:0 22px 10px;padding:8px 12px;border-radius:8px;background:var(--list);border:1px solid var(--list-b);font-size:12.5px}
 .bills .ico{width:15px;height:15px;color:var(--warn)}
@@ -525,7 +526,7 @@ details.hist ul{margin:6px 0 0;padding-left:18px;font-size:12px;color:var(--mute
     <div class="dlg-head"><h2 id="iTitle" style="flex:1;margin:0;font-size:17px">Conta</h2><button class="icon-btn" value="close" aria-label="Fechar" data-ico="x"></button></div>
     <div class="fields">
       <label style="grid-column:1/-1">Nome<input id="iName" type="text" placeholder="Ex.: Aluguel, Salário"></label>
-      <label>Tipo<select id="iKind"><option value="income">Entrada</option><option value="fixed">Conta fixa</option><option value="variable">Variável ou parcelado</option></select></label>
+      <label>Tipo<select id="iKind"><option value="income">Entrada</option><option value="fixed">Conta fixa</option><option value="variable">Variável ou parcelado</option><option value="benefit">Benefício (vale)</option></select></label>
       <label>Valor (R$)<input id="iAmount" type="text" inputmode="decimal" placeholder="0,00"></label>
       <label>De quem<select id="iWho"></select></label>
       <label>Dia do vencimento<input id="iDay" type="number" min="1" max="31" placeholder="opcional"></label>
@@ -1392,7 +1393,8 @@ const mparse = k => { const [y, m] = k.split('-').map(Number); return new Date(y
 const maddK = (k, n) => { const d = mparse(k); d.setMonth(d.getMonth() + n); return mkey(d); };
 const mdiff = (a, b) => { const A = mparse(a), B = mparse(b); return (B.getFullYear() - A.getFullYear()) * 12 + B.getMonth() - A.getMonth(); };
 const mlabel = (k, short) => { const d = mparse(k); const n = MONTHS[d.getMonth()]; return short ? n.slice(0, 3) + '/' + String(d.getFullYear()).slice(2) : n[0].toUpperCase() + n.slice(1) + ' de ' + d.getFullYear(); };
-const FIN_KINDS = { income: 'Entradas', fixed: 'Contas fixas', variable: 'Variáveis e parcelados' };
+const FIN_KINDS = { income: 'Entradas', fixed: 'Contas fixas', variable: 'Variáveis e parcelados', benefit: 'Benefícios (vale)' };
+const noBill = k => k === 'income' || k === 'benefit';
 const FIN_TABS = [{ id: 'mes', name: 'Mês' }, { id: 'dividas', name: 'Dívidas' }, { id: 'gastos', name: 'Gastos do dia' }, { id: 'projecao', name: 'Próximos meses' }];
 const parseMoney = s => { const t = String(s).replace(/\s/g, '').replace(/r\$/i, ''); if (!t) return NaN; return +(t.includes(',') ? t.replace(/\./g, '').replace(',', '.') : t); };
 
@@ -1416,7 +1418,7 @@ function normFin(f) {
     dailyLimit: f.dailyLimit && typeof f.dailyLimit === 'object' ? f.dailyLimit : {},
     items: arr(f.items).filter(x => x && x.id).map(x => ({ updated: 0, notes: '', who: null, day: null, end: null, kind: 'fixed', ...x, amount: +x.amount || 0 })),
     debts: arr(f.debts).filter(x => x && x.id).map(x => ({ updated: 0, notes: '', lender: '', contract: '', payroll: false, rate: 0, day: null, ...x, installment: +x.installment || 0, count: +x.count || 0 })),
-    expenses: arr(f.expenses).filter(x => x && x.id).map(x => ({ updated: 0, cat: 'Outros', who: null, desc: '', ...x, amount: +x.amount || 0 })),
+    expenses: arr(f.expenses).filter(x => x && x.id).map(x => ({ updated: 0, cat: 'Outros', who: null, desc: '', pay: 'dinheiro', ...x, amount: +x.amount || 0 })),
     marks: f.marks && typeof f.marks === 'object' ? f.marks : {},
   };
 }
@@ -1457,7 +1459,7 @@ function finRemove(kind, id) {
 
 function monthData(M) {
   const f = F();
-  const rows = { income: [], fixed: [], variable: [] };
+  const rows = { income: [], fixed: [], variable: [], benefit: [] };
   for (const it of f.items) if (itemActive(it, M) && rows[it.kind]) rows[it.kind].push({ type: 'item', it, amount: itemAmount(it, M), paid: !!markOf(it.id, M)?.paid });
   for (const k of Object.keys(rows)) rows[k].sort((a, b) => (a.it.day || 99) - (b.it.day || 99) || b.amount - a.amount);
   const debts = f.debts.map(d => ({ d, n: debtInst(d, M) })).filter(x => x.n)
@@ -1465,7 +1467,9 @@ function monthData(M) {
     .sort((a, b) => b.amount - a.amount);
   const exp = f.expenses.filter(e => (e.date || '').slice(0, 7) === M).sort((a, b) => b.date.localeCompare(a.date) || (b.updated || 0) - (a.updated || 0));
   const sum = a => a.reduce((s, x) => s + x.amount, 0);
-  const tot = { income: sum(rows.income), fixed: sum(rows.fixed), variable: sum(rows.variable), debts: sum(debts), daily: sum(exp) };
+  const cashExp = exp.filter(e => e.pay !== 'vale'), valeExp = exp.filter(e => e.pay === 'vale');
+  const tot = { income: sum(rows.income), fixed: sum(rows.fixed), variable: sum(rows.variable), debts: sum(debts), daily: sum(cashExp), benefit: sum(rows.benefit), vale: sum(valeExp) };
+  tot.valeLeft = tot.benefit - tot.vale;
   const limit = f.dailyLimit[M] != null ? +f.dailyLimit[M] : f.dailyDefault;
   tot.dailyPlan = Math.max(tot.daily, limit || 0);
   tot.outPlan = tot.fixed + tot.variable + tot.debts + tot.dailyPlan;
@@ -1477,7 +1481,7 @@ function finMonthKey() { return /^\d{4}-\d{2}$/.test(prefs.finMonth || '') ? pre
 /* Contas com vencimento (para calendário e aviso no quadro) */
 function billsOfMonth(M) {
   const out = [];
-  for (const it of F().items) if (it.kind !== 'income' && it.day && itemActive(it, M)) out.push({ id: it.id, name: it.name, day: +it.day, amount: itemAmount(it, M), paid: !!markOf(it.id, M)?.paid, M });
+  for (const it of F().items) if (!noBill(it.kind) && it.day && itemActive(it, M)) out.push({ id: it.id, name: it.name, day: +it.day, amount: itemAmount(it, M), paid: !!markOf(it.id, M)?.paid, M });
   for (const d of F().debts) if (!d.payroll && d.day && debtInst(d, M)) out.push({ id: d.id, debt: true, name: d.name, day: +d.day, amount: d.installment, paid: !!markOf(d.id, M)?.paid, M });
   return out.sort((a, b) => a.day - b.day);
 }
@@ -1522,8 +1526,8 @@ function finRow(r, M) {
   }
   const it = r.it;
   const sub = [it.who ? personName(it.who) : '', it.day ? 'dia ' + it.day : '', it.start === it.end ? 'só neste mês' : it.end ? 'até ' + mlabel(it.end, true) : ''].filter(Boolean).join(', ');
-  const late = !r.paid && it.kind !== 'income' && it.day && M === mkey(today()) && today().getDate() > +it.day;
-  return `<div class="fin-row ${late ? 'late' : ''}">${chk(r.paid, `data-pay="${esc(it.id)}"`, it.kind === 'income' ? 'Recebido' : 'Pago')}<button type="button" class="nm" data-edititem="${esc(it.id)}">${esc(it.name)}${sub || late ? `<span class="sub">${late ? 'atrasada, ' : ''}${esc(sub)}</span>` : ''}</button><div class="amt">${brl(r.amount)}</div></div>`;
+  const late = !r.paid && !noBill(it.kind) && it.day && M === mkey(today()) && today().getDate() > +it.day;
+  return `<div class="fin-row ${late ? 'late' : ''}">${chk(r.paid, `data-pay="${esc(it.id)}"`, noBill(it.kind) ? 'Recebido' : 'Pago')}<button type="button" class="nm" data-edititem="${esc(it.id)}">${esc(it.name)}${sub || late ? `<span class="sub">${late ? 'atrasada, ' : ''}${esc(sub)}</span>` : ''}</button><div class="amt">${brl(r.amount)}</div></div>`;
 }
 function finMonthHTML(M) {
   const { rows, debts, tot, limit } = monthData(M);
@@ -1531,7 +1535,8 @@ function finMonthHTML(M) {
     ${kpi('Entradas', tot.income)}
     ${kpi('Saídas previstas', tot.outPlan, '', 'contas, parcelas e gastos do dia')}
     ${kpi('Sobra prevista', tot.leftPlan, tot.leftPlan < 0 ? 'neg' : 'pos')}
-    ${kpi('Gastos do dia', tot.daily, limit && tot.daily > limit ? 'neg' : '', limit ? 'de ' + brl(limit) + ' planejados' : 'sem limite definido')}
+    ${kpi('Gastos do dia', tot.daily, limit && tot.daily > limit ? 'neg' : '', (limit ? 'de ' + brl(limit) + ' planejados' : 'sem limite definido') + ', fora o vale')}
+    ${tot.benefit ? kpi('Vale disponível', tot.valeLeft, tot.valeLeft < 0 ? 'neg' : '', 'de ' + brl(tot.benefit) + ', já usou ' + brl(tot.vale)) : ''}
   </div>`;
   const total = list => brl(list.reduce((s, x) => s + x.amount, 0));
   const sec = (kind, list) => `<section class="fin-sec"><header><h3>${FIN_KINDS[kind]}</h3><span class="tot">${total(list)}</span></header>
@@ -1540,7 +1545,9 @@ function finMonthHTML(M) {
   const debtSec = `<section class="fin-sec"><header><h3>Empréstimos e parcelamentos</h3><span class="tot">${brl(tot.debts)}</span></header>
     ${debts.map(r => finRow(r, M)).join('') || '<p class="empty-s">Nenhuma parcela neste mês.</p>'}
     <button class="add-btn" data-fintab="dividas">${icon('right')}Ver todas as dívidas</button></section>`;
-  return tiles + `<div class="fin-grid">${sec('income', rows.income)}${sec('fixed', rows.fixed)}${debtSec}${sec('variable', rows.variable)}</div>`;
+  const valeSec = sec('benefit', rows.benefit).replace(`<button class="add-btn" data-additem="benefit">`,
+    `<p class="vale-line">Usado no mês: ${brl(tot.vale)}. Sobra no vale: <b>${brl(tot.valeLeft)}</b>. Não entra na sobra em dinheiro.</p><button class="add-btn" data-additem="benefit">`);
+  return tiles + `<div class="fin-grid">${sec('income', rows.income)}${sec('fixed', rows.fixed)}${debtSec}${sec('variable', rows.variable)}${valeSec}</div>`;
 }
 
 function finDebtsHTML() {
@@ -1597,20 +1604,22 @@ function finDailyHTML(M) {
   return `<form id="expForm" class="exp-form" autocomplete="off">
       <input id="expInput" type="text" inputmode="text" placeholder="Ex.: 45,90 mercado" aria-label="Valor e descrição">
       <select id="expCat" aria-label="Categoria">${f.cats.map(c => `<option>${esc(c)}</option>`).join('')}</select>
+      <select id="expPay" aria-label="Pago com"><option value="dinheiro">Dinheiro ou cartão</option><option value="vale">Vale</option></select>
       <select id="expWho" aria-label="Quem gastou">${f.people.map(p => `<option value="${esc(p.id)}">${esc(p.name)}</option>`).join('')}</select>
       <input id="expDate" type="date" value="${date}" aria-label="Data">
       <button class="primary" type="submit">${icon('plus')}<span class="t">Lançar</span></button>
     </form>
     <div class="kpis">
-      ${kpi('Gasto no mês', tot.daily, limit && tot.daily > limit ? 'neg' : '')}
+      ${kpi('Gasto no mês (dinheiro)', tot.daily, limit && tot.daily > limit ? 'neg' : '')}
       ${kpi('Limite planejado', limit || 0, '', `<button type="button" class="link-btn" data-setlimit style="padding:0">${limit ? 'alterar' : 'definir'}</button>`)}
       ${kpi('Ainda pode gastar', Math.max(0, (limit || 0) - tot.daily), limit && tot.daily > limit ? 'neg' : 'pos', limit ? '' : 'defina um limite')}
+      ${tot.benefit || tot.vale ? kpi('Vale', tot.valeLeft, tot.valeLeft < 0 ? 'neg' : 'pos', 'usou ' + brl(tot.vale) + ' de ' + brl(tot.benefit)) : ''}
     </div>
     ${limit ? `<div class="prog big ${tot.daily > limit ? 'over' : ''}"><i style="width:${pct}%"></i></div>` : ''}
     ${Object.keys(byCat).length ? `<div class="cat-chips">${Object.entries(byCat).sort((a, b) => b[1] - a[1]).map(([c, v]) => `<span class="label">${esc(c)} ${brl(v)}</span>`).join('')}</div>` : ''}
     <div class="exp-list">${Object.keys(days).length ? Object.entries(days).map(([d, list]) => `
       <div class="ag-day"><h3>${WD[parseD(d).getDay()]} ${d.slice(8, 10)}/${d.slice(5, 7)}</h3>
-      ${list.map(e => `<div class="fin-row"><div class="nm static">${esc(e.desc || e.cat)}<span class="sub">${esc(e.cat)}${e.who ? ', ' + esc(personName(e.who)) : ''}</span></div><div class="amt">${brl(e.amount)}</div><button type="button" class="icon-btn" data-delexp="${esc(e.id)}" aria-label="Apagar gasto">${icon('x')}</button></div>`).join('')}</div>`).join('') : '<p class="empty">Nenhum gasto lançado neste mês. Digite o valor e o que foi, por exemplo "32 lanche".</p>'}</div>`;
+      ${list.map(e => `<div class="fin-row"><div class="nm static">${esc(e.desc || e.cat)}<span class="sub">${esc(e.cat)}${e.pay === 'vale' ? ', vale' : ''}${e.who ? ', ' + esc(personName(e.who)) : ''}</span></div><div class="amt">${brl(e.amount)}</div><button type="button" class="icon-btn" data-delexp="${esc(e.id)}" aria-label="Apagar gasto">${icon('x')}</button></div>`).join('')}</div>`).join('') : '<p class="empty">Nenhum gasto lançado neste mês. Digite o valor e o que foi, por exemplo "32 lanche".</p>'}</div>`;
 }
 
 function finProjectionHTML() {
@@ -1622,7 +1631,7 @@ function finProjectionHTML() {
       <thead><tr><th>Mês</th><th>Entradas</th><th>Contas fixas</th><th>Parcelas</th><th>Variáveis</th><th>Gastos do dia</th><th>Sobra</th></tr></thead>
       <tbody>${rows.map(r => `<tr data-gomonth="${r.k}"><td>${mlabel(r.k, true)}</td><td>${brl(r.income)}</td><td>${brl(r.fixed)}</td><td>${brl(r.debts)}</td><td>${brl(r.variable)}</td><td>${brl(r.dailyPlan)}</td><td class="${r.leftPlan < 0 ? 'neg' : 'pos'}"><b>${brl(r.leftPlan)}</b></td></tr>`).join('')}</tbody>
     </table></div>
-    <p class="small muted">Conta as entradas e contas cadastradas como estão hoje, as parcelas dos contratos e o limite de gastos do dia (ou o que já foi gasto, se for maior). Toque num mês para abrir.</p>`;
+    <p class="small muted">Conta as entradas em dinheiro e as contas cadastradas como estão hoje (o vale fica de fora), as parcelas dos contratos e o limite de gastos do dia (ou o que já foi gasto, se for maior). Toque num mês para abrir.</p>`;
 }
 
 /* ---------- Eventos de Finanças ---------- */
@@ -1654,6 +1663,10 @@ board.addEventListener('click', e => {
     F().metaAt = Date.now(); return finTouch();
   }
 });
+board.addEventListener('change', e => {
+  if (e.target.id === 'expPay') e.target.dataset.touched = '1';
+  if (e.target.id === 'expCat' && !$('#expPay').dataset.touched) $('#expPay').value = norm(e.target.value) === 'mercado' ? 'vale' : 'dinheiro';
+});
 board.addEventListener('submit', e => {
   if (e.target.id !== 'expForm') return;
   e.preventDefault();
@@ -1666,10 +1679,12 @@ board.addEventListener('submit', e => {
   let cat = $('#expCat').value;
   const guess = F().cats.find(c => desc && norm(desc).includes(norm(c).split(' ')[0]));
   if (guess) cat = guess;
-  F().expenses.push({ id: uid(), date: $('#expDate').value || dstr(today()), amount, desc, cat, who: $('#expWho').value, updated: Date.now() });
+  let pay = $('#expPay').value;
+  if (!$('#expPay').dataset.touched && norm(cat) === 'mercado') pay = 'vale';
+  F().expenses.push({ id: uid(), date: $('#expDate').value || dstr(today()), amount, desc, cat, pay, who: $('#expWho').value, updated: Date.now() });
   save(); renderMain(); renderBillsBar();
   setTimeout(() => $('#expInput')?.focus(), 0);
-  toast('Gasto de ' + brl(amount) + ' lançado');
+  toast('Gasto de ' + brl(amount) + ' lançado' + (pay === 'vale' ? ' no vale' : ''));
 });
 $('#billsBar').addEventListener('click', e => {
   const b = e.target.closest('[data-billpay]'); if (!b) return;
@@ -1684,7 +1699,7 @@ function openItem(id, kind) {
   const M = finMonthKey();
   const it = id ? F().items.find(x => x.id === id) : null;
   finEditId = id;
-  $('#iTitle').textContent = it ? 'Editar' : 'Nova ' + (kind === 'income' ? 'entrada' : 'conta');
+  $('#iTitle').textContent = it ? 'Editar' : ({ income: 'Nova entrada', benefit: 'Novo benefício' }[kind] || 'Nova conta');
   $('#iName').value = it?.name || '';
   $('#iKind').value = it?.kind || kind || 'fixed';
   $('#iAmount').value = it ? String(itemAmount(it, M)).replace('.', ',') : '';
@@ -1774,10 +1789,12 @@ $('#importFinFile').addEventListener('change', async e => {
   try {
     const raw = JSON.parse(await file.text());
     const inc = normFin(raw.fin || raw);
+    const remove = (raw.fin || raw).remove || [];
     const n = inc.items.length + inc.debts.length + inc.expenses.length;
-    if (!n) return toast('Nenhum dado financeiro no arquivo');
+    if (!n && !remove.length) return toast('Nenhum dado financeiro no arquivo');
     if (!confirm(`Importar ${inc.items.length} entradas/contas, ${inc.debts.length} dívidas e ${inc.expenses.length} gastos? Itens com o mesmo código são atualizados.`)) return;
     const now = Date.now();
+    for (const id of remove) for (const kind of ['items', 'debts', 'expenses']) if (F()[kind].some(x => x.id === id)) finRemove(kind, id);
     for (const kind of ['items', 'debts', 'expenses']) for (const x of inc[kind]) {
       x.updated = now; delete state.deleted[x.id];
       const i = F()[kind].findIndex(y => y.id === x.id);
