@@ -1,0 +1,983 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>Organizador</title>
+<meta name="theme-color" content="#2f5d50">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="Organizador">
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="icon" href="icon.svg" type="image/svg+xml">
+<link rel="apple-touch-icon" href="icon-192.png">
+<style>
+:root{
+  --bg:#f3f1ec; --surface:#ffffff; --surface-2:#eeebe5; --col:#e7e3dc;
+  --text:#1e1c19; --muted:#6d685f; --border:#dcd7ce;
+  --accent:#2f5d50; --accent-text:#ffffff;
+  --danger:#b3261e; --warn:#8a5300; --warn-bg:#f6e3c4; --ok:#2b7a4b;
+  --shadow:0 1px 2px rgba(0,0,0,.05),0 2px 6px rgba(0,0,0,.04);
+  color-scheme:light;
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --bg:#131312; --surface:#22211f; --surface-2:#2b2a27; --col:#1b1a18;
+    --text:#ece9e3; --muted:#9a958c; --border:#363430;
+    --accent:#6fb39c; --accent-text:#0f1a16;
+    --danger:#e5645b; --warn:#e9b45c; --warn-bg:#3a2d17; --ok:#6cc08f;
+    --shadow:0 1px 2px rgba(0,0,0,.4);
+    color-scheme:dark;
+  }
+}
+:root[data-theme="dark"]{
+  --bg:#131312; --surface:#22211f; --surface-2:#2b2a27; --col:#1b1a18;
+  --text:#ece9e3; --muted:#9a958c; --border:#363430;
+  --accent:#6fb39c; --accent-text:#0f1a16;
+  --danger:#e5645b; --warn:#e9b45c; --warn-bg:#3a2d17; --ok:#6cc08f;
+  --shadow:0 1px 2px rgba(0,0,0,.4);
+  color-scheme:dark;
+}
+*{box-sizing:border-box}
+html,body{margin:0;height:100%}
+body{background:var(--bg);color:var(--text);font:14px/1.45 "Segoe UI",system-ui,-apple-system,Roboto,sans-serif;display:flex;flex-direction:column;overflow:hidden;padding-bottom:env(safe-area-inset-bottom)}
+button{font:inherit;color:inherit;cursor:pointer}
+input,select,textarea{font:inherit;color:inherit}
+input[type=text],input[type=search],input[type=date],input[type=password],select,textarea{background:var(--surface-2);border:1px solid transparent;border-radius:8px;padding:8px 10px;outline:none;min-width:0}
+input:focus,select:focus,textarea:focus{border-color:var(--accent);background:var(--surface)}
+textarea{resize:vertical}
+a{color:var(--accent)}
+
+/* Top bar */
+.top{display:flex;align-items:center;gap:10px;padding:12px 16px;padding-top:max(12px,env(safe-area-inset-top));border-bottom:1px solid var(--border);background:var(--surface);flex-wrap:wrap;flex-shrink:0}
+.brand{font-weight:700;font-size:16px;letter-spacing:-.01em;display:flex;align-items:center;gap:8px;margin-right:4px}
+.logo{width:24px;height:24px;border-radius:7px;background:var(--accent);display:grid;place-items:center;color:var(--accent-text);font-size:13px;font-weight:800}
+#quick{flex:1 1 340px;display:flex}
+#quickInput{width:100%}
+#search{width:170px}
+.btn{background:var(--surface-2);border:1px solid var(--border);border-radius:8px;padding:7px 12px;white-space:nowrap}
+.btn:hover{border-color:var(--muted)}
+.btn.on{background:var(--accent);color:var(--accent-text);border-color:var(--accent)}
+.pill{border:1px solid var(--border);background:none;border-radius:999px;padding:5px 11px;font-size:12px;white-space:nowrap;color:var(--muted)}
+.pill.warn{color:var(--warn);border-color:var(--warn)}
+.pill.err{color:var(--danger);border-color:var(--danger)}
+.pill.ok{color:var(--ok);border-color:transparent}
+
+/* Filters */
+#filters{display:flex;gap:6px;padding:10px 16px 8px;overflow-x:auto;flex-shrink:0}
+.chip{display:inline-flex;align-items:center;gap:6px;border:1px solid var(--border);background:var(--surface);border-radius:999px;padding:4px 11px;white-space:nowrap;font-size:13px}
+.chip .dot{width:8px;height:8px;border-radius:50%;background:var(--c)}
+.chip .n{color:var(--muted);font-size:12px;font-variant-numeric:tabular-nums}
+.chip.on{border-color:var(--c);box-shadow:inset 0 0 0 1px var(--c)}
+
+/* Board */
+#board{flex:1;display:flex;gap:12px;padding:4px 16px 16px;overflow-x:auto;align-items:flex-start;min-height:0}
+.col{flex:1 0 240px;max-width:340px;background:var(--col);border-radius:12px;display:flex;flex-direction:column;max-height:100%}
+.col-head{display:flex;justify-content:space-between;align-items:flex-start;padding:12px 12px 6px;gap:8px}
+.col-head h2{margin:0;font-size:12px;font-weight:700;text-transform:uppercase;letter-spacing:.05em}
+.hint{margin:2px 0 0;font-size:12px;color:var(--muted)}
+.count{font-size:12px;color:var(--muted);background:var(--surface);border-radius:999px;padding:1px 8px;font-variant-numeric:tabular-nums;flex-shrink:0}
+.count.over{background:var(--danger);color:#fff}
+.wip-warn{margin:0 12px 6px;font-size:12px;color:var(--danger)}
+.list{padding:4px 8px;overflow-y:auto;min-height:44px;display:flex;flex-direction:column;gap:6px;flex:1}
+.card{background:var(--surface);border-radius:8px;padding:9px 10px 9px 13px;box-shadow:var(--shadow);cursor:grab;position:relative;border:1px solid var(--border);flex-shrink:0}
+.card::before{content:"";position:absolute;left:0;top:8px;bottom:8px;width:3px;border-radius:0 3px 3px 0;background:var(--area)}
+.card:hover,.card:focus-visible{border-color:var(--muted);outline:none}
+.card.dragging{opacity:.35}
+.card.is-done .card-title{color:var(--muted);text-decoration:line-through}
+.card-title{overflow-wrap:anywhere}
+.prio{color:var(--danger);font-size:10px;vertical-align:2px;margin-right:2px}
+.card-meta{display:flex;flex-wrap:wrap;align-items:center;gap:6px;margin-top:6px;font-size:12px;color:var(--muted)}
+.card-meta:empty{display:none}
+.tag{color:var(--area);font-weight:600}
+.due{padding:0 6px;border-radius:4px;background:var(--surface-2)}
+.due.late{background:var(--danger);color:#fff}
+.due.soon{background:var(--warn-bg);color:var(--warn)}
+.meta.ok{color:var(--ok)}
+.placeholder{border:2px dashed var(--muted);border-radius:8px;flex-shrink:0;opacity:.5}
+.col-foot{padding:6px 8px 10px}
+.add-btn{width:100%;text-align:left;background:none;border:none;color:var(--muted);padding:6px 8px;border-radius:6px}
+.add-btn:hover{background:var(--surface);color:var(--text)}
+.col-foot input{width:100%}
+.link-btn{background:none;border:none;color:var(--muted);font-size:12px;text-decoration:underline;padding:0 12px 6px;text-align:left}
+.link-btn:hover{color:var(--text)}
+
+/* Dialogs */
+dialog{border:none;border-radius:14px;padding:0;background:var(--surface);color:var(--text);width:min(580px,calc(100vw - 32px));box-shadow:0 20px 60px rgba(0,0,0,.3)}
+dialog::backdrop{background:rgba(0,0,0,.4)}
+.dlg{padding:18px;display:flex;flex-direction:column;gap:16px;max-height:85vh;overflow:auto;margin:0}
+.dlg-head{display:flex;gap:8px;align-items:flex-start}
+.title-input{flex:1;font-size:17px;font-weight:600;resize:none;background:none !important;border-color:transparent;padding:4px 6px;overflow:hidden}
+.title-input:focus{border-color:var(--accent)}
+.icon-btn{background:none;border:none;font-size:16px;padding:6px 8px;border-radius:6px;color:var(--muted)}
+.icon-btn:hover{background:var(--surface-2);color:var(--text)}
+.fields{display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:10px;align-items:end}
+.fields label,.block{display:flex;flex-direction:column;gap:4px;font-size:12px;color:var(--muted)}
+.fields select,.fields input,.block textarea,.block input{color:var(--text);font-size:14px}
+label.check{flex-direction:row;align-items:center;gap:8px;font-size:14px;color:var(--text);padding:8px 0}
+.lbl{font-size:12px;color:var(--muted)}
+#ckList{list-style:none;margin:4px 0;padding:0;display:flex;flex-direction:column;gap:2px}
+#ckList li{display:flex;align-items:center;gap:8px}
+#ckList li input[type=text]{flex:1;background:none;padding:5px 6px}
+#ckList li input[type=text]:focus{background:var(--surface-2)}
+#ckList li.done input[type=text]{text-decoration:line-through;color:var(--muted)}
+#ckNew{width:100%}
+.dlg-foot{display:flex;align-items:center;gap:10px;border-top:1px solid var(--border);padding-top:12px}
+.dlg-foot .grow{flex:1}
+.primary{background:var(--accent);color:var(--accent-text);border:none;border-radius:8px;padding:8px 16px;font-weight:600}
+.danger-btn{background:none;border:1px solid var(--border);border-radius:8px;padding:7px 12px;color:var(--danger)}
+.danger-btn.armed{background:var(--danger);color:#fff;border-color:var(--danger)}
+.small{font-size:12px}.muted{color:var(--muted)}
+.set-sec{display:flex;flex-direction:column;gap:8px}
+.set-sec h3{margin:0;font-size:13px;text-transform:uppercase;letter-spacing:.05em;color:var(--muted)}
+.area-row{display:flex;gap:8px;align-items:center}
+.area-row input[type=text]{flex:1}
+.area-row input[type=color]{width:36px;height:34px;border:none;background:none;padding:0;cursor:pointer}
+.row{display:flex;gap:8px;flex-wrap:wrap;align-items:center}
+.help{margin:0;padding-left:18px;color:var(--muted);font-size:13px}
+.help li{margin:2px 0}
+.help code,kbd{background:var(--surface-2);border-radius:4px;padding:0 5px;font-family:Consolas,monospace;font-size:12px;color:var(--text)}
+.info-box{background:var(--surface-2);border-radius:8px;padding:10px 12px;font-size:13px}
+.info-box.err{color:var(--danger)}
+
+#toast{position:fixed;left:50%;bottom:calc(20px + env(safe-area-inset-bottom));transform:translateX(-50%) translateY(20px);background:var(--text);color:var(--bg);padding:8px 14px;border-radius:8px;font-size:13px;opacity:0;transition:.2s;pointer-events:none;z-index:10}
+#toast.show{opacity:1;transform:translateX(-50%)}
+
+@media (max-width:640px){
+  .top{gap:8px;padding-left:12px;padding-right:12px}
+  .brand{flex:1}
+  #quick{flex-basis:100%;order:5}
+  #search{flex:1 1 100%;width:auto;order:6}
+  .pill{max-width:150px;overflow:hidden;text-overflow:ellipsis}
+  #filters{scrollbar-width:none;padding-left:12px;padding-right:12px}
+  #filters::-webkit-scrollbar{display:none}
+  #board{padding-left:12px;padding-right:12px}
+  #board{scroll-snap-type:x mandatory}
+  .col{flex:0 0 85vw;max-width:none;scroll-snap-align:center}
+}
+</style>
+</head>
+<body>
+<header class="top">
+  <div class="brand"><span class="logo">O</span>Organizador</div>
+  <form id="quick" autocomplete="off">
+    <input id="quickInput" type="text" placeholder="Nova tarefa…  ex: Pagar luz #casa @sex !   (N)">
+  </form>
+  <input id="search" type="search" placeholder="Buscar  (/)">
+  <button class="btn" id="focusBtn" title="Esconde Entrada e Feito (F)">Foco</button>
+  <button class="pill" id="statusBtn"></button>
+  <button class="btn" id="setBtn" title="Configurações">⚙</button>
+</header>
+<nav id="filters"></nav>
+<main id="board"></main>
+
+<dialog id="cardDlg">
+  <form method="dialog" class="dlg" id="cardForm">
+    <div class="dlg-head">
+      <textarea id="fTitle" rows="1" class="title-input" placeholder="Título"></textarea>
+      <button class="icon-btn" value="close" aria-label="Fechar">✕</button>
+    </div>
+    <div class="fields">
+      <label>Área<select id="fArea"></select></label>
+      <label>Coluna<select id="fCol"></select></label>
+      <label>Prazo<input type="date" id="fDue"></label>
+      <label class="check"><input type="checkbox" id="fPrio"> Prioridade</label>
+    </div>
+    <label class="block">Notas<textarea id="fNotes" rows="5" placeholder="Detalhes, links, contexto…"></textarea></label>
+    <div class="block">
+      <div class="lbl">Checklist <span id="ckProg"></span></div>
+      <ul id="ckList"></ul>
+      <input id="ckNew" type="text" placeholder="+ Adicionar item (Enter)">
+    </div>
+    <div class="dlg-foot">
+      <button type="button" id="delBtn" class="danger-btn">Excluir</button>
+      <span class="grow small muted" id="fInfo"></span>
+      <button class="primary" value="close">Concluído</button>
+    </div>
+  </form>
+</dialog>
+
+<dialog id="setDlg">
+  <form method="dialog" class="dlg" autocomplete="off">
+    <div class="dlg-head"><h2 style="flex:1;margin:0;font-size:18px">Configurações</h2><button class="icon-btn" value="close" aria-label="Fechar">✕</button></div>
+
+    <section class="set-sec">
+      <h3>Sincronizar entre aparelhos</h3>
+      <div class="info-box" id="syncInfo"></div>
+      <div id="syncForm" class="set-sec"></div>
+    </section>
+
+    <section class="set-sec">
+      <h3>Backup</h3>
+      <div class="row">
+        <button type="button" class="btn" id="exportBtn">Exportar backup (.json)</button>
+        <button type="button" class="btn" id="importBtn">Importar backup</button>
+        <input type="file" id="importFile" accept=".json,application/json" hidden>
+      </div>
+      <div class="small muted" id="fileInfo"></div>
+      <div class="row" id="fileActions"></div>
+      <div class="row small muted" id="archInfo"></div>
+    </section>
+
+    <section class="set-sec">
+      <h3>Áreas da vida</h3>
+      <div id="areaList" class="set-sec"></div>
+      <div><button type="button" class="btn" id="addArea">+ Nova área</button></div>
+    </section>
+
+    <section class="set-sec">
+      <h3>Aparência</h3>
+      <label class="row">Tema
+        <select id="themeSel"><option value="auto">Automático</option><option value="light">Claro</option><option value="dark">Escuro</option></select>
+      </label>
+    </section>
+
+    <section class="set-sec">
+      <h3>Atalhos</h3>
+      <ul class="help">
+        <li><code>#área</code> define a frente: <code>#casa</code>, <code>#trab</code>, <code>#saude</code></li>
+        <li><code>@hoje</code> <code>@amanha</code> <code>@sex</code> <code>@25/12</code> definem prazo</li>
+        <li><code>!</code> marca como prioridade</li>
+        <li><kbd>N</kbd> nova tarefa · <kbd>/</kbd> buscar · <kbd>F</kbd> modo foco · <kbd>Esc</kbd> fechar</li>
+        <li>No celular (sem arrastar), abra o cartão e troque a coluna.</li>
+      </ul>
+    </section>
+  </form>
+</dialog>
+
+<div id="toast"></div>
+
+<script>
+'use strict';
+const KEY = 'organizador:v1';          // conteúdo (cartões, áreas)
+const PREFS_KEY = 'organizador:prefs'; // preferências deste aparelho
+const SYNC_KEY = 'organizador:sync';   // configuração de sincronização deste aparelho
+const DATA_PATH = 'organizador.json';  // arquivo no repositório de dados
+const DEFAULT_REPO = 'Jordan-Vigano/organizador-dados';
+
+const $ = (s, r = document) => r.querySelector(s);
+const esc = s => String(s ?? '').replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const uid = () => Math.random().toString(36).slice(2, 8) + Date.now().toString(36).slice(-5);
+const norm = s => String(s).normalize('NFD').replace(/[\u0300-\u036f]/g, '').toLowerCase();
+const pad = n => String(n).padStart(2, '0');
+const dstr = d => d.getFullYear() + '-' + pad(d.getMonth() + 1) + '-' + pad(d.getDate());
+const today = () => { const d = new Date(); d.setHours(0, 0, 0, 0); return d; };
+const parseD = s => { const [y, m, d] = s.split('-').map(Number); return new Date(y, m - 1, d); };
+const addDays = (d, n) => { const x = new Date(d); x.setDate(x.getDate() + n); return x; };
+const hhmm = t => { const d = new Date(t); return pad(d.getHours()) + ':' + pad(d.getMinutes()); };
+const WD = ['dom', 'seg', 'ter', 'qua', 'qui', 'sex', 'sáb'];
+const lsGet = k => { try { return localStorage.getItem(k); } catch { return null; } };
+const lsSet = (k, v) => { try { localStorage.setItem(k, v); } catch {} };
+
+/* ---------- Data model ---------- */
+function makeCard(o) {
+  const now = Date.now();
+  const c = { id: uid(), title: '', notes: '', area: null, col: 'entrada', due: null, priority: false,
+    checklist: [], archived: false, created: now, updated: now, doneAt: null, ...o };
+  if (!Array.isArray(c.checklist)) c.checklist = [];
+  return c;
+}
+
+function defaults() {
+  return {
+    version: 2, savedAt: 0, areasAt: 0, deleted: {},
+    areas: [
+      { id: 'trabalho', name: 'Trabalho', color: '#3b6fd8' },
+      { id: 'projetos', name: 'Projetos', color: '#8b55d6' },
+      { id: 'casa', name: 'Casa & Finanças', color: '#c27a10' },
+      { id: 'saude', name: 'Saúde & Hábitos', color: '#2b9a5a' },
+    ],
+    columns: [
+      { id: 'entrada', name: 'Entrada', hint: 'Tudo que surgir cai aqui primeiro' },
+      { id: 'proximas', name: 'Próximas', hint: 'Decidido: vai ser feito em breve' },
+      { id: 'fazendo', name: 'Fazendo', wip: 3, hint: 'No máximo 3 coisas ao mesmo tempo' },
+      { id: 'aguardando', name: 'Aguardando', hint: 'Depende de outra pessoa' },
+      { id: 'feito', name: 'Feito' },
+    ],
+    cards: [
+      makeCard({ id: 'boasvindas1', created: 1, updated: 1, title: 'Arraste este cartão para "Fazendo"', area: 'projetos',
+        notes: 'Cartões se movem arrastando. Clique num cartão para abrir notas, prazo e checklist. No celular, abra o cartão e troque a coluna.' }),
+      makeCard({ id: 'boasvindas2', created: 1, updated: 1, title: 'Teste a barra de cima: Pagar conta de luz #casa @amanha !',
+        notes: '#área define a frente, @hoje / @amanha / @sex / @25/12 define o prazo, ! marca prioridade.' }),
+      makeCard({ id: 'boasvindas3', created: 1, updated: 1, title: 'Ligar a sincronização (⚙ Configurações)', col: 'proximas', priority: true,
+        notes: 'Conecte o repositório do GitHub para ver as mesmas tarefas no celular, no PC de casa e no do trabalho.' }),
+    ],
+  };
+}
+
+function normalize(data) {
+  if (!data || !Array.isArray(data.cards)) throw new Error('formato inválido');
+  const d = defaults();
+  return {
+    version: 2,
+    savedAt: +data.savedAt || 0,
+    areasAt: +data.areasAt || 0,
+    deleted: data.deleted && typeof data.deleted === 'object' ? data.deleted : {},
+    areas: Array.isArray(data.areas) ? data.areas : d.areas,
+    columns: Array.isArray(data.columns) && data.columns.length ? data.columns : d.columns,
+    cards: data.cards.map(makeCard),
+  };
+}
+
+const content = s => JSON.stringify({ a: s.areas, c: s.cards, d: s.deleted });
+
+/* Junta duas versões: cada cartão fica com a edição mais recente; exclusões vencem edições mais antigas. */
+function mergeStates(local, remote) {
+  const deleted = { ...remote.deleted };
+  for (const [k, t] of Object.entries(local.deleted)) deleted[k] = Math.max(t, deleted[k] || 0);
+  const cutoff = Date.now() - 90 * 864e5;
+  for (const k of Object.keys(deleted)) if (deleted[k] < cutoff) delete deleted[k];
+  const newerFirst = remote.savedAt > local.savedAt ? [remote, local] : [local, remote];
+  const map = new Map();
+  for (const s of newerFirst) for (const c of s.cards) {
+    const ex = map.get(c.id);
+    if (!ex || c.updated > ex.updated) map.set(c.id, c);
+  }
+  const cards = [...map.values()].filter(c => !(deleted[c.id] && deleted[c.id] >= c.updated));
+  const remoteAreas = remote.areasAt > local.areasAt;
+  return {
+    ...local,
+    savedAt: Math.max(local.savedAt, remote.savedAt),
+    areasAt: Math.max(local.areasAt, remote.areasAt),
+    areas: remoteAreas ? remote.areas : local.areas,
+    columns: remoteAreas ? remote.columns : local.columns,
+    deleted, cards,
+  };
+}
+
+let state;
+try { const raw = lsGet(KEY); state = raw ? normalize(JSON.parse(raw)) : defaults(); } catch { state = defaults(); }
+
+let prefs = { theme: 'auto', focus: false, filter: 'all' };
+try { prefs = { ...prefs, ...(JSON.parse(lsGet(PREFS_KEY)) || {}) }; } catch {}
+const savePrefs = () => lsSet(PREFS_KEY, JSON.stringify(prefs));
+
+function persistLocal() { lsSet(KEY, JSON.stringify(state)); }
+function save() {
+  state.savedAt = Date.now();
+  persistLocal();
+  scheduleFileWrite();
+  scheduleSync();
+}
+
+const areaById = id => state.areas.find(a => a.id === id);
+const cardById = id => state.cards.find(c => c.id === id);
+function removeCards(pred) {
+  const now = Date.now();
+  state.cards = state.cards.filter(c => { if (pred(c)) { state.deleted[c.id] = now; return false; } return true; });
+}
+
+/* ---------- Toast ---------- */
+let toastT;
+function toast(msg) { const t = $('#toast'); t.textContent = msg; t.classList.add('show'); clearTimeout(toastT); toastT = setTimeout(() => t.classList.remove('show'), 2400); }
+
+/* ---------- Quick-add parsing ---------- */
+function parseDateWord(t) {
+  const T = today();
+  if (t === 'hoje') return dstr(T);
+  if (t === 'amanha') return dstr(addDays(T, 1));
+  const wd = ['dom', 'seg', 'ter', 'qua', 'qui', 'sex', 'sab'].findIndex(x => t.startsWith(x));
+  if (wd >= 0 && t.length <= 7) return dstr(addDays(T, ((wd - T.getDay() + 7) % 7) || 7));
+  const m = t.match(/^(\d{1,2})\/(\d{1,2})(?:\/(\d{2,4}))?$/);
+  if (m) {
+    let y = m[3] ? +m[3] : T.getFullYear(); if (y < 100) y += 2000;
+    let d = new Date(y, +m[2] - 1, +m[1]);
+    if (!m[3] && d < T) d = new Date(y + 1, +m[2] - 1, +m[1]);
+    if (d.getMonth() === +m[2] - 1) return dstr(d);
+  }
+  return null;
+}
+function parseQuick(text) {
+  let area = null, due = null, priority = false;
+  const words = text.split(/\s+/).filter(Boolean).filter(w => {
+    if (w === '!' || w === '!!' || /^!alta$/i.test(w)) { priority = true; return false; }
+    if (w[0] === '#' && w.length > 1) {
+      const t = norm(w.slice(1));
+      const a = state.areas.find(a => norm(a.id).startsWith(t) || norm(a.name).split(/[^a-z0-9]+/).some(p => p && p.startsWith(t)));
+      if (a) { area = a.id; return false; }
+    }
+    if (w[0] === '@' && w.length > 1) { const d = parseDateWord(norm(w.slice(1))); if (d) { due = d; return false; } }
+    return true;
+  });
+  return { title: words.join(' '), area, due, priority };
+}
+function addFromText(text, col) {
+  const p = parseQuick(text);
+  if (!p.title) return false;
+  if (!p.area && areaById(prefs.filter)) p.area = prefs.filter;
+  state.cards.push(makeCard({ ...p, col }));
+  save(); render();
+  return true;
+}
+
+/* ---------- Rendering ---------- */
+function matches(c, q) {
+  const f = prefs.filter;
+  if (f !== 'all') {
+    if (f === 'none') { if (c.area && areaById(c.area)) return false; }
+    else if (c.area !== f) return false;
+  }
+  if (q && !norm(c.title + ' ' + c.notes + ' ' + c.checklist.map(i => i.text).join(' ')).includes(norm(q))) return false;
+  return true;
+}
+
+function dueBadge(c) {
+  const d = parseD(c.due), n = Math.round((d - today()) / 864e5);
+  let cls = '', txt;
+  if (n < 0) { txt = n === -1 ? 'ontem' : `atrasada ${-n}d`; cls = 'late'; }
+  else if (n === 0) { txt = 'hoje'; cls = 'soon'; }
+  else if (n === 1) { txt = 'amanhã'; cls = 'soon'; }
+  else if (n < 7) txt = WD[d.getDay()];
+  else txt = pad(d.getDate()) + '/' + pad(d.getMonth() + 1);
+  if (c.col === 'feito') cls = '';
+  return `<span class="due ${cls}">${txt}</span>`;
+}
+
+function cardHTML(c) {
+  const a = areaById(c.area);
+  const done = c.checklist.filter(i => i.done).length;
+  return `<article class="card ${c.col === 'feito' ? 'is-done' : ''}" draggable="true" data-id="${esc(c.id)}" tabindex="0" style="--area:${a ? esc(a.color) : 'transparent'}">
+    <div class="card-title">${c.priority ? '<span class="prio" title="Prioridade">●</span>' : ''}${esc(c.title)}</div>
+    <div class="card-meta">${a ? `<span class="tag">${esc(a.name)}</span>` : ''}${c.due ? dueBadge(c) : ''}${c.checklist.length ? `<span class="meta ${done === c.checklist.length ? 'ok' : ''}">☑ ${done}/${c.checklist.length}</span>` : ''}${c.notes.trim() ? '<span class="meta" title="Tem notas">≡</span>' : ''}</div>
+  </article>`;
+}
+
+function renderBoard() {
+  const q = $('#search').value.trim();
+  const scroll = $('#board').scrollLeft;
+  const cols = state.columns.filter(c => !(prefs.focus && (c.id === 'entrada' || c.id === 'feito')));
+  $('#board').innerHTML = cols.map(col => {
+    const all = state.cards.filter(c => c.col === col.id && !c.archived);
+    const shown = all.filter(c => matches(c, q));
+    const over = col.wip && all.length > col.wip;
+    return `<section class="col" data-col="${col.id}">
+      <header class="col-head">
+        <div><h2>${esc(col.name)}</h2>${col.hint ? `<p class="hint">${esc(col.hint)}</p>` : ''}</div>
+        <span class="count ${over ? 'over' : ''}">${all.length}${col.wip ? '/' + col.wip : ''}</span>
+      </header>
+      ${over ? '<p class="wip-warn">Muita coisa em paralelo — termine algo antes de puxar outra.</p>' : ''}
+      ${col.id === 'feito' && all.length ? '<button class="link-btn" data-act="archive-done">Arquivar concluídos</button>' : ''}
+      <div class="list" data-col="${col.id}">${shown.map(cardHTML).join('')}</div>
+      <div class="col-foot"><button class="add-btn" data-act="add" data-col="${col.id}">+ Adicionar</button></div>
+    </section>`;
+  }).join('');
+  $('#board').scrollLeft = scroll;
+}
+
+function renderFilters() {
+  const f = prefs.filter;
+  const live = state.cards.filter(c => !c.archived && c.col !== 'feito');
+  const chip = (id, name, color, n) =>
+    `<button class="chip ${f === id ? 'on' : ''}" data-filter="${esc(id)}" style="--c:${color ? esc(color) : 'var(--muted)'}">${color ? '<span class="dot"></span>' : ''}${esc(name)}<span class="n">${n}</span></button>`;
+  const none = live.filter(c => !c.area || !areaById(c.area)).length;
+  $('#filters').innerHTML = chip('all', 'Todas', null, live.length)
+    + state.areas.map(a => chip(a.id, a.name, a.color, live.filter(c => c.area === a.id).length)).join('')
+    + (none ? chip('none', 'Sem área', null, none) : '');
+}
+
+function applyTheme() {
+  if (prefs.theme === 'auto') document.documentElement.removeAttribute('data-theme');
+  else document.documentElement.setAttribute('data-theme', prefs.theme);
+}
+
+function render() {
+  if (prefs.filter !== 'all' && prefs.filter !== 'none' && !areaById(prefs.filter)) prefs.filter = 'all';
+  applyTheme();
+  $('#focusBtn').classList.toggle('on', !!prefs.focus);
+  renderFilters();
+  renderBoard();
+  renderStatus();
+}
+
+/* ---------- Moving cards ---------- */
+function moveCard(id, col, beforeId, noRender) {
+  const i = state.cards.findIndex(c => c.id === id);
+  if (i < 0) return;
+  const [c] = state.cards.splice(i, 1);
+  if (c.col !== 'feito' && col === 'feito') c.doneAt = Date.now();
+  if (col !== 'feito') c.doneAt = null;
+  c.col = col; c.updated = Date.now();
+  if (beforeId && beforeId !== id) {
+    const j = state.cards.findIndex(x => x.id === beforeId);
+    state.cards.splice(j < 0 ? state.cards.length : j, 0, c);
+  } else {
+    let last = -1; state.cards.forEach((x, k) => { if (x.col === col) last = k; });
+    state.cards.splice(last + 1, 0, c);
+  }
+  save();
+  if (!noRender) render();
+}
+
+/* ---------- Board events ---------- */
+const board = $('#board');
+board.addEventListener('click', e => {
+  const act = e.target.closest('[data-act]');
+  if (act) {
+    if (act.dataset.act === 'add') return showInlineAdd(act.dataset.col);
+    if (act.dataset.act === 'archive-done') {
+      let n = 0; const now = Date.now();
+      state.cards.forEach(c => { if (c.col === 'feito' && !c.archived) { c.archived = true; c.updated = now; n++; } });
+      save(); render(); toast(`${n} cartão(ões) arquivado(s)`); return;
+    }
+  }
+  const card = e.target.closest('.card');
+  if (card) openCard(card.dataset.id);
+});
+board.addEventListener('keydown', e => {
+  if (e.key === 'Enter' && e.target.classList.contains('card')) openCard(e.target.dataset.id);
+});
+
+function showInlineAdd(col) {
+  const foot = board.querySelector(`.col[data-col="${col}"] .col-foot`);
+  if (!foot) return;
+  foot.innerHTML = '<form autocomplete="off"><input type="text" placeholder="Título…  (#área @data !)"></form>';
+  const form = foot.firstChild, input = form.firstChild;
+  input.focus();
+  form.addEventListener('submit', e => {
+    e.preventDefault();
+    if (addFromText(input.value, col)) showInlineAdd(col);
+  });
+  input.addEventListener('keydown', e => { if (e.key === 'Escape') renderBoard(); });
+  input.addEventListener('blur', () => setTimeout(() => { if (!input.value.trim() && document.activeElement !== input) renderBoard(); }, 150));
+}
+
+/* Drag & drop */
+let dragId = null;
+const ph = document.createElement('div'); ph.className = 'placeholder';
+board.addEventListener('dragstart', e => {
+  const el = e.target.closest('.card'); if (!el) return;
+  dragId = el.dataset.id;
+  e.dataTransfer.effectAllowed = 'move';
+  e.dataTransfer.setData('text/plain', dragId);
+  ph.style.height = el.offsetHeight + 'px';
+  requestAnimationFrame(() => el.classList.add('dragging'));
+});
+board.addEventListener('dragover', e => {
+  if (!dragId) return;
+  const list = e.target.closest('.col')?.querySelector('.list'); if (!list) return;
+  e.preventDefault();
+  const after = [...list.querySelectorAll('.card:not(.dragging)')].find(c => {
+    const r = c.getBoundingClientRect(); return e.clientY < r.top + r.height / 2;
+  });
+  if (after) { if (after.previousElementSibling !== ph) list.insertBefore(ph, after); }
+  else if (list.lastElementChild !== ph) list.appendChild(ph);
+});
+board.addEventListener('drop', e => {
+  if (!dragId) return;
+  e.preventDefault();
+  const list = ph.parentElement; if (!list) return;
+  let next = ph.nextElementSibling;
+  while (next && (!next.classList.contains('card') || next.dataset.id === dragId)) next = next.nextElementSibling;
+  const id = dragId; dragId = null;
+  moveCard(id, list.dataset.col, next ? next.dataset.id : null);
+});
+board.addEventListener('dragend', () => {
+  dragId = null; ph.remove();
+  board.querySelectorAll('.dragging').forEach(el => el.classList.remove('dragging'));
+});
+
+/* ---------- Top bar ---------- */
+$('#quick').addEventListener('submit', e => {
+  e.preventDefault();
+  const inp = $('#quickInput');
+  if (addFromText(inp.value, 'entrada')) {
+    inp.value = '';
+    if (prefs.focus) toast('Adicionado à Entrada (oculta no modo Foco)');
+  }
+});
+$('#search').addEventListener('input', renderBoard);
+$('#focusBtn').addEventListener('click', () => { prefs.focus = !prefs.focus; savePrefs(); render(); });
+$('#filters').addEventListener('click', e => {
+  const b = e.target.closest('[data-filter]'); if (!b) return;
+  prefs.filter = b.dataset.filter; savePrefs(); render();
+});
+
+/* ---------- Card dialog ---------- */
+const cardDlg = $('#cardDlg');
+let curId = null;
+const cur = () => cardById(curId);
+function touch() { const c = cur(); if (c) { c.updated = Date.now(); save(); } }
+function autoGrow(t) { t.style.height = 'auto'; t.style.height = t.scrollHeight + 'px'; }
+
+function openCard(id) {
+  const c = cardById(id); if (!c) return;
+  curId = id;
+  $('#fTitle').value = c.title;
+  $('#fArea').innerHTML = '<option value="">— sem área —</option>' + state.areas.map(a => `<option value="${esc(a.id)}">${esc(a.name)}</option>`).join('');
+  $('#fArea').value = areaById(c.area) ? c.area : '';
+  $('#fCol').innerHTML = state.columns.map(k => `<option value="${k.id}">${esc(k.name)}</option>`).join('');
+  $('#fCol').value = c.col;
+  $('#fDue').value = c.due || '';
+  $('#fPrio').checked = !!c.priority;
+  $('#fNotes').value = c.notes;
+  const fmt = t => new Date(t).toLocaleDateString('pt-BR');
+  $('#fInfo').textContent = (c.created > 1 ? 'Criado em ' + fmt(c.created) : '') + (c.doneAt ? ' · concluído em ' + fmt(c.doneAt) : '');
+  resetDel();
+  renderChecklist();
+  cardDlg.showModal();
+  autoGrow($('#fTitle'));
+  if (!c.title) $('#fTitle').focus();
+}
+
+function renderChecklist() {
+  const c = cur(); if (!c) return;
+  const done = c.checklist.filter(i => i.done).length;
+  $('#ckProg').textContent = c.checklist.length ? `(${done}/${c.checklist.length})` : '';
+  $('#ckList').innerHTML = c.checklist.map(i =>
+    `<li data-id="${esc(i.id)}" class="${i.done ? 'done' : ''}"><input type="checkbox" ${i.done ? 'checked' : ''}><input type="text" value="${esc(i.text)}"><button type="button" class="icon-btn" data-del aria-label="Remover">✕</button></li>`).join('');
+}
+
+$('#fTitle').addEventListener('input', e => { cur().title = e.target.value.replace(/\n/g, ' '); autoGrow(e.target); touch(); });
+$('#fTitle').addEventListener('keydown', e => { if (e.key === 'Enter') { e.preventDefault(); e.target.blur(); } });
+$('#fArea').addEventListener('change', e => { cur().area = e.target.value || null; touch(); });
+$('#fCol').addEventListener('change', e => moveCard(curId, e.target.value, null, true));
+$('#fDue').addEventListener('change', e => { cur().due = e.target.value || null; touch(); });
+$('#fPrio').addEventListener('change', e => { cur().priority = e.target.checked; touch(); });
+$('#fNotes').addEventListener('input', e => { cur().notes = e.target.value; touch(); });
+$('#ckNew').addEventListener('keydown', e => {
+  if (e.key !== 'Enter') return;
+  e.preventDefault();
+  const v = e.target.value.trim(); if (!v) return;
+  cur().checklist.push({ id: uid(), text: v, done: false });
+  e.target.value = ''; touch(); renderChecklist();
+});
+$('#ckList').addEventListener('change', e => {
+  const li = e.target.closest('li'); if (!li) return;
+  const item = cur().checklist.find(i => i.id === li.dataset.id); if (!item) return;
+  if (e.target.type === 'checkbox') { item.done = e.target.checked; touch(); renderChecklist(); }
+});
+$('#ckList').addEventListener('input', e => {
+  const li = e.target.closest('li'); if (!li || e.target.type !== 'text') return;
+  const item = cur().checklist.find(i => i.id === li.dataset.id); if (item) { item.text = e.target.value; touch(); }
+});
+$('#ckList').addEventListener('keydown', e => { if (e.key === 'Enter') { e.preventDefault(); e.target.blur(); } });
+$('#ckList').addEventListener('click', e => {
+  if (!e.target.closest('[data-del]')) return;
+  const li = e.target.closest('li');
+  cur().checklist = cur().checklist.filter(i => i.id !== li.dataset.id);
+  touch(); renderChecklist();
+});
+
+let delArmed = false, delT;
+function resetDel() { delArmed = false; clearTimeout(delT); const b = $('#delBtn'); b.textContent = 'Excluir'; b.classList.remove('armed'); }
+$('#delBtn').addEventListener('click', () => {
+  const b = $('#delBtn');
+  if (!delArmed) { delArmed = true; b.textContent = 'Clique de novo para excluir'; b.classList.add('armed'); delT = setTimeout(resetDel, 3000); return; }
+  const id = curId;
+  removeCards(c => c.id === id);
+  save(); cardDlg.close(); toast('Cartão excluído');
+});
+cardDlg.addEventListener('close', () => {
+  const c = cur();
+  if (c && !c.title.trim()) { removeCards(x => x.id === c.id); save(); }
+  curId = null; render();
+});
+
+/* ---------- Settings dialog ---------- */
+const setDlg = $('#setDlg');
+$('#setBtn').addEventListener('click', openSettings);
+function openSettings() { renderSettings(); setDlg.showModal(); }
+setDlg.addEventListener('close', render);
+
+function renderSettings() {
+  $('#themeSel').value = prefs.theme;
+  $('#areaList').innerHTML = state.areas.map(a =>
+    `<div class="area-row" data-id="${esc(a.id)}"><input type="color" value="${esc(a.color)}"><input type="text" value="${esc(a.name)}"><button type="button" class="icon-btn" data-del aria-label="Excluir área">✕</button></div>`).join('');
+  const arch = state.cards.filter(c => c.archived).length;
+  $('#archInfo').innerHTML = arch ? `${arch} cartão(ões) arquivado(s) (ficam no backup). <button type="button" class="link-btn" id="purgeBtn" style="padding:0">Excluir arquivados definitivamente</button>` : '';
+  renderSyncSettings();
+  renderFileSettings();
+}
+$('#themeSel').addEventListener('change', e => { prefs.theme = e.target.value; savePrefs(); applyTheme(); });
+function areasChanged() { state.areasAt = Date.now(); save(); }
+$('#areaList').addEventListener('input', e => {
+  const row = e.target.closest('.area-row'); const a = areaById(row.dataset.id); if (!a) return;
+  if (e.target.type === 'color') a.color = e.target.value; else a.name = e.target.value;
+  areasChanged();
+});
+$('#areaList').addEventListener('click', e => {
+  if (!e.target.closest('[data-del]')) return;
+  const id = e.target.closest('.area-row').dataset.id;
+  const n = state.cards.filter(c => c.area === id).length;
+  if (n && !confirm(`${n} cartão(ões) usam essa área e ficarão "sem área". Excluir mesmo assim?`)) return;
+  const now = Date.now();
+  state.areas = state.areas.filter(a => a.id !== id);
+  state.cards.forEach(c => { if (c.area === id) { c.area = null; c.updated = now; } });
+  areasChanged(); renderSettings();
+});
+$('#addArea').addEventListener('click', () => {
+  const palette = ['#d0453b', '#1f8f9e', '#b5568f', '#6a7a1f', '#5865c9', '#a8642a'];
+  state.areas.push({ id: uid(), name: 'Nova área', color: palette[state.areas.length % palette.length] });
+  areasChanged(); renderSettings();
+  const inputs = $('#areaList').querySelectorAll('input[type=text]'); const last = inputs[inputs.length - 1]; last.focus(); last.select();
+});
+$('#archInfo').addEventListener('click', e => {
+  if (e.target.id !== 'purgeBtn') return;
+  if (!confirm('Excluir definitivamente todos os cartões arquivados?')) return;
+  removeCards(c => c.archived); save(); renderSettings();
+});
+
+/* Export / import */
+$('#exportBtn').addEventListener('click', () => {
+  const blob = new Blob([JSON.stringify(state, null, 2)], { type: 'application/json' });
+  const a = document.createElement('a');
+  a.href = URL.createObjectURL(blob); a.download = `organizador-backup-${dstr(new Date())}.json`;
+  a.click(); setTimeout(() => URL.revokeObjectURL(a.href), 1000);
+});
+$('#importBtn').addEventListener('click', () => $('#importFile').click());
+$('#importFile').addEventListener('change', async e => {
+  const f = e.target.files[0]; e.target.value = ''; if (!f) return;
+  try {
+    const data = normalize(JSON.parse(await f.text()));
+    if (!confirm(`Importar ${data.cards.length} cartões? Isso substitui os dados atuais (em todos os aparelhos, se a sincronização estiver ligada).`)) return;
+    const now = Date.now();
+    const keep = new Set(data.cards.map(c => c.id));
+    for (const c of state.cards) if (!keep.has(c.id)) data.deleted[c.id] = now;
+    data.cards.forEach(c => { c.updated = now; });
+    data.areasAt = now;
+    state = data; save(); renderSettings(); render(); toast('Backup importado');
+  } catch { toast('Arquivo inválido'); }
+});
+
+/* ---------- Sync via GitHub (repositório privado) ---------- */
+let sync = { repo: DEFAULT_REPO, token: '', lastSync: 0 };
+try { sync = { ...sync, ...(JSON.parse(lsGet(SYNC_KEY)) || {}) }; } catch {}
+const saveSync = () => lsSet(SYNC_KEY, JSON.stringify(sync));
+const syncOn = () => !!(sync.token && sync.repo);
+let syncBusy = false, syncAgain = false, syncErr = null, syncT = null;
+
+function b64e(str) {
+  const bytes = new TextEncoder().encode(str); let bin = '';
+  for (let i = 0; i < bytes.length; i += 0x8000) bin += String.fromCharCode.apply(null, bytes.subarray(i, i + 0x8000));
+  return btoa(bin);
+}
+function b64d(b64) {
+  const bin = atob(b64.replace(/\s/g, ''));
+  return new TextDecoder().decode(Uint8Array.from(bin, ch => ch.charCodeAt(0)));
+}
+function gh(path, method = 'GET', body) {
+  return fetch('https://api.github.com/repos/' + sync.repo + path, {
+    method, cache: 'no-store',
+    headers: { Authorization: 'Bearer ' + sync.token, Accept: 'application/vnd.github+json', 'X-GitHub-Api-Version': '2022-11-28',
+      ...(body ? { 'Content-Type': 'application/json' } : {}) },
+    body: body ? JSON.stringify(body) : undefined,
+  });
+}
+function httpMsg(st) {
+  if (st === 401) return 'Token inválido ou expirado';
+  if (st === 403) return 'Token sem permissão de escrita (Contents: Read and write)';
+  if (st === 404) return 'Repositório não encontrado ou token sem acesso a ele';
+  return 'Erro do GitHub (' + st + ')';
+}
+function scheduleSync(delay = 1500) {
+  if (!syncOn()) return;
+  clearTimeout(syncT); syncT = setTimeout(syncNow, delay);
+}
+async function syncNow() {
+  if (!syncOn()) return;
+  if (!navigator.onLine) { syncErr = 'Sem internet — sincroniza quando voltar'; renderStatus(); return; }
+  if (syncBusy) { syncAgain = true; return; }
+  syncBusy = true; renderStatus();
+  try {
+    for (let attempt = 0; ; attempt++) {
+      if (attempt > 3) throw new Error('Conflito persistente, tente de novo');
+      const r = await gh('/contents/' + DATA_PATH);
+      let remote = null, sha = null;
+      if (r.status === 200) {
+        const j = await r.json(); sha = j.sha;
+        const txt = j.content ? b64d(j.content) : await (await gh('/git/blobs/' + j.sha)).json().then(b => b64d(b.content));
+        remote = normalize(JSON.parse(txt));
+      } else if (r.status === 404) {
+        const repo = await gh(''); if (repo.status !== 200) throw new Error(httpMsg(repo.status));
+      } else throw new Error(httpMsg(r.status));
+
+      const merged = remote ? mergeStates(state, remote) : state;
+      if (content(merged) !== content(state)) { state = merged; persistLocal(); render(); if (curId && !cardById(curId)) cardDlg.close(); }
+      else state.savedAt = merged.savedAt;
+      if (remote && content(merged) === content(remote)) break;
+
+      const p = await gh('/contents/' + DATA_PATH, 'PUT', {
+        message: 'Atualização do Organizador', content: b64e(JSON.stringify(state, null, 1)), ...(sha ? { sha } : {}),
+      });
+      if (p.status === 200 || p.status === 201) break;
+      if (p.status === 409 || p.status === 422) continue;
+      throw new Error(httpMsg(p.status));
+    }
+    sync.lastSync = Date.now(); saveSync(); syncErr = null;
+    scheduleFileWrite();
+  } catch (e) { syncErr = e.message || String(e); }
+  syncBusy = false; renderStatus(); if (setDlg.open) renderSyncSettings();
+  if (syncAgain) { syncAgain = false; syncNow(); }
+}
+
+function renderSyncSettings() {
+  const info = $('#syncInfo'), form = $('#syncForm');
+  info.classList.toggle('err', !!(syncOn() && syncErr));
+  if (syncOn()) {
+    info.innerHTML = syncErr ? '⚠ ' + esc(syncErr)
+      : `✓ Sincronizando com <b>${esc(sync.repo)}</b>${sync.lastSync ? ' · última vez às ' + hhmm(sync.lastSync) : ''}.<br><span class="muted">Abra o mesmo link em qualquer aparelho e conecte com o mesmo token.</span>`;
+    form.innerHTML = '<div class="row"><button type="button" class="primary" data-s="now">Sincronizar agora</button><button type="button" class="btn" data-s="off">Desconectar este aparelho</button></div>';
+  } else {
+    const tokenUrl = 'https://github.com/settings/personal-access-tokens/new?name=Organizador&description=Sincroniza%C3%A7%C3%A3o%20do%20Organizador%20pessoal&expires_in=none&contents=write';
+    info.innerHTML = 'Guarda suas tarefas num repositório <b>privado</b> do GitHub para ver as mesmas coisas no celular e nos PCs. '
+      + `Precisa de um token que só acesse esse repositório: <a href="${tokenUrl}" target="_blank" rel="noopener">criar token no GitHub</a> → em <i>Repository access</i> escolha <i>Only select repositories</i> → <b>organizador-dados</b>; em <i>Permissions</i>, <i>Contents</i> = <i>Read and write</i>.`;
+    form.innerHTML = `<label class="block">Repositório de dados<input type="text" id="sRepo" value="${esc(sync.repo)}" spellcheck="false"></label>
+      <label class="block">Token<input type="password" id="sToken" placeholder="github_pat_…" spellcheck="false"></label>
+      <div class="row"><button type="button" class="primary" data-s="connect">Conectar</button><span class="small muted" id="sMsg"></span></div>`;
+  }
+}
+$('#syncForm').addEventListener('click', async e => {
+  const act = e.target.closest('[data-s]')?.dataset.s; if (!act) return;
+  if (act === 'now') return syncNow();
+  if (act === 'off') { sync.token = ''; syncErr = null; saveSync(); renderSyncSettings(); renderStatus(); return; }
+  if (act === 'connect') {
+    const repo = $('#sRepo').value.trim().replace(/^https?:\/\/github\.com\//, '').replace(/\/$/, '');
+    const token = $('#sToken').value.trim();
+    const msg = $('#sMsg');
+    if (!/^[\w.-]+\/[\w.-]+$/.test(repo) || !token) { msg.textContent = 'Preencha o repositório (usuario/nome) e o token.'; return; }
+    msg.textContent = 'Testando…';
+    const prev = { ...sync };
+    sync.repo = repo; sync.token = token;
+    try {
+      const r = await gh('');
+      if (r.status !== 200) throw new Error(httpMsg(r.status));
+      const j = await r.json();
+      if (j.permissions && !j.permissions.push) throw new Error(httpMsg(403));
+      if (!j.private && !confirm('Atenção: esse repositório é PÚBLICO — qualquer pessoa veria suas tarefas. Continuar mesmo assim?')) throw new Error('Cancelado');
+      saveSync(); syncErr = null;
+      await syncNow();
+      toast(syncErr ? syncErr : 'Sincronização ligada');
+      renderSyncSettings();
+    } catch (err) { sync = prev; msg.textContent = err.message; }
+  }
+});
+
+/* ---------- Backup em arquivo local (Chrome/Edge no PC) ---------- */
+const fsSupported = 'showSaveFilePicker' in window && 'indexedDB' in window;
+let fileHandle = null, filePerm = false;
+
+function idb() {
+  return new Promise((res, rej) => {
+    const r = indexedDB.open('organizador', 1);
+    r.onupgradeneeded = () => r.result.createObjectStore('kv');
+    r.onsuccess = () => res(r.result); r.onerror = () => rej(r.error);
+  });
+}
+async function idbGet(k) { const db = await idb(); return new Promise((res, rej) => { const q = db.transaction('kv').objectStore('kv').get(k); q.onsuccess = () => res(q.result); q.onerror = () => rej(q.error); }); }
+async function idbSet(k, v) { const db = await idb(); return new Promise((res, rej) => { const t = db.transaction('kv', 'readwrite'); v === undefined ? t.objectStore('kv').delete(k) : t.objectStore('kv').put(v, k); t.oncomplete = res; t.onerror = () => rej(t.error); }); }
+
+let writeT;
+function scheduleFileWrite() {
+  if (!fileHandle || !filePerm) return;
+  clearTimeout(writeT); writeT = setTimeout(writeFile, 800);
+}
+async function writeFile() {
+  if (!fileHandle || !filePerm) return;
+  try { const w = await fileHandle.createWritable(); await w.write(JSON.stringify(state, null, 2)); await w.close(); }
+  catch { filePerm = false; renderStatus(); }
+}
+async function readFile(replace) {
+  const txt = await (await fileHandle.getFile()).text();
+  if (!txt.trim()) return writeFile();
+  let data;
+  try { data = normalize(JSON.parse(txt)); } catch { toast('Esse arquivo não é um backup válido'); return; }
+  state = replace ? data : mergeStates(state, data);
+  if (replace) { const now = Date.now(); state.cards.forEach(c => { c.updated = now; }); state.areasAt = now; }
+  save(); render();
+}
+async function initFile() {
+  if (!fsSupported) return;
+  try {
+    fileHandle = await idbGet('fileHandle') || null;
+    if (fileHandle) filePerm = (await fileHandle.queryPermission({ mode: 'readwrite' })) === 'granted';
+  } catch { fileHandle = null; }
+  renderStatus();
+}
+async function reconnectFile() {
+  try { filePerm = (await fileHandle.requestPermission({ mode: 'readwrite' })) === 'granted'; if (filePerm) { await writeFile(); toast('Backup em arquivo reconectado'); } }
+  catch { toast('Não foi possível acessar o arquivo'); }
+  renderStatus(); if (setDlg.open) renderFileSettings();
+}
+const jsonTypes = [{ description: 'Dados do Organizador', accept: { 'application/json': ['.json'] } }];
+async function createFile() {
+  try {
+    const h = await window.showSaveFilePicker({ suggestedName: 'organizador-backup.json', types: jsonTypes });
+    fileHandle = h; filePerm = true; await idbSet('fileHandle', h);
+    await writeFile(); toast('Backup automático ligado');
+  } catch (err) { if (err.name !== 'AbortError') toast('Erro: ' + err.message); }
+  renderStatus(); renderFileSettings();
+}
+async function openFile() {
+  try {
+    const [h] = await window.showOpenFilePicker({ types: jsonTypes });
+    if (!confirm('Carregar esse arquivo e SUBSTITUIR os dados atuais?')) return;
+    fileHandle = h; await idbSet('fileHandle', h);
+    filePerm = (await h.requestPermission({ mode: 'readwrite' })) === 'granted';
+    if (filePerm) { await readFile(true); toast('Arquivo carregado'); }
+  } catch (err) { if (err.name !== 'AbortError') toast('Erro: ' + err.message); }
+  renderStatus(); renderFileSettings();
+}
+async function disconnectFile() {
+  fileHandle = null; filePerm = false; await idbSet('fileHandle', undefined);
+  renderStatus(); renderFileSettings();
+}
+function renderFileSettings() {
+  const info = $('#fileInfo'), act = $('#fileActions');
+  if (!fsSupported) { info.textContent = ''; act.innerHTML = ''; return; }
+  if (!fileHandle) {
+    info.textContent = 'Opcional (PC): manter também uma cópia automática num arquivo .json do computador.';
+    act.innerHTML = '<button type="button" class="btn" data-f="create">Ligar backup automático em arquivo</button><button type="button" class="btn" data-f="open">Carregar de um arquivo</button>';
+  } else {
+    info.innerHTML = `Backup automático em <b>${esc(fileHandle.name)}</b>${filePerm ? '.' : ' — precisa de permissão novamente.'}`;
+    act.innerHTML = (filePerm ? '' : '<button type="button" class="primary" data-f="reconnect">Reconectar</button>') + '<button type="button" class="btn" data-f="disconnect">Desligar</button>';
+  }
+}
+$('#fileActions').addEventListener('click', e => {
+  const f = e.target.closest('[data-f]')?.dataset.f;
+  ({ create: createFile, open: openFile, reconnect: reconnectFile, disconnect: disconnectFile })[f]?.();
+});
+
+/* ---------- Header status ---------- */
+function renderStatus() {
+  const b = $('#statusBtn');
+  b.className = 'pill'; b.dataset.act = 'settings';
+  if (syncOn()) {
+    if (syncBusy) { b.textContent = '↻ Sincronizando…'; b.title = ''; return; }
+    if (syncErr) { b.textContent = '⚠ Sincronização'; b.classList.add('err'); b.title = syncErr; return; }
+    b.textContent = '☁ ' + (sync.lastSync ? hhmm(sync.lastSync) : 'Conectado'); b.classList.add('ok'); b.title = 'Sincronizado com ' + sync.repo + ' — clique para sincronizar agora';
+    b.dataset.act = 'sync'; return;
+  }
+  if (fileHandle && !filePerm) { b.textContent = '↻ Reconectar backup'; b.classList.add('warn'); b.dataset.act = 'file'; return; }
+  b.textContent = '⚠ Só neste aparelho'; b.classList.add('warn'); b.title = 'Ligue a sincronização nas configurações';
+}
+$('#statusBtn').addEventListener('click', e => {
+  const act = e.currentTarget.dataset.act;
+  if (act === 'sync') return syncNow();
+  if (act === 'file') return reconnectFile();
+  openSettings();
+});
+
+/* ---------- Keyboard, tabs, lifecycle ---------- */
+document.addEventListener('keydown', e => {
+  if (e.ctrlKey || e.metaKey || e.altKey) return;
+  if (document.querySelector('dialog[open]')) return;
+  if (e.target.closest('input,textarea,select')) { if (e.key === 'Escape') e.target.blur(); return; }
+  const k = e.key.toLowerCase();
+  if (k === 'n') { e.preventDefault(); $('#quickInput').focus(); }
+  else if (k === '/') { e.preventDefault(); $('#search').focus(); }
+  else if (k === 'f') { prefs.focus = !prefs.focus; savePrefs(); render(); }
+});
+window.addEventListener('storage', e => {
+  if (e.key !== KEY || !e.newValue) return;
+  try { state = normalize(JSON.parse(e.newValue)); if (!cardDlg.open) render(); } catch {}
+});
+document.addEventListener('visibilitychange', () => { if (document.visibilityState === 'visible') scheduleSync(200); });
+window.addEventListener('online', () => scheduleSync(200));
+setInterval(() => { if (document.visibilityState === 'visible' && !cardDlg.open) syncNow(); }, 30000);
+
+render();
+initFile();
+scheduleSync(100);
+</script>
+</body>
+</html>
