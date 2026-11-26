@@ -13,52 +13,60 @@
 <link rel="apple-touch-icon" href="icon-192.png">
 <style>
 :root{
-  --bg:#f3f1ec; --surface:#ffffff; --surface-2:#eeebe5; --col:#e7e3dc;
-  --text:#1e1c19; --muted:#6d685f; --border:#dcd7ce;
-  --accent:#2f5d50; --accent-text:#ffffff;
+  --bg:#eef1ef; --surface:#ffffff; --surface-2:#e8ece9; --col:#e2e7e4; --col-focus:#d9e7e0;
+  --text:#16201c; --muted:#56635d; --border:#d0d9d4;
+  --accent:#2f5d50; --accent-text:#ffffff; --accent-soft:#c9ddd4;
   --danger:#b3261e; --warn:#8a5300; --warn-bg:#f6e3c4; --ok:#2b7a4b;
-  --shadow:0 1px 2px rgba(0,0,0,.05),0 2px 6px rgba(0,0,0,.04);
+  --shadow:0 1px 2px rgba(22,32,28,.06);
   color-scheme:light;
 }
 @media (prefers-color-scheme: dark){
   :root:not([data-theme="light"]){
-    --bg:#131312; --surface:#22211f; --surface-2:#2b2a27; --col:#1b1a18;
-    --text:#ece9e3; --muted:#9a958c; --border:#363430;
-    --accent:#6fb39c; --accent-text:#0f1a16;
-    --danger:#e5645b; --warn:#e9b45c; --warn-bg:#3a2d17; --ok:#6cc08f;
-    --shadow:0 1px 2px rgba(0,0,0,.4);
+    --bg:#0f1312; --surface:#1a201e; --surface-2:#232a27; --col:#151a18; --col-focus:#16251f;
+    --text:#e6ece9; --muted:#97a59f; --border:#2b3431;
+    --accent:#7fbfa9; --accent-text:#0d1a15; --accent-soft:#2a4a3f;
+    --danger:#ee7a71; --warn:#e9b45c; --warn-bg:#3a2d17; --ok:#7ccf9d;
+    --shadow:0 1px 2px rgba(0,0,0,.45);
     color-scheme:dark;
   }
 }
 :root[data-theme="dark"]{
-  --bg:#131312; --surface:#22211f; --surface-2:#2b2a27; --col:#1b1a18;
-  --text:#ece9e3; --muted:#9a958c; --border:#363430;
-  --accent:#6fb39c; --accent-text:#0f1a16;
-  --danger:#e5645b; --warn:#e9b45c; --warn-bg:#3a2d17; --ok:#6cc08f;
-  --shadow:0 1px 2px rgba(0,0,0,.4);
+  --bg:#0f1312; --surface:#1a201e; --surface-2:#232a27; --col:#151a18; --col-focus:#16251f;
+  --text:#e6ece9; --muted:#97a59f; --border:#2b3431;
+  --accent:#7fbfa9; --accent-text:#0d1a15; --accent-soft:#2a4a3f;
+  --danger:#ee7a71; --warn:#e9b45c; --warn-bg:#3a2d17; --ok:#7ccf9d;
+  --shadow:0 1px 2px rgba(0,0,0,.45);
   color-scheme:dark;
 }
+@font-face{font-family:"Plus Jakarta Sans";src:url("fonts/plus-jakarta-sans-latin.woff2") format("woff2");font-weight:400 700;font-display:swap}
 *{box-sizing:border-box}
 html,body{margin:0;height:100%;overscroll-behavior-y:none}
-body{background:var(--bg);color:var(--text);font:14px/1.45 "Segoe UI",system-ui,-apple-system,Roboto,sans-serif;display:flex;flex-direction:column;overflow:hidden;padding-bottom:env(safe-area-inset-bottom)}
+body{background:var(--bg);color:var(--text);font:14.5px/1.5 "Plus Jakarta Sans","Segoe UI",system-ui,-apple-system,Roboto,sans-serif;display:flex;flex-direction:column;overflow:hidden;padding-bottom:env(safe-area-inset-bottom)}
 button{font:inherit;color:inherit;cursor:pointer}
 input,select,textarea{font:inherit;color:inherit}
 input[type=text],input[type=search],input[type=date],input[type=password],select,textarea{background:var(--surface-2);border:1px solid transparent;border-radius:8px;padding:8px 10px;outline:none;min-width:0}
 input:focus,select:focus,textarea:focus{border-color:var(--accent);background:var(--surface)}
 textarea{resize:vertical}
 a{color:var(--accent)}
+button,.card,.chip{cursor:pointer}
+:where(button,a,input,select,textarea,.card,.chip):focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+.ico{width:16px;height:16px;fill:none;stroke:currentColor;stroke-width:2;stroke-linecap:round;stroke-linejoin:round;flex-shrink:0;vertical-align:-3px}
+.spin{animation:ptrspin .9s linear infinite}
+@media (prefers-reduced-motion:reduce){*,*::before,*::after{animation-duration:.01ms !important;animation-iteration-count:1 !important;transition-duration:.01ms !important}}
 
 /* Top bar */
 .top{display:flex;align-items:center;gap:10px;padding:12px 16px;padding-top:max(12px,env(safe-area-inset-top));border-bottom:1px solid var(--border);background:var(--surface);flex-wrap:wrap;flex-shrink:0}
 .brand{font-weight:700;font-size:16px;letter-spacing:-.01em;display:flex;align-items:center;gap:8px;margin-right:4px}
-.logo{width:24px;height:24px;border-radius:7px;background:var(--accent);display:grid;place-items:center;color:var(--accent-text);font-size:13px;font-weight:800}
+.logo{width:26px;height:26px;border-radius:8px;background:var(--accent);display:grid;place-items:center;color:var(--accent-text)}
+.logo svg{width:16px;height:16px}
 #quick{flex:1 1 340px;display:flex}
 #quickInput{width:100%}
 #search{width:170px}
-.btn{background:var(--surface-2);border:1px solid var(--border);border-radius:8px;padding:7px 12px;white-space:nowrap}
+.btn{background:var(--surface-2);border:1px solid var(--border);border-radius:8px;padding:7px 12px;white-space:nowrap;display:inline-flex;align-items:center;gap:6px}
 .btn:hover{border-color:var(--muted)}
 .btn.on{background:var(--accent);color:var(--accent-text);border-color:var(--accent)}
-.pill{border:1px solid var(--border);background:none;border-radius:999px;padding:5px 11px;font-size:12px;white-space:nowrap;color:var(--muted)}
+.pill{border:1px solid var(--border);background:none;border-radius:999px;padding:5px 11px;font-size:12px;white-space:nowrap;color:var(--muted);display:inline-flex;align-items:center;gap:6px}
+.pill .ico{width:14px;height:14px}
 .pill.warn{color:var(--warn);border-color:var(--warn)}
 .pill.err{color:var(--danger);border-color:var(--danger)}
 .pill.ok{color:var(--ok);border-color:transparent}
@@ -74,7 +82,13 @@ a{color:var(--accent)}
 #board{flex:1;display:flex;gap:12px;padding:4px 16px 16px;overflow-x:auto;align-items:flex-start;min-height:0}
 .col{flex:1 0 240px;max-width:340px;background:var(--col);border-radius:12px;display:flex;flex-direction:column;max-height:100%}
 .col-head{display:flex;justify-content:space-between;align-items:flex-start;padding:12px 12px 6px;gap:8px}
-.col-head h2{margin:0;font-size:12px;font-weight:700;text-transform:uppercase;letter-spacing:.05em}
+.col-head h2{margin:0;font-size:15px;font-weight:700;letter-spacing:-.01em}
+.col[data-col="fazendo"]{background:var(--col-focus);box-shadow:inset 0 0 0 1px var(--accent-soft)}
+.col[data-col="fazendo"] .col-head h2{color:var(--accent)}
+.slots{display:flex;gap:3px;padding-top:6px;flex-shrink:0}
+.slots i{width:16px;height:6px;border-radius:3px;background:var(--accent-soft)}
+.slots i.on{background:var(--accent)}
+.slots.over i.on{background:var(--danger)}
 .hint{margin:2px 0 0;font-size:12px;color:var(--muted)}
 .count{font-size:12px;color:var(--muted);background:var(--surface);border-radius:999px;padding:1px 8px;font-variant-numeric:tabular-nums;flex-shrink:0}
 .count.over{background:var(--danger);color:#fff}
@@ -86,7 +100,10 @@ a{color:var(--accent)}
 .card.dragging{opacity:.35}
 .card.is-done .card-title{color:var(--muted);text-decoration:line-through}
 .card-title{overflow-wrap:anywhere}
-.prio{color:var(--danger);font-size:10px;vertical-align:2px;margin-right:2px}
+.prio{color:var(--danger);margin-right:4px}
+.prio .ico{width:13px;height:13px;vertical-align:-1px}
+.card-meta .ico{width:13px;height:13px;vertical-align:-2px}
+.meta{display:inline-flex;align-items:center;gap:3px}
 .card-meta{display:flex;flex-wrap:wrap;align-items:center;gap:6px;margin-top:6px;font-size:12px;color:var(--muted)}
 .card-meta:empty{display:none}
 .tag{color:var(--area);font-weight:600}
@@ -96,7 +113,7 @@ a{color:var(--accent)}
 .meta.ok{color:var(--ok)}
 .placeholder{border:2px dashed var(--muted);border-radius:8px;flex-shrink:0;opacity:.5}
 .col-foot{padding:6px 8px 10px}
-.add-btn{width:100%;text-align:left;background:none;border:none;color:var(--muted);padding:6px 8px;border-radius:6px}
+.add-btn{width:100%;text-align:left;background:none;border:none;color:var(--muted);padding:6px 8px;border-radius:6px;display:flex;align-items:center;gap:6px}
 .add-btn:hover{background:var(--surface);color:var(--text)}
 .col-foot input{width:100%}
 .link-btn{background:none;border:none;color:var(--muted);font-size:12px;text-decoration:underline;padding:0 12px 6px;text-align:left}
@@ -109,7 +126,8 @@ dialog::backdrop{background:rgba(0,0,0,.4)}
 .dlg-head{display:flex;gap:8px;align-items:flex-start}
 .title-input{flex:1;font-size:17px;font-weight:600;resize:none;background:none !important;border-color:transparent;padding:4px 6px;overflow:hidden}
 .title-input:focus{border-color:var(--accent)}
-.icon-btn{background:none;border:none;font-size:16px;padding:6px 8px;border-radius:6px;color:var(--muted)}
+.icon-btn{background:none;border:none;padding:6px;border-radius:6px;color:var(--muted);display:inline-grid;place-items:center}
+.icon-btn .ico{width:18px;height:18px}
 .icon-btn:hover{background:var(--surface-2);color:var(--text)}
 .fields{display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:10px;align-items:end}
 .fields label,.block{display:flex;flex-direction:column;gap:4px;font-size:12px;color:var(--muted)}
@@ -143,7 +161,8 @@ label.check{flex-direction:row;align-items:center;gap:8px;font-size:14px;color:v
 /* Puxar para atualizar (celular) */
 #ptr{position:fixed;top:0;left:50%;transform:translate(-50%,-56px);z-index:20;width:42px;height:42px;border-radius:50%;background:var(--surface);border:1px solid var(--border);box-shadow:0 4px 14px rgba(0,0,0,.18);display:grid;place-items:center;color:var(--accent);font-size:20px;font-weight:700;transition:transform .2s;pointer-events:none}
 #ptr.pulling{transition:none}
-#ptr span{display:block;transition:transform .15s}
+#ptr span{display:grid;place-items:center;transition:transform .15s}
+#ptr .ico{width:20px;height:20px}
 #ptr.loading span{animation:ptrspin .8s linear infinite}
 @keyframes ptrspin{to{transform:rotate(360deg)}}
 #toast{position:fixed;left:50%;bottom:calc(20px + env(safe-area-inset-bottom));transform:translateX(-50%) translateY(20px);background:var(--text);color:var(--bg);padding:8px 14px;border-radius:8px;font-size:13px;opacity:0;transition:.2s;pointer-events:none;z-index:10}
@@ -152,12 +171,18 @@ label.check{flex-direction:row;align-items:center;gap:8px;font-size:14px;color:v
 @media (max-width:640px){
   .top{gap:8px;padding-left:12px;padding-right:12px}
   .brand{flex:1}
-  #quick{flex-basis:100%;order:5}
-  #search{flex:1 1 100%;width:auto;order:6}
-  .pill{max-width:150px;overflow:hidden;text-overflow:ellipsis}
+  #quick{flex:1 1 58%;order:5}
+  #search{flex:1 1 30%;width:auto;order:6}
+  .pill .t,#focusBtn .t{display:none}
+  .pill{justify-content:center;min-width:44px}
+  .pill .ico{width:18px;height:18px}
   #filters{scrollbar-width:none;padding-left:12px;padding-right:12px}
   #filters::-webkit-scrollbar{display:none}
   #board{padding-left:12px;padding-right:12px}
+  .btn,.icon-btn,.pill,.add-btn,.primary,.danger-btn{min-height:44px}
+  .icon-btn{min-width:44px}
+  .chip{min-height:36px}
+  input[type=text],input[type=search],input[type=date],input[type=password],select,textarea{font-size:16px}
   #board{scroll-snap-type:x mandatory}
   .col{flex:0 0 85vw;max-width:none;scroll-snap-align:center}
 }
@@ -165,14 +190,14 @@ label.check{flex-direction:row;align-items:center;gap:8px;font-size:14px;color:v
 </head>
 <body>
 <header class="top">
-  <div class="brand"><span class="logo">O</span>Organizador</div>
+  <div class="brand"><span class="logo"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="4" y="5" width="4" height="14" rx="1.2" fill="currentColor"/><rect x="10" y="5" width="4" height="10" rx="1.2" fill="currentColor" opacity=".75"/><rect x="16" y="5" width="4" height="6" rx="1.2" fill="currentColor" opacity=".5"/></svg></span>Organizador</div>
   <form id="quick" autocomplete="off">
-    <input id="quickInput" type="text" placeholder="Nova tarefa…  ex: Pagar luz #casa @sex !   (N)">
+    <input id="quickInput" type="text" placeholder="Nova tarefa: ex. Pagar luz #casa @sex !">
   </form>
   <input id="search" type="search" placeholder="Buscar  (/)">
-  <button class="btn" id="focusBtn" title="Esconde Entrada e Feito (F)">Foco</button>
+  <button class="btn" id="focusBtn" title="Esconde Entrada e Feito (F)" data-ico="target"><span class="t">Foco</span></button>
   <button class="pill" id="statusBtn"></button>
-  <button class="btn" id="setBtn" title="Configurações">⚙</button>
+  <button class="btn" id="setBtn" title="Configurações" aria-label="Configurações" data-ico="sliders"></button>
 </header>
 <nav id="filters"></nav>
 <main id="board"></main>
@@ -181,7 +206,7 @@ label.check{flex-direction:row;align-items:center;gap:8px;font-size:14px;color:v
   <form method="dialog" class="dlg" id="cardForm">
     <div class="dlg-head">
       <textarea id="fTitle" rows="1" class="title-input" placeholder="Título"></textarea>
-      <button class="icon-btn" value="close" aria-label="Fechar">✕</button>
+      <button class="icon-btn" value="close" aria-label="Fechar" data-ico="x"></button>
     </div>
     <div class="fields">
       <label>Área<select id="fArea"></select></label>
@@ -205,7 +230,7 @@ label.check{flex-direction:row;align-items:center;gap:8px;font-size:14px;color:v
 
 <dialog id="setDlg">
   <form method="dialog" class="dlg" autocomplete="off">
-    <div class="dlg-head"><h2 style="flex:1;margin:0;font-size:18px">Configurações</h2><button class="icon-btn" value="close" aria-label="Fechar">✕</button></div>
+    <div class="dlg-head"><h2 style="flex:1;margin:0;font-size:18px">Configurações</h2><button class="icon-btn" value="close" aria-label="Fechar" data-ico="x"></button></div>
 
     <section class="set-sec">
       <h3>Sincronizar entre aparelhos</h3>
@@ -245,13 +270,13 @@ label.check{flex-direction:row;align-items:center;gap:8px;font-size:14px;color:v
         <li><code>@hoje</code> <code>@amanha</code> <code>@sex</code> <code>@25/12</code> definem prazo</li>
         <li><code>!</code> marca como prioridade</li>
         <li><kbd>N</kbd> nova tarefa · <kbd>/</kbd> buscar · <kbd>F</kbd> modo foco · <kbd>Esc</kbd> fechar</li>
-        <li>No celular (sem arrastar), abra o cartão e troque a coluna.</li>
+        <li>No celular, abra o cartão e troque a coluna; puxe a tela para baixo para atualizar.</li>
       </ul>
     </section>
   </form>
 </dialog>
 
-<div id="ptr" aria-hidden="true"><span>↓</span></div>
+<div id="ptr" aria-hidden="true"><span data-ico="arrowDown"></span></div>
 <div id="toast"></div>
 
 <script>
@@ -273,6 +298,23 @@ const parseD = s => { const [y, m, d] = s.split('-').map(Number); return new Dat
 const addDays = (d, n) => { const x = new Date(d); x.setDate(x.getDate() + n); return x; };
 const hhmm = t => { const d = new Date(t); return pad(d.getHours()) + ':' + pad(d.getMinutes()); };
 const WD = ['dom', 'seg', 'ter', 'qua', 'qui', 'sex', 'sáb'];
+const ICONS = {
+  x: '<path d="M18 6 6 18"/><path d="m6 6 12 12"/>',
+  sliders: '<line x1="21" x2="14" y1="4" y2="4"/><line x1="10" x2="3" y1="4" y2="4"/><line x1="21" x2="12" y1="12" y2="12"/><line x1="8" x2="3" y1="12" y2="12"/><line x1="21" x2="16" y1="20" y2="20"/><line x1="12" x2="3" y1="20" y2="20"/><line x1="14" x2="14" y1="2" y2="6"/><line x1="8" x2="8" y1="10" y2="14"/><line x1="16" x2="16" y1="18" y2="22"/>',
+  check: '<path d="m9 11 3 3L22 4"/><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/>',
+  notes: '<path d="M15 12H3"/><path d="M17 18H3"/><path d="M21 6H3"/>',
+  flag: '<path d="M4 15s1-1 4-1 5 2 8 2 4-1 4-1V3s-1 1-4 1-5-2-8-2-4 1-4 1z"/><line x1="4" x2="4" y1="22" y2="15"/>',
+  cloud: '<path d="M17.5 19H9a7 7 0 1 1 6.71-9h1.79a4.5 4.5 0 1 1 0 9Z"/>',
+  refresh: '<path d="M21 12a9 9 0 0 0-9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"/><path d="M3 3v5h5"/><path d="M3 12a9 9 0 0 0 9 9 9.75 9.75 0 0 0 6.74-2.74L21 16"/><path d="M16 16h5v5"/>',
+  alert: '<path d="m21.73 18-8-14a2 2 0 0 0-3.48 0l-8 14A2 2 0 0 0 4 21h16a2 2 0 0 0 1.73-3"/><path d="M12 9v4"/><path d="M12 17h.01"/>',
+  arrowDown: '<path d="M12 5v14"/><path d="m19 12-7 7-7-7"/>',
+  plus: '<path d="M5 12h14"/><path d="M12 5v14"/>',
+  target: '<circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="6"/><circle cx="12" cy="12" r="2"/>',
+};
+const icon = (n, cls = '') => `<svg class="ico ${cls}" viewBox="0 0 24 24" aria-hidden="true">${ICONS[n]}</svg>`;
+document.querySelectorAll('[data-ico]').forEach(el => el.insertAdjacentHTML('afterbegin', icon(el.dataset.ico)));
+if (matchMedia('(max-width: 640px)').matches) document.getElementById('quickInput').placeholder = 'Nova tarefa';
+
 const lsGet = k => { try { return localStorage.getItem(k); } catch { return null; } };
 const lsSet = (k, v) => { try { localStorage.setItem(k, v); } catch {} };
 
@@ -444,8 +486,8 @@ function cardHTML(c) {
   const a = areaById(c.area);
   const done = c.checklist.filter(i => i.done).length;
   return `<article class="card ${c.col === 'feito' ? 'is-done' : ''}" draggable="true" data-id="${esc(c.id)}" tabindex="0" style="--area:${a ? esc(a.color) : 'transparent'}">
-    <div class="card-title">${c.priority ? '<span class="prio" title="Prioridade">●</span>' : ''}${esc(c.title)}</div>
-    <div class="card-meta">${a ? `<span class="tag">${esc(a.name)}</span>` : ''}${c.due ? dueBadge(c) : ''}${c.checklist.length ? `<span class="meta ${done === c.checklist.length ? 'ok' : ''}">☑ ${done}/${c.checklist.length}</span>` : ''}${c.notes.trim() ? '<span class="meta" title="Tem notas">≡</span>' : ''}</div>
+    <div class="card-title">${c.priority ? `<span class="prio" title="Prioridade">${icon('flag')}</span>` : ''}${esc(c.title)}</div>
+    <div class="card-meta">${a ? `<span class="tag">${esc(a.name)}</span>` : ''}${c.due ? dueBadge(c) : ''}${c.checklist.length ? `<span class="meta ${done === c.checklist.length ? 'ok' : ''}">${icon('check')}${done}/${c.checklist.length}</span>` : ''}${c.notes.trim() ? `<span class="meta" title="Tem notas">${icon('notes')}</span>` : ''}</div>
   </article>`;
 }
 
@@ -460,12 +502,14 @@ function renderBoard() {
     return `<section class="col" data-col="${col.id}">
       <header class="col-head">
         <div><h2>${esc(col.name)}</h2>${col.hint ? `<p class="hint">${esc(col.hint)}</p>` : ''}</div>
-        <span class="count ${over ? 'over' : ''}">${all.length}${col.wip ? '/' + col.wip : ''}</span>
+        ${col.wip
+          ? `<span class="slots ${over ? 'over' : ''}" title="${all.length} de ${col.wip} vagas" aria-label="${all.length} de ${col.wip} vagas">${Array.from({ length: Math.max(col.wip, all.length) }, (_, i) => `<i class="${i < all.length ? 'on' : ''}"></i>`).join('')}</span>`
+          : `<span class="count">${all.length}</span>`}
       </header>
-      ${over ? '<p class="wip-warn">Muita coisa em paralelo — termine algo antes de puxar outra.</p>' : ''}
+      ${over ? '<p class="wip-warn">Muita coisa em paralelo. Termine algo antes de puxar outra.</p>' : ''}
       ${col.id === 'feito' && all.length ? '<button class="link-btn" data-act="archive-done">Arquivar concluídos</button>' : ''}
       <div class="list" data-col="${col.id}">${shown.map(cardHTML).join('')}</div>
-      <div class="col-foot"><button class="add-btn" data-act="add" data-col="${col.id}">+ Adicionar</button></div>
+      <div class="col-foot"><button class="add-btn" data-act="add" data-col="${col.id}">${icon('plus')}Adicionar</button></div>
     </section>`;
   }).join('');
   $('#board').scrollLeft = scroll;
@@ -631,7 +675,7 @@ function renderChecklist() {
   const done = c.checklist.filter(i => i.done).length;
   $('#ckProg').textContent = c.checklist.length ? `(${done}/${c.checklist.length})` : '';
   $('#ckList').innerHTML = c.checklist.map(i =>
-    `<li data-id="${esc(i.id)}" class="${i.done ? 'done' : ''}"><input type="checkbox" ${i.done ? 'checked' : ''}><input type="text" value="${esc(i.text)}"><button type="button" class="icon-btn" data-del aria-label="Remover">✕</button></li>`).join('');
+    `<li data-id="${esc(i.id)}" class="${i.done ? 'done' : ''}"><input type="checkbox" ${i.done ? 'checked' : ''}><input type="text" value="${esc(i.text)}"><button type="button" class="icon-btn" data-del aria-label="Remover item">${icon('x')}</button></li>`).join('');
 }
 
 $('#fTitle').addEventListener('input', e => { cur().title = e.target.value.replace(/\n/g, ' '); autoGrow(e.target); touch(); });
@@ -689,7 +733,7 @@ setDlg.addEventListener('close', render);
 function renderSettings() {
   $('#themeSel').value = prefs.theme;
   $('#areaList').innerHTML = state.areas.map(a =>
-    `<div class="area-row" data-id="${esc(a.id)}"><input type="color" value="${esc(a.color)}"><input type="text" value="${esc(a.name)}"><button type="button" class="icon-btn" data-del aria-label="Excluir área">✕</button></div>`).join('');
+    `<div class="area-row" data-id="${esc(a.id)}"><input type="color" value="${esc(a.color)}"><input type="text" value="${esc(a.name)}"><button type="button" class="icon-btn" data-del aria-label="Excluir área">${icon('x')}</button></div>`).join('');
   const arch = state.cards.filter(c => c.archived).length;
   $('#archInfo').innerHTML = arch ? `${arch} cartão(ões) arquivado(s) (ficam no backup). <button type="button" class="link-btn" id="purgeBtn" style="padding:0">Excluir arquivados definitivamente</button>` : '';
   renderSyncSettings();
@@ -821,8 +865,8 @@ function renderSyncSettings() {
   const info = $('#syncInfo'), form = $('#syncForm');
   info.classList.toggle('err', !!(syncOn() && syncErr));
   if (syncOn()) {
-    info.innerHTML = syncErr ? '⚠ ' + esc(syncErr)
-      : `✓ Sincronizando com <b>${esc(sync.repo)}</b>${sync.lastSync ? ' · última vez às ' + hhmm(sync.lastSync) : ''}.<br><span class="muted">Abra o mesmo link em qualquer aparelho e conecte com o mesmo token.</span>`;
+    info.innerHTML = syncErr ? esc(syncErr)
+      : `Sincronizando com <b>${esc(sync.repo)}</b>${sync.lastSync ? ' · última vez às ' + hhmm(sync.lastSync) : ''}.<br><span class="muted">Abra o mesmo link em qualquer aparelho e conecte com o mesmo token.</span>`;
     form.innerHTML = '<div class="row"><button type="button" class="primary" data-s="now">Sincronizar agora</button><button type="button" class="btn" data-s="off">Desconectar este aparelho</button></div>';
   } else {
     const tokenUrl = 'https://github.com/settings/personal-access-tokens/new?name=Organizador&description=Sincroniza%C3%A7%C3%A3o%20do%20Organizador%20pessoal&expires_in=none&contents=write';
@@ -949,13 +993,13 @@ function renderStatus() {
   const b = $('#statusBtn');
   b.className = 'pill'; b.dataset.act = 'settings';
   if (syncOn()) {
-    if (syncBusy) { b.textContent = '↻ Sincronizando…'; b.title = ''; return; }
-    if (syncErr) { b.textContent = '⚠ Sincronização'; b.classList.add('err'); b.title = syncErr; return; }
-    b.textContent = '☁ ' + (sync.lastSync ? hhmm(sync.lastSync) : 'Conectado'); b.classList.add('ok'); b.title = 'Sincronizado com ' + sync.repo + ' — clique para sincronizar agora';
+    if (syncBusy) { b.innerHTML = icon('refresh', 'spin') + '<span class="t">Sincronizando</span>'; b.title = ''; return; }
+    if (syncErr) { b.innerHTML = icon('alert') + '<span class="t">Sem sincronizar</span>'; b.classList.add('err'); b.title = syncErr; return; }
+    b.innerHTML = icon('cloud') + '<span class="t">' + (sync.lastSync ? 'Salvo ' + hhmm(sync.lastSync) : 'Conectado') + '</span>'; b.classList.add('ok'); b.title = 'Sincronizado com ' + sync.repo + ' — clique para sincronizar agora';
     b.dataset.act = 'sync'; return;
   }
-  if (fileHandle && !filePerm) { b.textContent = '↻ Reconectar backup'; b.classList.add('warn'); b.dataset.act = 'file'; return; }
-  b.textContent = '⚠ Só neste aparelho'; b.classList.add('warn'); b.title = 'Ligue a sincronização nas configurações';
+  if (fileHandle && !filePerm) { b.innerHTML = icon('refresh') + '<span class="t">Reconectar backup</span>'; b.classList.add('warn'); b.dataset.act = 'file'; return; }
+  b.innerHTML = icon('alert') + '<span class="t">Só neste aparelho</span>'; b.classList.add('warn'); b.title = 'Ligue a sincronização nas configurações';
 }
 $('#statusBtn').addEventListener('click', e => {
   const act = e.currentTarget.dataset.act;
@@ -984,7 +1028,7 @@ setInterval(() => { if (document.visibilityState === 'visible' && !cardDlg.open)
 
 /* ---------- Puxar para atualizar (celular) ---------- */
 (function () {
-  const el = $('#ptr'), icon = el.firstElementChild, LIMIT = 70;
+  const el = $('#ptr'), arrow = el.firstElementChild, LIMIT = 70;
   let y0 = null, x0 = 0, dist = 0, pulling = false, busy = false;
   document.addEventListener('touchstart', e => {
     if (busy || e.touches.length !== 1 || document.querySelector('dialog[open]')) return;
@@ -1003,7 +1047,7 @@ setInterval(() => { if (document.visibilityState === 'visible' && !cardDlg.open)
     }
     dist = Math.min(dy * 0.5, 110);
     el.style.transform = `translate(-50%, ${dist - 56 + 16}px)`;
-    icon.style.transform = `rotate(${dist >= LIMIT ? 180 : dist * 2}deg)`;
+    arrow.style.transform = `rotate(${dist >= LIMIT ? 180 : dist * 2}deg)`;
     if (e.cancelable) e.preventDefault();
   }, { passive: false });
   const end = async () => {
@@ -1011,15 +1055,15 @@ setInterval(() => { if (document.visibilityState === 'visible' && !cardDlg.open)
     y0 = null;
     if (!pulling) return;
     pulling = false; el.classList.remove('pulling');
-    if (dist < LIMIT) { el.style.transform = ''; icon.style.transform = ''; return; }
+    if (dist < LIMIT) { el.style.transform = ''; arrow.style.transform = ''; return; }
     busy = true;
     el.style.transform = 'translate(-50%, 16px)';
-    icon.style.transform = ''; icon.textContent = '↻'; el.classList.add('loading');
+    arrow.style.transform = ''; arrow.innerHTML = icon('refresh'); el.classList.add('loading');
     try { if (syncOn()) await Promise.race([syncNow(), new Promise(r => setTimeout(r, 6000))]); } catch {}
     location.reload();
   };
   document.addEventListener('touchend', end);
-  document.addEventListener('touchcancel', () => { y0 = null; pulling = false; el.classList.remove('pulling'); el.style.transform = ''; icon.style.transform = ''; });
+  document.addEventListener('touchcancel', () => { y0 = null; pulling = false; el.classList.remove('pulling'); el.style.transform = ''; arrow.style.transform = ''; });
 })();
 
 render();
