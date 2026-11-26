@@ -209,19 +209,102 @@ label.check{flex-direction:row;align-items:center;gap:8px;font-size:14px;color:v
   .chip{min-height:36px}
   input[type=text],input[type=search],input[type=date],input[type=password],select,textarea{font-size:16px}
 }
+
+/* ---------- Recursos v3: quadros, vistas, etiquetas, calendário, arquivados ---------- */
+.side .nav .ico{width:15px;height:15px;color:var(--muted)}
+.side .nav.on .ico{color:var(--txt)}
+.sec-row{display:flex;align-items:center;justify-content:space-between}
+.sec-row .icon-btn{padding:3px;margin-right:4px}
+.sec-row .icon-btn .ico{width:14px;height:14px}
+.nav .sq{width:8px;height:8px;border-radius:2px;background:var(--c);flex-shrink:0}
+.top h1 small{font-size:13px;font-weight:500;color:var(--muted);margin-left:2px}
+.quick .btn.icon{min-height:34px}
+
+.views{display:none;gap:6px;padding:0 12px 8px;align-items:center;overflow-x:auto;scrollbar-width:none}
+.views::-webkit-scrollbar{display:none}
+.views select{padding:6px 8px;font-size:13px;flex-shrink:0;min-width:120px;max-width:46vw;min-height:40px}
+.vbtn{display:inline-flex;align-items:center;gap:5px;border:1px solid var(--chip-b);background:none;border-radius:6px;padding:5px 10px;font-size:12.5px;color:var(--txt-2);white-space:nowrap}
+.vbtn .ico{width:14px;height:14px}
+.vbtn.on{background:var(--btn);color:var(--btn-txt);border-color:var(--btn)}
+.chip .sq{width:7px;height:7px;border-radius:2px;background:var(--c)}
+.chip-sep{width:1px;background:var(--chip-b);margin:4px 2px;flex-shrink:0}
+
+.label.tg .dot{border-radius:2px}
+
+.scrollv{flex:1;min-height:0;overflow:auto;padding:4px 22px 22px}
+.cal-head{display:flex;align-items:center;gap:6px;margin-bottom:10px}
+.cal-head h2{margin:0 6px 0 0;font-size:15px;font-weight:600;min-width:140px}
+.cal-grid{display:grid;grid-template-columns:repeat(7,minmax(0,1fr));gap:1px;background:var(--list-b);border:1px solid var(--list-b);border-radius:8px;overflow:hidden}
+.cal-dow{background:var(--list);font-size:11.5px;color:var(--muted);padding:6px 8px}
+.cal-day{background:var(--panel);min-height:96px;padding:6px;display:flex;flex-direction:column;gap:3px;min-width:0}
+.cal-day.out{background:var(--canvas)}
+.cal-day.out .dn{opacity:.45}
+.dn{font-size:11.5px;color:var(--muted);font-variant-numeric:tabular-nums;align-self:flex-start;padding:0 5px;border-radius:999px}
+.cal-day.today .dn{background:var(--btn);color:var(--btn-txt);font-weight:600}
+.cal-item{display:flex;align-items:center;gap:5px;font-size:12px;padding:2px 6px;border-radius:5px;background:var(--list);border:0;text-align:left;color:var(--txt);width:100%;min-width:0}
+.cal-item:hover{background:var(--hover)}
+.cal-item .t{white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.cal-item .dot{width:6px;height:6px;border-radius:50%;background:var(--c);flex-shrink:0}
+.cal-item.done .t{text-decoration:line-through;color:var(--muted)}
+.cal-item.late{color:var(--danger)}
+.cal-note{margin-top:12px;font-size:12px;color:var(--muted)}
+.agenda{display:flex;flex-direction:column;gap:16px}
+.ag-day h3{margin:0 0 6px;font-size:12.5px;font-weight:600;color:var(--txt-2)}
+.ag-day h3.late{color:var(--danger)}
+.ag-day .list{padding:0;overflow:visible}
+
+.arch-list{display:flex;flex-direction:column;gap:6px;max-width:760px}
+.arch-row{display:flex;align-items:center;gap:10px;padding:8px 8px 8px 12px;border-radius:8px;background:var(--card);box-shadow:var(--shadow),0 0 0 1px var(--ring)}
+.arch-row .t{flex:1;min-width:0;cursor:pointer}
+.arch-row .sub{font-size:11.5px;color:var(--muted);margin-top:2px;display:flex;gap:6px;flex-wrap:wrap;align-items:center}
+.empty{color:var(--muted);padding:32px 0;text-align:center;max-width:760px}
+
+.lbl-pick{display:flex;flex-wrap:wrap;gap:6px}
+.lbl-pick button{display:inline-flex;align-items:center;gap:5px;border:1px solid var(--chip-b);background:none;border-radius:999px;padding:3px 10px;font-size:12px;color:var(--txt-2)}
+.lbl-pick button .dot{width:7px;height:7px;border-radius:2px;background:var(--c)}
+.lbl-pick button.on{background:var(--btn);color:var(--btn-txt);border-color:var(--btn)}
+.cmts{display:flex;flex-direction:column;gap:6px}
+.cmt{background:var(--input);border-radius:8px;padding:7px 10px;font-size:13px;color:var(--txt);white-space:pre-wrap;overflow-wrap:anywhere}
+.cmt .when{font-size:11px;color:var(--muted);display:flex;justify-content:space-between;align-items:center;margin-bottom:2px}
+.cmt .icon-btn{padding:2px}
+.cmt .icon-btn .ico{width:13px;height:13px}
+#cmtNew{width:100%}
+details.hist summary{cursor:pointer;font-size:12px;color:var(--muted)}
+details.hist ul{margin:6px 0 0;padding-left:18px;font-size:12px;color:var(--muted)}
+.dlg-foot{flex-wrap:wrap}
+.tpl-list{display:flex;flex-direction:column;gap:6px}
+.tpl-item{display:flex;align-items:center;gap:10px;text-align:left;border:1px solid var(--chip-b);background:none;border-radius:8px;padding:10px 12px}
+.tpl-item:hover{background:var(--hover)}
+.tpl-item .sub{font-size:11.5px;color:var(--muted)}
+.future{border:1px dashed var(--chip-b);border-radius:8px;padding:10px 12px;font-size:12.5px;color:var(--muted)}
+
+@media (max-width:900px){
+  .views{display:flex}
+}
+@media (max-width:640px){
+  .scrollv{padding:2px 12px 12px}
+  .quick .btn.icon{min-height:44px;min-width:44px}
+  .vbtn{min-height:40px}
+}
+
 </style>
 </head>
 <body>
 <aside class="side">
   <div class="brand"><span class="logo"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="4" y="5" width="4" height="14" rx="1.2" fill="currentColor"/><rect x="10" y="5" width="4" height="10" rx="1.2" fill="currentColor" opacity=".75"/><rect x="16" y="5" width="4" height="6" rx="1.2" fill="currentColor" opacity=".5"/></svg></span>Organizador</div>
+  <div id="sideViews"></div>
+  <div class="sec-row"><div class="sec">Quadros</div><button class="icon-btn" id="addBoardBtn" title="Novo quadro" aria-label="Novo quadro" data-ico="plus"></button></div>
+  <div id="sideBoards"></div>
   <div class="sec">Áreas</div>
   <div id="sideAreas"></div>
+  <div class="sec">Etiquetas</div>
+  <div id="sideLabels"></div>
   <div class="grow"></div>
-  <div class="side-help">Atalhos: <code>N</code> nova tarefa, <code>/</code> buscar, <code>F</code> foco.<br>Na tarefa: <code>#área</code> <code>@sex</code> <code>!</code></div>
+  <div class="side-help">Atalhos: <code>N</code> nova tarefa, <code>/</code> buscar, <code>F</code> foco.<br>Na tarefa: <code>#área</code> <code>+etiqueta</code> <code>@sex</code> <code>!</code></div>
 </aside>
 <div class="panel">
   <header class="top">
-    <h1><span class="logo"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="4" y="5" width="4" height="14" rx="1.2" fill="currentColor"/><rect x="10" y="5" width="4" height="10" rx="1.2" fill="currentColor" opacity=".75"/><rect x="16" y="5" width="4" height="6" rx="1.2" fill="currentColor" opacity=".5"/></svg></span><span id="boardTitle">Meu quadro</span></h1>
+    <h1><span class="logo"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="4" y="5" width="4" height="14" rx="1.2" fill="currentColor"/><rect x="10" y="5" width="4" height="10" rx="1.2" fill="currentColor" opacity=".75"/><rect x="16" y="5" width="4" height="6" rx="1.2" fill="currentColor" opacity=".5"/></svg></span><span id="boardTitle">Meu quadro</span><small id="filterTitle"></small></h1>
     <div class="grow"></div>
     <button class="pill" id="statusBtn"></button>
     <input id="search" type="search" placeholder="Buscar">
@@ -230,9 +313,11 @@ label.check{flex-direction:row;align-items:center;gap:8px;font-size:14px;color:v
     <button class="btn icon" id="setBtn" title="Configurações" aria-label="Configurações" data-ico="sliders"></button>
   </header>
   <form id="quick" class="quick" autocomplete="off">
-    <input id="quickInput" type="text" placeholder="Nova tarefa…  ex.: Pagar luz #casa @sex !" aria-label="Nova tarefa">
+    <input id="quickInput" type="text" placeholder="Nova tarefa…  ex.: Pagar luz #casa +ligar @sex !" aria-label="Nova tarefa">
+    <button class="btn icon" type="button" id="tplBtn" title="Criar a partir de um modelo" aria-label="Criar a partir de um modelo" data-ico="copy"></button>
     <button class="primary" type="submit" data-ico="plus"><span class="t">Adicionar</span></button>
   </form>
+  <div class="views" id="views"></div>
   <nav id="filters"></nav>
   <main id="board"></main>
 </div>
@@ -247,19 +332,36 @@ label.check{flex-direction:row;align-items:center;gap:8px;font-size:14px;color:v
       <label>Área<select id="fArea"></select></label>
       <label>Coluna<select id="fCol"></select></label>
       <label>Prazo<input type="date" id="fDue"></label>
+      <label id="fBoardWrap">Quadro<select id="fBoard"></select></label>
       <label class="check"><input type="checkbox" id="fPrio"> Prioridade</label>
     </div>
-    <label class="block">Notas<textarea id="fNotes" rows="5" placeholder="Detalhes, links, contexto…"></textarea></label>
+    <div class="block"><div class="lbl">Etiquetas</div><div class="lbl-pick" id="fLabels"></div></div>
+    <label class="block">Notas<textarea id="fNotes" rows="4" placeholder="Detalhes, links, contexto…"></textarea></label>
     <div class="block">
       <div class="lbl">Checklist <span id="ckProg"></span></div>
       <ul id="ckList"></ul>
       <input id="ckNew" type="text" placeholder="+ Adicionar item (Enter)">
     </div>
+    <div class="block">
+      <div class="lbl">Comentários</div>
+      <div class="cmts" id="cmtList"></div>
+      <input id="cmtNew" type="text" placeholder="Escrever um comentário (Enter)">
+    </div>
+    <details class="hist" id="histBox"><summary>Histórico</summary><ul id="histList"></ul></details>
     <div class="dlg-foot">
       <button type="button" id="delBtn" class="danger-btn">Excluir</button>
+      <button type="button" id="archBtn" class="btn">Arquivar</button>
+      <button type="button" id="tplSaveBtn" class="btn">Salvar como modelo</button>
       <span class="grow small muted" id="fInfo"></span>
       <button class="primary" value="close">Concluído</button>
     </div>
+  </form>
+</dialog>
+
+<dialog id="tplDlg">
+  <form method="dialog" class="dlg">
+    <div class="dlg-head"><h2 style="flex:1;margin:0;font-size:17px">Criar a partir de um modelo</h2><button class="icon-btn" value="close" aria-label="Fechar" data-ico="x"></button></div>
+    <div class="tpl-list" id="tplList"></div>
   </form>
 </dialog>
 
@@ -274,6 +376,37 @@ label.check{flex-direction:row;align-items:center;gap:8px;font-size:14px;color:v
     </section>
 
     <section class="set-sec">
+      <h3>Aparência</h3>
+      <label class="row">Tema
+        <select id="themeSel"><option value="auto">Automático (segue o aparelho)</option><option value="light">Claro</option><option value="dark">Escuro</option></select>
+      </label>
+    </section>
+
+    <section class="set-sec">
+      <h3>Quadros</h3>
+      <div id="boardList" class="set-sec"></div>
+      <div><button type="button" class="btn" data-add="boards">+ Novo quadro</button></div>
+    </section>
+
+    <section class="set-sec">
+      <h3>Áreas da vida</h3>
+      <div id="areaList" class="set-sec"></div>
+      <div><button type="button" class="btn" data-add="areas">+ Nova área</button></div>
+    </section>
+
+    <section class="set-sec">
+      <h3>Etiquetas</h3>
+      <div id="labelList" class="set-sec"></div>
+      <div><button type="button" class="btn" data-add="labels">+ Nova etiqueta</button></div>
+    </section>
+
+    <section class="set-sec">
+      <h3>Modelos</h3>
+      <div id="tplSetList" class="set-sec"></div>
+      <div class="small muted">Para criar um modelo, abra uma tarefa e use "Salvar como modelo".</div>
+    </section>
+
+    <section class="set-sec">
       <h3>Backup</h3>
       <div class="row">
         <button type="button" class="btn" id="exportBtn">Exportar backup (.json)</button>
@@ -282,28 +415,19 @@ label.check{flex-direction:row;align-items:center;gap:8px;font-size:14px;color:v
       </div>
       <div class="small muted" id="fileInfo"></div>
       <div class="row" id="fileActions"></div>
-      <div class="row small muted" id="archInfo"></div>
     </section>
 
     <section class="set-sec">
-      <h3>Áreas da vida</h3>
-      <div id="areaList" class="set-sec"></div>
-      <div><button type="button" class="btn" id="addArea">+ Nova área</button></div>
-    </section>
-
-    <section class="set-sec">
-      <h3>Aparência</h3>
-      <label class="row">Tema
-        <select id="themeSel"><option value="auto">Automático</option><option value="light">Claro</option><option value="dark">Escuro</option></select>
-      </label>
+      <h3>Em breve</h3>
+      <div class="future"><b>Membros:</b> dar acesso à Tatiana pelo celular dela, com quadros compartilhados e quadros só seus.</div>
     </section>
 
     <section class="set-sec">
       <h3>Atalhos</h3>
       <ul class="help">
         <li><code>#área</code> define a frente: <code>#casa</code>, <code>#trab</code>, <code>#saude</code></li>
-        <li><code>@hoje</code> <code>@amanha</code> <code>@sex</code> <code>@25/12</code> definem prazo</li>
-        <li><code>!</code> marca como prioridade</li>
+        <li><code>+etiqueta</code> marca: <code>+ligar</code>, <code>+comprar</code>, <code>+rapido</code></li>
+        <li><code>@hoje</code> <code>@amanha</code> <code>@sex</code> <code>@25/12</code> definem prazo; <code>!</code> marca prioridade</li>
         <li><kbd>N</kbd> nova tarefa · <kbd>/</kbd> buscar · <kbd>F</kbd> modo foco · <kbd>Esc</kbd> fechar</li>
         <li>No celular, abra o cartão e troque a coluna; puxe a tela para baixo para atualizar.</li>
       </ul>
@@ -316,7 +440,7 @@ label.check{flex-direction:row;align-items:center;gap:8px;font-size:14px;color:v
 
 <script>
 'use strict';
-const KEY = 'organizador:v1';          // conteúdo (cartões, áreas)
+const KEY = 'organizador:v1';          // conteúdo (quadros, cartões, áreas…)
 const PREFS_KEY = 'organizador:prefs'; // preferências deste aparelho
 const SYNC_KEY = 'organizador:sync';   // configuração de sincronização deste aparelho
 const DATA_PATH = 'organizador.json';  // arquivo no repositório de dados
@@ -325,14 +449,19 @@ const DEFAULT_REPO = 'Jordan-Vigano/organizador-dados';
 const $ = (s, r = document) => r.querySelector(s);
 const esc = s => String(s ?? '').replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 const uid = () => Math.random().toString(36).slice(2, 8) + Date.now().toString(36).slice(-5);
-const norm = s => String(s).normalize('NFD').replace(/[\u0300-\u036f]/g, '').toLowerCase();
+const norm = s => String(s).normalize('NFD').replace(/[̀-ͯ]/g, '').toLowerCase();
 const pad = n => String(n).padStart(2, '0');
 const dstr = d => d.getFullYear() + '-' + pad(d.getMonth() + 1) + '-' + pad(d.getDate());
 const today = () => { const d = new Date(); d.setHours(0, 0, 0, 0); return d; };
 const parseD = s => { const [y, m, d] = s.split('-').map(Number); return new Date(y, m - 1, d); };
 const addDays = (d, n) => { const x = new Date(d); x.setDate(x.getDate() + n); return x; };
 const hhmm = t => { const d = new Date(t); return pad(d.getHours()) + ':' + pad(d.getMinutes()); };
+const ddmm = t => { const d = new Date(t); return pad(d.getDate()) + '/' + pad(d.getMonth() + 1); };
 const WD = ['dom', 'seg', 'ter', 'qua', 'qui', 'sex', 'sáb'];
+const MONTHS = ['janeiro', 'fevereiro', 'março', 'abril', 'maio', 'junho', 'julho', 'agosto', 'setembro', 'outubro', 'novembro', 'dezembro'];
+const lsGet = k => { try { return localStorage.getItem(k); } catch { return null; } };
+const lsSet = (k, v) => { try { localStorage.setItem(k, v); } catch {} };
+
 const ICONS = {
   x: '<path d="M18 6 6 18"/><path d="m6 6 12 12"/>',
   sliders: '<line x1="21" x2="14" y1="4" y2="4"/><line x1="10" x2="3" y1="4" y2="4"/><line x1="21" x2="12" y1="12" y2="12"/><line x1="8" x2="3" y1="12" y2="12"/><line x1="21" x2="16" y1="20" y2="20"/><line x1="12" x2="3" y1="20" y2="20"/><line x1="14" x2="14" y1="2" y2="6"/><line x1="8" x2="8" y1="10" y2="14"/><line x1="16" x2="16" y1="18" y2="22"/>',
@@ -348,32 +477,48 @@ const ICONS = {
   cal: '<rect x="3" y="4" width="18" height="18" rx="2"/><path d="M16 2v4M8 2v4M3 10h18"/>',
   sun: '<circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M6.34 17.66l-1.41 1.41M19.07 4.93l-1.41 1.41"/>',
   moon: '<path d="M12 3a6 6 0 0 0 9 9 9 9 0 1 1-9-9Z"/>',
+  kanban: '<rect x="3" y="3" width="7" height="18" rx="1.5"/><rect x="14" y="3" width="7" height="11" rx="1.5"/>',
+  archive: '<rect x="2" y="3" width="20" height="5" rx="1"/><path d="M4 8v11a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8"/><path d="M10 12h4"/>',
+  board: '<rect x="3" y="3" width="18" height="18" rx="2"/><path d="M9 3v18"/>',
+  copy: '<rect x="8" y="8" width="14" height="14" rx="2"/><path d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2"/>',
+  restore: '<path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"/><path d="M3 3v5h5"/>',
+  trash: '<path d="M3 6h18"/><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6"/><path d="M8 6V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/>',
+  left: '<path d="m15 18-6-6 6-6"/>',
+  right: '<path d="m9 18 6-6-6-6"/>',
+  msg: '<path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/>',
 };
 const icon = (n, cls = '') => `<svg class="ico ${cls}" viewBox="0 0 24 24" aria-hidden="true">${ICONS[n]}</svg>`;
 document.querySelectorAll('[data-ico]').forEach(el => el.insertAdjacentHTML('afterbegin', icon(el.dataset.ico)));
-if (matchMedia('(max-width: 640px)').matches) document.getElementById('quickInput').placeholder = 'Nova tarefa  (#área @data !)';
+if (matchMedia('(max-width: 640px)').matches) $('#quickInput').placeholder = 'Nova tarefa  (#área +etiqueta @data !)';
 
-const lsGet = k => { try { return localStorage.getItem(k); } catch { return null; } };
-const lsSet = (k, v) => { try { localStorage.setItem(k, v); } catch {} };
-
-/* ---------- Data model ---------- */
+/* ---------- Modelo de dados (v3) ---------- */
+const MAIN_BOARD = 'principal';
 function makeCard(o) {
   const now = Date.now();
-  const c = { id: uid(), title: '', notes: '', area: null, col: 'entrada', due: null, priority: false,
-    checklist: [], archived: false, created: now, updated: now, doneAt: null, ...o };
-  if (!Array.isArray(c.checklist)) c.checklist = [];
+  const c = { id: uid(), board: MAIN_BOARD, title: '', notes: '', area: null, labels: [], col: 'entrada', due: null, priority: false,
+    checklist: [], comments: [], log: [], archived: false, created: now, updated: now, doneAt: null, ...o };
+  for (const k of ['checklist', 'comments', 'log', 'labels']) if (!Array.isArray(c[k])) c[k] = [];
+  if (!c.board) c.board = MAIN_BOARD;
   return c;
 }
 
 function defaults() {
   return {
-    version: 2, savedAt: 0, areasAt: 0, deleted: {},
+    version: 3, savedAt: 0, metaAt: 0, deleted: {},
+    boards: [{ id: MAIN_BOARD, name: 'Pessoal' }],
     areas: [
       { id: 'trabalho', name: 'Trabalho', color: '#3b6fd8' },
       { id: 'projetos', name: 'Projetos', color: '#8b55d6' },
       { id: 'casa', name: 'Casa & Finanças', color: '#c27a10' },
       { id: 'saude', name: 'Saúde & Hábitos', color: '#2b9a5a' },
     ],
+    labels: [
+      { id: 'rapido', name: 'Rápido', color: '#0e9384' },
+      { id: 'ligar', name: 'Ligar', color: '#d4560f' },
+      { id: 'comprar', name: 'Comprar', color: '#c11574' },
+      { id: 'pagar', name: 'Pagar', color: '#b54708' },
+    ],
+    templates: [],
     columns: [
       { id: 'entrada', name: 'Entrada', hint: 'Tudo que surgir cai aqui primeiro' },
       { id: 'proximas', name: 'Próximas', hint: 'Decidido: vai ser feito em breve' },
@@ -383,10 +528,10 @@ function defaults() {
     ],
     cards: [
       makeCard({ id: 'boasvindas1', created: 1, updated: 1, title: 'Arraste este cartão para "Fazendo"', area: 'projetos',
-        notes: 'Cartões se movem arrastando. Clique num cartão para abrir notas, prazo e checklist. No celular, abra o cartão e troque a coluna.' }),
-      makeCard({ id: 'boasvindas2', created: 1, updated: 1, title: 'Teste a barra de cima: Pagar conta de luz #casa @amanha !',
-        notes: '#área define a frente, @hoje / @amanha / @sex / @25/12 define o prazo, ! marca prioridade.' }),
-      makeCard({ id: 'boasvindas3', created: 1, updated: 1, title: 'Ligar a sincronização (⚙ Configurações)', col: 'proximas', priority: true,
+        notes: 'Cartões se movem arrastando. Clique num cartão para abrir notas, prazo, etiquetas, checklist e comentários. No celular, abra o cartão e troque a coluna.' }),
+      makeCard({ id: 'boasvindas2', created: 1, updated: 1, title: 'Teste a barra de cima: Pagar conta de luz #casa +pagar @amanha !',
+        notes: '#área define a frente, +etiqueta marca, @hoje / @amanha / @sex / @25/12 define o prazo, ! marca prioridade.' }),
+      makeCard({ id: 'boasvindas3', created: 1, updated: 1, title: 'Ligar a sincronização (Configurações)', col: 'proximas', priority: true,
         notes: 'Conecte o repositório do GitHub para ver as mesmas tarefas no celular, no PC de casa e no do trabalho.' }),
     ],
   };
@@ -395,20 +540,26 @@ function defaults() {
 function normalize(data) {
   if (!data || !Array.isArray(data.cards)) throw new Error('formato inválido');
   const d = defaults();
+  const arr = (v, def) => Array.isArray(v) ? v : def;
+  const boards = arr(data.boards, d.boards).filter(b => b && b.id);
   return {
-    version: 2,
+    version: 3,
     savedAt: +data.savedAt || 0,
-    areasAt: +data.areasAt || 0,
+    metaAt: +data.metaAt || +data.areasAt || 0,
     deleted: data.deleted && typeof data.deleted === 'object' ? data.deleted : {},
-    areas: Array.isArray(data.areas) ? data.areas : d.areas,
-    columns: Array.isArray(data.columns) && data.columns.length ? data.columns : d.columns,
+    boards: boards.length ? boards : d.boards,
+    areas: arr(data.areas, d.areas),
+    labels: arr(data.labels, d.labels),
+    templates: arr(data.templates, []),
+    columns: arr(data.columns, d.columns).length ? arr(data.columns, d.columns) : d.columns,
     cards: data.cards.map(makeCard),
   };
 }
 
-const content = s => JSON.stringify({ a: s.areas, c: s.cards, d: s.deleted });
+const content = s => JSON.stringify({ b: s.boards, a: s.areas, l: s.labels, t: s.templates, k: s.columns, c: s.cards, d: s.deleted });
 
-/* Junta duas versões: cada cartão fica com a edição mais recente; exclusões vencem edições mais antigas. */
+/* Junta duas versões: cada cartão fica com a edição mais recente; exclusões vencem edições mais antigas;
+   quadros, áreas, etiquetas, modelos e colunas vêm da versão com "metaAt" mais novo. */
 function mergeStates(local, remote) {
   const deleted = { ...remote.deleted };
   for (const [k, t] of Object.entries(local.deleted)) deleted[k] = Math.max(t, deleted[k] || 0);
@@ -421,13 +572,12 @@ function mergeStates(local, remote) {
     if (!ex || c.updated > ex.updated) map.set(c.id, c);
   }
   const cards = [...map.values()].filter(c => !(deleted[c.id] && deleted[c.id] >= c.updated));
-  const remoteAreas = remote.areasAt > local.areasAt;
+  const meta = remote.metaAt > local.metaAt ? remote : local;
   return {
     ...local,
     savedAt: Math.max(local.savedAt, remote.savedAt),
-    areasAt: Math.max(local.areasAt, remote.areasAt),
-    areas: remoteAreas ? remote.areas : local.areas,
-    columns: remoteAreas ? remote.columns : local.columns,
+    metaAt: Math.max(local.metaAt, remote.metaAt),
+    boards: meta.boards, areas: meta.areas, labels: meta.labels, templates: meta.templates, columns: meta.columns,
     deleted, cards,
   };
 }
@@ -435,7 +585,7 @@ function mergeStates(local, remote) {
 let state;
 try { const raw = lsGet(KEY); state = raw ? normalize(JSON.parse(raw)) : defaults(); } catch { state = defaults(); }
 
-let prefs = { theme: 'auto', focus: false, filter: 'all' };
+let prefs = { theme: 'auto', focus: false, filter: 'all', label: null, board: MAIN_BOARD, view: 'board', calMonth: null };
 try { prefs = { ...prefs, ...(JSON.parse(lsGet(PREFS_KEY)) || {}) }; } catch {}
 const savePrefs = () => lsSet(PREFS_KEY, JSON.stringify(prefs));
 
@@ -446,19 +596,29 @@ function save() {
   scheduleFileWrite();
   scheduleSync();
 }
+function metaChanged() { state.metaAt = Date.now(); save(); }
 
 const areaById = id => state.areas.find(a => a.id === id);
+const labelById = id => state.labels.find(l => l.id === id);
+const boardById = id => state.boards.find(b => b.id === id);
+const colById = id => state.columns.find(c => c.id === id);
 const cardById = id => state.cards.find(c => c.id === id);
+const curBoard = () => boardById(prefs.board) || state.boards[0];
+const boardCards = () => state.cards.filter(c => c.board === curBoard().id);
 function removeCards(pred) {
   const now = Date.now();
   state.cards = state.cards.filter(c => { if (pred(c)) { state.deleted[c.id] = now; return false; } return true; });
+}
+function logCard(c, x) {
+  c.log.push({ t: Date.now(), x });
+  if (c.log.length > 60) c.log.splice(0, c.log.length - 60);
 }
 
 /* ---------- Toast ---------- */
 let toastT;
 function toast(msg) { const t = $('#toast'); t.textContent = msg; t.classList.add('show'); clearTimeout(toastT); toastT = setTimeout(() => t.classList.remove('show'), 2400); }
 
-/* ---------- Quick-add parsing ---------- */
+/* ---------- Adição rápida ---------- */
 function parseDateWord(t) {
   const T = today();
   if (t === 'hoje') return dstr(T);
@@ -474,40 +634,46 @@ function parseDateWord(t) {
   }
   return null;
 }
+const findByWord = (list, t) => list.find(a => norm(a.id).startsWith(t) || norm(a.name).split(/[^a-z0-9]+/).some(p => p && p.startsWith(t)));
 function parseQuick(text) {
-  let area = null, due = null, priority = false;
+  let area = null, due = null, priority = false; const labels = [];
   const words = text.split(/\s+/).filter(Boolean).filter(w => {
     if (w === '!' || w === '!!' || /^!alta$/i.test(w)) { priority = true; return false; }
-    if (w[0] === '#' && w.length > 1) {
-      const t = norm(w.slice(1));
-      const a = state.areas.find(a => norm(a.id).startsWith(t) || norm(a.name).split(/[^a-z0-9]+/).some(p => p && p.startsWith(t)));
-      if (a) { area = a.id; return false; }
-    }
+    if (w[0] === '#' && w.length > 1) { const a = findByWord(state.areas, norm(w.slice(1))); if (a) { area = a.id; return false; } }
+    if (w[0] === '+' && w.length > 1) { const l = findByWord(state.labels, norm(w.slice(1))); if (l) { if (!labels.includes(l.id)) labels.push(l.id); return false; } }
     if (w[0] === '@' && w.length > 1) { const d = parseDateWord(norm(w.slice(1))); if (d) { due = d; return false; } }
     return true;
   });
-  return { title: words.join(' '), area, due, priority };
+  return { title: words.join(' '), area, due, priority, labels };
 }
 function addFromText(text, col) {
   const p = parseQuick(text);
   if (!p.title) return false;
   if (!p.area && areaById(prefs.filter)) p.area = prefs.filter;
-  state.cards.push(makeCard({ ...p, col }));
+  if (prefs.label && labelById(prefs.label) && !p.labels.includes(prefs.label)) p.labels.push(prefs.label);
+  const c = makeCard({ ...p, col, board: curBoard().id });
+  logCard(c, 'Criada em ' + (colById(col)?.name || col));
+  state.cards.push(c);
   save(); render();
   return true;
 }
 
-/* ---------- Rendering ---------- */
+/* ---------- Filtros ---------- */
 function matches(c, q) {
   const f = prefs.filter;
   if (f !== 'all') {
     if (f === 'none') { if (c.area && areaById(c.area)) return false; }
     else if (c.area !== f) return false;
   }
-  if (q && !norm(c.title + ' ' + c.notes + ' ' + c.checklist.map(i => i.text).join(' ')).includes(norm(q))) return false;
+  if (prefs.label && !c.labels.includes(prefs.label)) return false;
+  if (q) {
+    const hay = [c.title, c.notes, ...c.checklist.map(i => i.text), ...c.comments.map(i => i.x), ...c.labels.map(id => labelById(id)?.name || '')].join(' ');
+    if (!norm(hay).includes(norm(q))) return false;
+  }
   return true;
 }
 
+/* ---------- Cartões ---------- */
 function dueBadge(c) {
   const d = parseD(c.due), n = Math.round((d - today()) / 864e5);
   let cls = '', txt;
@@ -516,29 +682,35 @@ function dueBadge(c) {
   else if (n === 1) { txt = 'amanhã'; cls = 'soon'; }
   else if (n < 7) txt = WD[d.getDay()];
   else txt = pad(d.getDate()) + '/' + pad(d.getMonth() + 1);
-  if (c.col === 'feito') cls = '';
+  if (c.col === 'feito' || c.archived) cls = '';
   return `<span class="due ${cls}" title="Prazo">${icon('cal')}${txt}</span>`;
 }
-
-function cardHTML(c) {
+function chipsHTML(c) {
   const a = areaById(c.area);
+  return (a ? `<span class="label" style="--c:${esc(a.color)}"><span class="dot"></span>${esc(a.name)}</span>` : '')
+    + c.labels.map(labelById).filter(Boolean).map(l => `<span class="label tg" style="--c:${esc(l.color)}"><span class="dot"></span>${esc(l.name)}</span>`).join('');
+}
+function cardHTML(c) {
   const done = c.checklist.filter(i => i.done).length;
+  const chips = chipsHTML(c);
   const meta = (c.priority ? `<span class="prio" title="Prioridade">${icon('flag')}</span>` : '')
     + (c.due ? dueBadge(c) : '')
     + (c.checklist.length ? `<span class="meta ${done === c.checklist.length ? 'ok' : ''}" title="Checklist">${icon('check')}${done}/${c.checklist.length}</span>` : '')
+    + (c.comments.length ? `<span class="meta" title="Comentários">${icon('msg')}${c.comments.length}</span>` : '')
     + (c.notes.trim() ? `<span class="meta" title="Tem notas">${icon('notes')}</span>` : '');
   return `<article class="card ${c.col === 'feito' ? 'is-done' : ''}" draggable="true" data-id="${esc(c.id)}" tabindex="0">
     <div class="card-title">${esc(c.title)}</div>
-    ${a || meta ? `<div class="card-row"><div class="labels">${a ? `<span class="label" style="--c:${esc(a.color)}"><span class="dot"></span>${esc(a.name)}</span>` : ''}</div><div class="card-meta">${meta}</div></div>` : ''}
+    ${chips || meta ? `<div class="card-row"><div class="labels">${chips}</div><div class="card-meta">${meta}</div></div>` : ''}
   </article>`;
 }
 
-function renderBoard() {
-  const q = $('#search').value.trim();
-  const scroll = $('#board').scrollLeft;
+/* ---------- Vista: quadro ---------- */
+function renderKanban(q) {
+  const board = $('#board');
   const cols = state.columns.filter(c => !(prefs.focus && (c.id === 'entrada' || c.id === 'feito')));
-  $('#board').innerHTML = cols.map(col => {
-    const all = state.cards.filter(c => c.col === col.id && !c.archived);
+  const mine = boardCards();
+  board.innerHTML = cols.map(col => {
+    const all = mine.filter(c => c.col === col.id && !c.archived);
     const shown = all.filter(c => matches(c, q));
     const over = col.wip && all.length > col.wip;
     const meter = col.wip
@@ -552,22 +724,120 @@ function renderBoard() {
       <div class="col-foot"><button class="add-btn" data-act="add" data-col="${col.id}">${icon('plus')}Nova tarefa</button></div>
     </section>`;
   }).join('');
-  $('#board').scrollLeft = scroll;
 }
 
-function renderFilters() {
+/* ---------- Vista: calendário ---------- */
+function calMonth() {
+  const m = /^(\d{4})-(\d{2})$/.exec(prefs.calMonth || '');
+  const T = today();
+  return m ? { y: +m[1], m: +m[2] - 1 } : { y: T.getFullYear(), m: T.getMonth() };
+}
+function calItem(c) {
+  const a = areaById(c.area);
+  const late = c.due && parseD(c.due) < today() && c.col !== 'feito';
+  return `<button class="cal-item ${c.col === 'feito' ? 'done' : ''} ${late ? 'late' : ''}" data-open="${esc(c.id)}" style="--c:${a ? esc(a.color) : 'var(--muted)'}" title="${esc(c.title)}"><span class="dot"></span><span class="t">${esc(c.title)}</span></button>`;
+}
+function renderCalendar(q) {
+  const { y, m } = calMonth();
+  const cards = boardCards().filter(c => !c.archived && matches(c, q));
+  const withDue = cards.filter(c => c.due);
+  const noDue = cards.filter(c => !c.due && c.col !== 'feito').length;
+  const byDay = {};
+  for (const c of withDue) (byDay[c.due] = byDay[c.due] || []).push(c);
+  const head = `<div class="cal-head">
+      <h2>${MONTHS[m][0].toUpperCase() + MONTHS[m].slice(1)} de ${y}</h2>
+      <button class="btn icon" data-cal="-1" aria-label="Mês anterior">${icon('left')}</button>
+      <button class="btn icon" data-cal="1" aria-label="Próximo mês">${icon('right')}</button>
+      <button class="btn" data-cal="0">Hoje</button>
+    </div>`;
+  const note = `<p class="cal-note">${noDue ? `${noDue} tarefa(s) sem prazo neste quadro. Abra a tarefa para definir uma data.` : 'Todas as tarefas abertas têm prazo.'}</p>`;
+  const T = today(), tStr = dstr(T);
+  let body;
+  if (matchMedia('(max-width: 640px)').matches) {
+    const first = new Date(y, m, 1), last = new Date(y, m + 1, 0);
+    const groups = [];
+    const isCurMonth = y === T.getFullYear() && m === T.getMonth();
+    if (isCurMonth) {
+      const late = withDue.filter(c => parseD(c.due) < T && c.col !== 'feito' && parseD(c.due) < first);
+      if (late.length) groups.push({ title: 'Atrasadas de meses anteriores', late: true, cards: late });
+    }
+    for (let d = new Date(first); d <= last; d = addDays(d, 1)) {
+      const k = dstr(d), list = byDay[k];
+      if (!list) continue;
+      const lateDay = d < T && list.some(c => c.col !== 'feito');
+      groups.push({ title: (k === tStr ? 'Hoje, ' : '') + WD[d.getDay()] + ' ' + pad(d.getDate()) + '/' + pad(m + 1), late: lateDay, cards: list });
+    }
+    body = groups.length
+      ? `<div class="agenda">${groups.map(g => `<div class="ag-day"><h3 class="${g.late ? 'late' : ''}">${g.title}</h3><div class="list">${g.cards.map(cardHTML).join('')}</div></div>`).join('')}</div>`
+      : '<p class="empty">Nenhuma tarefa com prazo neste mês.</p>';
+  } else {
+    const first = new Date(y, m, 1);
+    const offset = (first.getDay() + 6) % 7;
+    const start = addDays(first, -offset);
+    const daysInMonth = new Date(y, m + 1, 0).getDate();
+    const weeks = Math.ceil((offset + daysInMonth) / 7);
+    let cells = ['seg', 'ter', 'qua', 'qui', 'sex', 'sáb', 'dom'].map(d => `<div class="cal-dow">${d}</div>`).join('');
+    for (let i = 0; i < weeks * 7; i++) {
+      const d = addDays(start, i), k = dstr(d);
+      cells += `<div class="cal-day ${d.getMonth() !== m ? 'out' : ''} ${k === tStr ? 'today' : ''}"><span class="dn">${d.getDate()}</span>${(byDay[k] || []).map(calItem).join('')}</div>`;
+    }
+    body = `<div class="cal-grid">${cells}</div>`;
+  }
+  $('#board').innerHTML = `<div class="scrollv">${head}${body}${note}</div>`;
+}
+
+/* ---------- Vista: arquivados ---------- */
+function archivedAt(c) { for (let i = c.log.length - 1; i >= 0; i--) if (c.log[i].x === 'Arquivada') return c.log[i].t; return c.updated; }
+function renderArchive(q) {
+  const list = boardCards().filter(c => c.archived && matches(c, q)).sort((a, b) => archivedAt(b) - archivedAt(a));
+  $('#board').innerHTML = `<div class="scrollv">${list.length ? `<div class="arch-list">${list.map(c => `
+    <div class="arch-row">
+      <div class="t" data-open="${esc(c.id)}">${esc(c.title)}<div class="sub">Arquivada em ${ddmm(archivedAt(c))}${chipsHTML(c) ? ' ' + chipsHTML(c) : ''}</div></div>
+      <button class="btn" data-act="restore" data-id="${esc(c.id)}">${icon('restore')}Restaurar</button>
+      <button class="btn icon" data-act="purge" data-id="${esc(c.id)}" title="Excluir de vez" aria-label="Excluir de vez">${icon('trash')}</button>
+    </div>`).join('')}</div>` : '<p class="empty">Nada arquivado neste quadro. Use "Arquivar concluídos" na coluna Feito ou "Arquivar" dentro da tarefa.</p>'}</div>`;
+}
+
+function renderMain() {
+  const q = $('#search').value.trim();
+  const scroll = $('#board').scrollLeft;
+  if (prefs.view === 'cal') renderCalendar(q);
+  else if (prefs.view === 'arch') renderArchive(q);
+  else { renderKanban(q); $('#board').scrollLeft = scroll; }
+}
+const renderBoard = renderMain;
+
+/* ---------- Barra lateral, chips e vistas ---------- */
+const VIEWS = [{ id: 'board', name: 'Quadro', ico: 'kanban' }, { id: 'cal', name: 'Calendário', ico: 'cal' }, { id: 'arch', name: 'Arquivados', ico: 'archive' }];
+function renderNav() {
+  const mine = boardCards();
+  const live = mine.filter(c => !c.archived && c.col !== 'feito');
+  const archN = mine.filter(c => c.archived).length;
   const f = prefs.filter;
-  const live = state.cards.filter(c => !c.archived && c.col !== 'feito');
   const none = live.filter(c => !c.area || !areaById(c.area)).length;
-  const items = [{ id: 'all', name: 'Todas', n: live.length }]
+  const areaItems = [{ id: 'all', name: 'Todas', n: live.length }]
     .concat(state.areas.map(a => ({ id: a.id, name: a.name, color: a.color, n: live.filter(c => c.area === a.id).length })))
     .concat(none ? [{ id: 'none', name: 'Sem área', n: none }] : []);
-  $('#filters').innerHTML = items.map(i =>
-    `<button class="chip ${f === i.id ? 'on' : ''}" data-filter="${esc(i.id)}" style="--c:${i.color ? esc(i.color) : 'var(--muted)'}">${i.color ? '<span class="dot"></span>' : ''}${esc(i.name)}<span class="n">${i.n}</span></button>`).join('');
-  $('#sideAreas').innerHTML = items.map(i =>
-    `<button class="nav ${f === i.id ? 'on' : ''}" data-filter="${esc(i.id)}" style="--c:${i.color ? esc(i.color) : 'var(--muted)'}">${i.color ? '<span class="dot"></span>' : ''}${esc(i.name)}<span class="n">${i.n}</span></button>`).join('');
-  const cur = items.find(i => i.id === f);
-  $('#boardTitle').textContent = cur && f !== 'all' ? cur.name : 'Meu quadro';
+  const labelItems = state.labels.map(l => ({ id: l.id, name: l.name, color: l.color, n: live.filter(c => c.labels.includes(l.id)).length }));
+
+  $('#sideViews').innerHTML = VIEWS.map(v => `<button class="nav ${prefs.view === v.id ? 'on' : ''}" data-view="${v.id}">${icon(v.ico)}${v.name}${v.id === 'arch' && archN ? `<span class="n">${archN}</span>` : ''}</button>`).join('');
+  $('#sideBoards').innerHTML = state.boards.map(b => `<button class="nav ${curBoard().id === b.id ? 'on' : ''}" data-board="${esc(b.id)}">${icon('board')}${esc(b.name)}<span class="n">${state.cards.filter(c => c.board === b.id && !c.archived && c.col !== 'feito').length}</span></button>`).join('');
+  $('#sideAreas').innerHTML = areaItems.map(i => `<button class="nav ${f === i.id ? 'on' : ''}" data-filter="${esc(i.id)}" style="--c:${i.color ? esc(i.color) : 'var(--muted)'}">${i.color ? '<span class="dot"></span>' : ''}${esc(i.name)}<span class="n">${i.n}</span></button>`).join('');
+  $('#sideLabels').innerHTML = labelItems.length
+    ? labelItems.map(i => `<button class="nav ${prefs.label === i.id ? 'on' : ''}" data-label="${esc(i.id)}" style="--c:${esc(i.color)}"><span class="sq"></span>${esc(i.name)}<span class="n">${i.n}</span></button>`).join('')
+    : '<div class="side-help">Crie etiquetas em Configurações.</div>';
+
+  $('#filters').innerHTML = areaItems.map(i => `<button class="chip ${f === i.id ? 'on' : ''}" data-filter="${esc(i.id)}" style="--c:${i.color ? esc(i.color) : 'var(--muted)'}">${i.color ? '<span class="dot"></span>' : ''}${esc(i.name)}<span class="n">${i.n}</span></button>`).join('')
+    + (labelItems.length ? '<span class="chip-sep"></span>' + labelItems.map(i => `<button class="chip ${prefs.label === i.id ? 'on' : ''}" data-label="${esc(i.id)}" style="--c:${esc(i.color)}"><span class="sq"></span>${esc(i.name)}</button>`).join('') : '');
+  $('#views').innerHTML = (state.boards.length > 1 ? `<select id="boardSel" aria-label="Quadro">${state.boards.map(b => `<option value="${esc(b.id)}" ${curBoard().id === b.id ? 'selected' : ''}>${esc(b.name)}</option>`).join('')}</select>` : '')
+    + VIEWS.map(v => `<button class="vbtn ${prefs.view === v.id ? 'on' : ''}" data-view="${v.id}">${icon(v.ico)}${v.name}${v.id === 'arch' && archN ? ` (${archN})` : ''}</button>`).join('');
+
+  $('#boardTitle').textContent = curBoard().name;
+  const parts = [];
+  if (f !== 'all') parts.push(f === 'none' ? 'Sem área' : areaById(f)?.name);
+  if (prefs.label && labelById(prefs.label)) parts.push(labelById(prefs.label).name);
+  if (prefs.view === 'cal') parts.unshift('Calendário'); else if (prefs.view === 'arch') parts.unshift('Arquivados');
+  $('#filterTitle').textContent = parts.filter(Boolean).length ? '/ ' + parts.filter(Boolean).join(' / ') : '';
 }
 
 function applyTheme() {
@@ -575,51 +845,77 @@ function applyTheme() {
   else document.documentElement.setAttribute('data-theme', prefs.theme);
   const dark = prefs.theme === 'dark' || (prefs.theme === 'auto' && matchMedia('(prefers-color-scheme: dark)').matches);
   const b = $('#themeBtn');
-  if (b) { b.innerHTML = icon(dark ? 'sun' : 'moon'); b.title = dark ? 'Mudar para claro' : 'Mudar para escuro'; b.setAttribute('aria-label', b.title); }
+  b.innerHTML = icon(dark ? 'sun' : 'moon'); b.title = dark ? 'Mudar para claro' : 'Mudar para escuro'; b.setAttribute('aria-label', b.title);
   const meta = document.querySelector('meta[name="theme-color"]');
   if (meta) meta.content = dark ? '#0e0e10' : '#f8f8f8';
 }
 
 function render() {
+  if (!boardById(prefs.board)) prefs.board = state.boards[0].id;
   if (prefs.filter !== 'all' && prefs.filter !== 'none' && !areaById(prefs.filter)) prefs.filter = 'all';
+  if (prefs.label && !labelById(prefs.label)) prefs.label = null;
+  if (!VIEWS.some(v => v.id === prefs.view)) prefs.view = 'board';
   applyTheme();
   $('#focusBtn').classList.toggle('on', !!prefs.focus);
-  renderFilters();
-  renderBoard();
+  $('#focusBtn').style.display = prefs.view === 'board' ? '' : 'none';
+  renderNav();
+  renderMain();
   renderStatus();
 }
 
-/* ---------- Moving cards ---------- */
+/* ---------- Mover cartões ---------- */
 function moveCard(id, col, beforeId, noRender) {
   const i = state.cards.findIndex(c => c.id === id);
   if (i < 0) return;
   const [c] = state.cards.splice(i, 1);
-  if (c.col !== 'feito' && col === 'feito') c.doneAt = Date.now();
+  if (c.col !== col) {
+    if (col === 'feito') { c.doneAt = Date.now(); logCard(c, 'Concluída'); }
+    else logCard(c, 'Movida para ' + (colById(col)?.name || col));
+  }
   if (col !== 'feito') c.doneAt = null;
   c.col = col; c.updated = Date.now();
   if (beforeId && beforeId !== id) {
     const j = state.cards.findIndex(x => x.id === beforeId);
     state.cards.splice(j < 0 ? state.cards.length : j, 0, c);
   } else {
-    let last = -1; state.cards.forEach((x, k) => { if (x.col === col) last = k; });
+    let last = -1; state.cards.forEach((x, k) => { if (x.col === col && x.board === c.board) last = k; });
     state.cards.splice(last + 1, 0, c);
   }
   save();
   if (!noRender) render();
 }
+function setArchived(c, on) {
+  c.archived = on; c.updated = Date.now();
+  logCard(c, on ? 'Arquivada' : 'Restaurada');
+}
 
-/* ---------- Board events ---------- */
+/* ---------- Eventos do quadro ---------- */
 const board = $('#board');
 board.addEventListener('click', e => {
   const act = e.target.closest('[data-act]');
   if (act) {
-    if (act.dataset.act === 'add') return showInlineAdd(act.dataset.col);
-    if (act.dataset.act === 'archive-done') {
-      let n = 0; const now = Date.now();
-      state.cards.forEach(c => { if (c.col === 'feito' && !c.archived) { c.archived = true; c.updated = now; n++; } });
-      save(); render(); toast(`${n} cartão(ões) arquivado(s)`); return;
+    const a = act.dataset.act;
+    if (a === 'add') return showInlineAdd(act.dataset.col);
+    if (a === 'archive-done') {
+      let n = 0;
+      boardCards().forEach(c => { if (c.col === 'feito' && !c.archived) { setArchived(c, true); n++; } });
+      save(); render(); toast(`${n} tarefa(s) arquivada(s)`); return;
+    }
+    if (a === 'restore') { const c = cardById(act.dataset.id); if (c) { setArchived(c, false); save(); render(); toast('Tarefa restaurada'); } return; }
+    if (a === 'purge') {
+      const c = cardById(act.dataset.id);
+      if (c && confirm(`Excluir "${c.title}" de vez?`)) { removeCards(x => x.id === c.id); save(); render(); toast('Tarefa excluída'); }
+      return;
     }
   }
+  const cal = e.target.closest('[data-cal]');
+  if (cal) {
+    const step = +cal.dataset.cal; const { y, m } = calMonth();
+    const d = step === 0 ? today() : new Date(y, m + step, 1);
+    prefs.calMonth = d.getFullYear() + '-' + pad(d.getMonth() + 1); savePrefs(); renderMain(); return;
+  }
+  const open = e.target.closest('[data-open]');
+  if (open) return openCard(open.dataset.open);
   const card = e.target.closest('.card');
   if (card) openCard(card.dataset.id);
 });
@@ -630,22 +926,22 @@ board.addEventListener('keydown', e => {
 function showInlineAdd(col) {
   const foot = board.querySelector(`.col[data-col="${col}"] .col-foot`);
   if (!foot) return;
-  foot.innerHTML = '<form autocomplete="off"><input type="text" placeholder="Título…  (#área @data !)"></form>';
+  foot.innerHTML = '<form autocomplete="off"><input type="text" placeholder="Título…  (#área +etiqueta @data !)"></form>';
   const form = foot.firstChild, input = form.firstChild;
   input.focus();
   form.addEventListener('submit', e => {
     e.preventDefault();
     if (addFromText(input.value, col)) showInlineAdd(col);
   });
-  input.addEventListener('keydown', e => { if (e.key === 'Escape') renderBoard(); });
-  input.addEventListener('blur', () => setTimeout(() => { if (!input.value.trim() && document.activeElement !== input) renderBoard(); }, 150));
+  input.addEventListener('keydown', e => { if (e.key === 'Escape') renderMain(); });
+  input.addEventListener('blur', () => setTimeout(() => { if (!input.value.trim() && document.activeElement !== input) renderMain(); }, 150));
 }
 
-/* Drag & drop */
+/* Arrastar e soltar (vista quadro) */
 let dragId = null;
 const ph = document.createElement('div'); ph.className = 'placeholder';
 board.addEventListener('dragstart', e => {
-  const el = e.target.closest('.card'); if (!el) return;
+  const el = e.target.closest('.card'); if (!el || prefs.view !== 'board') return;
   dragId = el.dataset.id;
   e.dataTransfer.effectAllowed = 'move';
   e.dataTransfer.setData('text/plain', dragId);
@@ -676,36 +972,69 @@ board.addEventListener('dragend', () => {
   board.querySelectorAll('.dragging').forEach(el => el.classList.remove('dragging'));
 });
 
-/* ---------- Top bar ---------- */
+/* ---------- Topo, barra lateral e vistas ---------- */
 $('#quick').addEventListener('submit', e => {
   e.preventDefault();
   const inp = $('#quickInput');
   if (addFromText(inp.value, 'entrada')) {
     inp.value = '';
-    if (prefs.focus) toast('Adicionado à Entrada (oculta no modo Foco)');
+    if (prefs.view !== 'board') toast('Adicionada à Entrada do quadro ' + curBoard().name);
+    else if (prefs.focus) toast('Adicionada à Entrada (oculta no modo Foco)');
   }
 });
-$('#search').addEventListener('input', renderBoard);
+$('#search').addEventListener('input', renderMain);
 $('#focusBtn').addEventListener('click', () => { prefs.focus = !prefs.focus; savePrefs(); render(); });
-function onFilterClick(e) {
-  const b = e.target.closest('[data-filter]'); if (!b) return;
-  prefs.filter = b.dataset.filter; savePrefs(); render();
+function onNavClick(e) {
+  const b = e.target.closest('[data-filter],[data-label],[data-view],[data-board]'); if (!b) return;
+  if (b.dataset.filter) prefs.filter = b.dataset.filter;
+  else if (b.dataset.label) prefs.label = prefs.label === b.dataset.label ? null : b.dataset.label;
+  else if (b.dataset.view) prefs.view = b.dataset.view;
+  else if (b.dataset.board) prefs.board = b.dataset.board;
+  savePrefs(); render();
 }
-$('#filters').addEventListener('click', onFilterClick);
-$('#sideAreas').addEventListener('click', onFilterClick);
+for (const id of ['#filters', '#sideAreas', '#sideLabels', '#sideViews', '#sideBoards', '#views']) $(id).addEventListener('click', onNavClick);
+$('#views').addEventListener('change', e => { if (e.target.id === 'boardSel') { prefs.board = e.target.value; savePrefs(); render(); } });
+function newBoard() {
+  const name = (prompt('Nome do novo quadro:') || '').trim();
+  if (!name) return;
+  const b = { id: uid(), name };
+  state.boards.push(b); prefs.board = b.id; savePrefs(); metaChanged(); render();
+  if (setDlg.open) renderSettings();
+  toast('Quadro "' + name + '" criado');
+}
+$('#addBoardBtn').addEventListener('click', newBoard);
 $('#themeBtn').addEventListener('click', () => {
   const dark = document.documentElement.getAttribute('data-theme') === 'dark'
     || (!document.documentElement.hasAttribute('data-theme') && matchMedia('(prefers-color-scheme: dark)').matches);
   prefs.theme = dark ? 'light' : 'dark'; savePrefs(); applyTheme();
 });
 matchMedia('(prefers-color-scheme: dark)').addEventListener('change', () => { if (prefs.theme === 'auto') applyTheme(); });
+matchMedia('(max-width: 640px)').addEventListener('change', () => { if (prefs.view === 'cal') renderMain(); });
 
-/* ---------- Card dialog ---------- */
+/* ---------- Modelos ---------- */
+const tplDlg = $('#tplDlg');
+$('#tplBtn').addEventListener('click', () => {
+  $('#tplList').innerHTML = state.templates.length
+    ? state.templates.map(t => `<button type="button" class="tpl-item" data-tpl="${esc(t.id)}">${icon('copy')}<div><div>${esc(t.name)}</div><div class="sub">${t.checklist.length ? t.checklist.length + ' itens de checklist' : 'sem checklist'}${areaById(t.area) ? ', ' + esc(areaById(t.area).name) : ''}</div></div></button>`).join('')
+    : '<p class="small muted">Nenhum modelo ainda. Abra uma tarefa que você repete (ex.: "Fechamento do mês" com o checklist) e use "Salvar como modelo".</p>';
+  tplDlg.showModal();
+});
+$('#tplList').addEventListener('click', e => {
+  const b = e.target.closest('[data-tpl]'); if (!b) return;
+  const t = state.templates.find(x => x.id === b.dataset.tpl); if (!t) return;
+  const c = makeCard({ board: curBoard().id, title: t.title, notes: t.notes || '', area: t.area || null, labels: [...(t.labels || [])], priority: !!t.priority,
+    checklist: (t.checklist || []).map(text => ({ id: uid(), text, done: false })) });
+  logCard(c, 'Criada a partir do modelo "' + t.name + '"');
+  state.cards.push(c); save(); tplDlg.close(); render(); openCard(c.id);
+});
+
+/* ---------- Janela da tarefa ---------- */
 const cardDlg = $('#cardDlg');
 let curId = null;
 const cur = () => cardById(curId);
 function touch() { const c = cur(); if (c) { c.updated = Date.now(); save(); } }
 function autoGrow(t) { t.style.height = 'auto'; t.style.height = t.scrollHeight + 'px'; }
+const fmtDT = t => { const d = new Date(t); return pad(d.getDate()) + '/' + pad(d.getMonth() + 1) + '/' + d.getFullYear() + ' ' + hhmm(t); };
 
 function openCard(id) {
   const c = cardById(id); if (!c) return;
@@ -715,18 +1044,29 @@ function openCard(id) {
   $('#fArea').value = areaById(c.area) ? c.area : '';
   $('#fCol').innerHTML = state.columns.map(k => `<option value="${k.id}">${esc(k.name)}</option>`).join('');
   $('#fCol').value = c.col;
+  $('#fBoardWrap').style.display = state.boards.length > 1 ? '' : 'none';
+  $('#fBoard').innerHTML = state.boards.map(b => `<option value="${esc(b.id)}">${esc(b.name)}</option>`).join('');
+  $('#fBoard').value = c.board;
   $('#fDue').value = c.due || '';
   $('#fPrio').checked = !!c.priority;
   $('#fNotes').value = c.notes;
+  $('#archBtn').innerHTML = c.archived ? icon('restore') + 'Restaurar' : icon('archive') + 'Arquivar';
   const fmt = t => new Date(t).toLocaleDateString('pt-BR');
-  $('#fInfo').textContent = (c.created > 1 ? 'Criado em ' + fmt(c.created) : '') + (c.doneAt ? ' · concluído em ' + fmt(c.doneAt) : '');
+  $('#fInfo').textContent = (c.created > 1 ? 'Criada em ' + fmt(c.created) : '') + (c.doneAt ? ' · concluída em ' + fmt(c.doneAt) : '');
+  $('#cmtNew').value = '';
+  $('#histBox').open = false;
   resetDel();
-  renderChecklist();
+  renderLabelPick(); renderChecklist(); renderComments(); renderHistory();
   cardDlg.showModal();
   autoGrow($('#fTitle'));
   if (!c.title) $('#fTitle').focus();
 }
-
+function renderLabelPick() {
+  const c = cur(); if (!c) return;
+  $('#fLabels').innerHTML = state.labels.length
+    ? state.labels.map(l => `<button type="button" class="${c.labels.includes(l.id) ? 'on' : ''}" data-lid="${esc(l.id)}" style="--c:${esc(l.color)}"><span class="dot"></span>${esc(l.name)}</button>`).join('')
+    : '<span class="small muted">Crie etiquetas em Configurações.</span>';
+}
 function renderChecklist() {
   const c = cur(); if (!c) return;
   const done = c.checklist.filter(i => i.done).length;
@@ -734,14 +1074,33 @@ function renderChecklist() {
   $('#ckList').innerHTML = c.checklist.map(i =>
     `<li data-id="${esc(i.id)}" class="${i.done ? 'done' : ''}"><input type="checkbox" ${i.done ? 'checked' : ''}><input type="text" value="${esc(i.text)}"><button type="button" class="icon-btn" data-del aria-label="Remover item">${icon('x')}</button></li>`).join('');
 }
+function renderComments() {
+  const c = cur(); if (!c) return;
+  $('#cmtList').innerHTML = c.comments.map(m =>
+    `<div class="cmt" data-id="${esc(m.id)}"><div class="when">${fmtDT(m.t)}<button type="button" class="icon-btn" data-del-cmt aria-label="Apagar comentário">${icon('x')}</button></div>${esc(m.x)}</div>`).join('');
+}
+function renderHistory() {
+  const c = cur(); if (!c) return;
+  const items = [...c.log].reverse();
+  $('#histList').innerHTML = items.length ? items.map(l => `<li>${fmtDT(l.t)}: ${esc(l.x)}</li>`).join('') : '<li>Sem registros ainda.</li>';
+}
 
 $('#fTitle').addEventListener('input', e => { cur().title = e.target.value.replace(/\n/g, ' '); autoGrow(e.target); touch(); });
 $('#fTitle').addEventListener('keydown', e => { if (e.key === 'Enter') { e.preventDefault(); e.target.blur(); } });
 $('#fArea').addEventListener('change', e => { cur().area = e.target.value || null; touch(); });
-$('#fCol').addEventListener('change', e => moveCard(curId, e.target.value, null, true));
+$('#fCol').addEventListener('change', e => { moveCard(curId, e.target.value, null, true); renderHistory(); });
+$('#fBoard').addEventListener('change', e => {
+  const c = cur(); c.board = e.target.value; logCard(c, 'Movida para o quadro ' + (boardById(c.board)?.name || '')); touch(); renderHistory();
+});
 $('#fDue').addEventListener('change', e => { cur().due = e.target.value || null; touch(); });
 $('#fPrio').addEventListener('change', e => { cur().priority = e.target.checked; touch(); });
 $('#fNotes').addEventListener('input', e => { cur().notes = e.target.value; touch(); });
+$('#fLabels').addEventListener('click', e => {
+  const b = e.target.closest('[data-lid]'); if (!b) return;
+  const c = cur(), id = b.dataset.lid;
+  c.labels = c.labels.includes(id) ? c.labels.filter(x => x !== id) : [...c.labels, id];
+  touch(); renderLabelPick();
+});
 $('#ckNew').addEventListener('keydown', e => {
   if (e.key !== 'Enter') return;
   e.preventDefault();
@@ -765,6 +1124,28 @@ $('#ckList').addEventListener('click', e => {
   cur().checklist = cur().checklist.filter(i => i.id !== li.dataset.id);
   touch(); renderChecklist();
 });
+$('#cmtNew').addEventListener('keydown', e => {
+  if (e.key !== 'Enter') return;
+  e.preventDefault();
+  const v = e.target.value.trim(); if (!v) return;
+  cur().comments.push({ id: uid(), t: Date.now(), x: v });
+  e.target.value = ''; touch(); renderComments();
+});
+$('#cmtList').addEventListener('click', e => {
+  if (!e.target.closest('[data-del-cmt]')) return;
+  const id = e.target.closest('.cmt').dataset.id;
+  cur().comments = cur().comments.filter(m => m.id !== id); touch(); renderComments();
+});
+$('#archBtn').addEventListener('click', () => {
+  const c = cur(); setArchived(c, !c.archived); save();
+  toast(c.archived ? 'Tarefa arquivada' : 'Tarefa restaurada'); cardDlg.close();
+});
+$('#tplSaveBtn').addEventListener('click', () => {
+  const c = cur();
+  const name = (prompt('Nome do modelo:', c.title) || '').trim(); if (!name) return;
+  state.templates.push({ id: uid(), name, title: c.title, notes: c.notes, area: c.area, labels: [...c.labels], priority: c.priority, checklist: c.checklist.map(i => i.text) });
+  metaChanged(); toast('Modelo "' + name + '" salvo');
+});
 
 let delArmed = false, delT;
 function resetDel() { delArmed = false; clearTimeout(delT); const b = $('#delBtn'); b.textContent = 'Excluir'; b.classList.remove('armed'); }
@@ -773,7 +1154,7 @@ $('#delBtn').addEventListener('click', () => {
   if (!delArmed) { delArmed = true; b.textContent = 'Clique de novo para excluir'; b.classList.add('armed'); delT = setTimeout(resetDel, 3000); return; }
   const id = curId;
   removeCards(c => c.id === id);
-  save(); cardDlg.close(); toast('Cartão excluído');
+  save(); cardDlg.close(); toast('Tarefa excluída');
 });
 cardDlg.addEventListener('close', () => {
   const c = cur();
@@ -781,51 +1162,68 @@ cardDlg.addEventListener('close', () => {
   curId = null; render();
 });
 
-/* ---------- Settings dialog ---------- */
+/* ---------- Configurações ---------- */
 const setDlg = $('#setDlg');
 $('#setBtn').addEventListener('click', openSettings);
 function openSettings() { renderSettings(); setDlg.showModal(); }
 setDlg.addEventListener('close', render);
 
+const META = {
+  boards: { el: '#boardList', color: false, label: 'quadro' },
+  areas: { el: '#areaList', color: true, label: 'área' },
+  labels: { el: '#labelList', color: true, label: 'etiqueta' },
+};
 function renderSettings() {
   $('#themeSel').value = prefs.theme;
-  $('#areaList').innerHTML = state.areas.map(a =>
-    `<div class="area-row" data-id="${esc(a.id)}"><input type="color" value="${esc(a.color)}"><input type="text" value="${esc(a.name)}"><button type="button" class="icon-btn" data-del aria-label="Excluir área">${icon('x')}</button></div>`).join('');
-  const arch = state.cards.filter(c => c.archived).length;
-  $('#archInfo').innerHTML = arch ? `${arch} cartão(ões) arquivado(s) (ficam no backup). <button type="button" class="link-btn" id="purgeBtn" style="padding:0">Excluir arquivados definitivamente</button>` : '';
+  for (const [kind, cfg] of Object.entries(META)) {
+    $(cfg.el).innerHTML = state[kind].map(x =>
+      `<div class="area-row" data-kind="${kind}" data-id="${esc(x.id)}">${cfg.color ? `<input type="color" value="${esc(x.color)}" aria-label="Cor">` : ''}<input type="text" value="${esc(x.name)}" aria-label="Nome"><button type="button" class="icon-btn" data-del aria-label="Excluir ${cfg.label}">${icon('x')}</button></div>`).join('');
+  }
+  $('#tplSetList').innerHTML = state.templates.map(t =>
+    `<div class="area-row" data-kind="templates" data-id="${esc(t.id)}"><input type="text" value="${esc(t.name)}" aria-label="Nome do modelo"><button type="button" class="icon-btn" data-del aria-label="Excluir modelo">${icon('x')}</button></div>`).join('');
   renderSyncSettings();
   renderFileSettings();
 }
 $('#themeSel').addEventListener('change', e => { prefs.theme = e.target.value; savePrefs(); applyTheme(); });
-function areasChanged() { state.areasAt = Date.now(); save(); }
-$('#areaList').addEventListener('input', e => {
-  const row = e.target.closest('.area-row'); const a = areaById(row.dataset.id); if (!a) return;
-  if (e.target.type === 'color') a.color = e.target.value; else a.name = e.target.value;
-  areasChanged();
+setDlg.addEventListener('input', e => {
+  const row = e.target.closest('.area-row[data-kind]'); if (!row) return;
+  const x = state[row.dataset.kind].find(i => i.id === row.dataset.id); if (!x) return;
+  if (e.target.type === 'color') x.color = e.target.value; else x.name = e.target.value;
+  metaChanged();
 });
-$('#areaList').addEventListener('click', e => {
-  if (!e.target.closest('[data-del]')) return;
-  const id = e.target.closest('.area-row').dataset.id;
-  const n = state.cards.filter(c => c.area === id).length;
-  if (n && !confirm(`${n} cartão(ões) usam essa área e ficarão "sem área". Excluir mesmo assim?`)) return;
+setDlg.addEventListener('click', e => {
+  const add = e.target.closest('[data-add]');
+  if (add) {
+    const kind = add.dataset.add;
+    if (kind === 'boards') return newBoard();
+    const palette = ['#d0453b', '#1f8f9e', '#b5568f', '#6a7a1f', '#5865c9', '#a8642a', '#0e9384', '#c11574'];
+    state[kind].push({ id: uid(), name: kind === 'areas' ? 'Nova área' : 'Nova etiqueta', color: palette[state[kind].length % palette.length] });
+    metaChanged(); renderSettings();
+    const inputs = $(META[kind].el).querySelectorAll('input[type=text]'); const last = inputs[inputs.length - 1]; last.focus(); last.select();
+    return;
+  }
+  const del = e.target.closest('.area-row[data-kind] [data-del]'); if (!del) return;
+  const row = del.closest('.area-row'), kind = row.dataset.kind, id = row.dataset.id;
   const now = Date.now();
-  state.areas = state.areas.filter(a => a.id !== id);
-  state.cards.forEach(c => { if (c.area === id) { c.area = null; c.updated = now; } });
-  areasChanged(); renderSettings();
-});
-$('#addArea').addEventListener('click', () => {
-  const palette = ['#d0453b', '#1f8f9e', '#b5568f', '#6a7a1f', '#5865c9', '#a8642a'];
-  state.areas.push({ id: uid(), name: 'Nova área', color: palette[state.areas.length % palette.length] });
-  areasChanged(); renderSettings();
-  const inputs = $('#areaList').querySelectorAll('input[type=text]'); const last = inputs[inputs.length - 1]; last.focus(); last.select();
-});
-$('#archInfo').addEventListener('click', e => {
-  if (e.target.id !== 'purgeBtn') return;
-  if (!confirm('Excluir definitivamente todos os cartões arquivados?')) return;
-  removeCards(c => c.archived); save(); renderSettings();
+  if (kind === 'boards') {
+    if (state.boards.length === 1) return toast('Precisa existir pelo menos um quadro');
+    const n = state.cards.filter(c => c.board === id).length;
+    if (!confirm(n ? `Excluir o quadro e as ${n} tarefa(s) dele?` : 'Excluir este quadro?')) return;
+    removeCards(c => c.board === id);
+  } else if (kind === 'areas') {
+    const n = state.cards.filter(c => c.area === id).length;
+    if (n && !confirm(`${n} tarefa(s) usam essa área e ficarão "sem área". Excluir mesmo assim?`)) return;
+    state.cards.forEach(c => { if (c.area === id) { c.area = null; c.updated = now; } });
+  } else if (kind === 'labels') {
+    const n = state.cards.filter(c => c.labels.includes(id)).length;
+    if (n && !confirm(`${n} tarefa(s) usam essa etiqueta. Excluir mesmo assim?`)) return;
+    state.cards.forEach(c => { if (c.labels.includes(id)) { c.labels = c.labels.filter(x => x !== id); c.updated = now; } });
+  } else if (kind === 'templates' && !confirm('Excluir este modelo?')) return;
+  state[kind] = state[kind].filter(x => x.id !== id);
+  metaChanged(); renderSettings();
 });
 
-/* Export / import */
+/* Exportar / importar */
 $('#exportBtn').addEventListener('click', () => {
   const blob = new Blob([JSON.stringify(state, null, 2)], { type: 'application/json' });
   const a = document.createElement('a');
@@ -837,12 +1235,12 @@ $('#importFile').addEventListener('change', async e => {
   const f = e.target.files[0]; e.target.value = ''; if (!f) return;
   try {
     const data = normalize(JSON.parse(await f.text()));
-    if (!confirm(`Importar ${data.cards.length} cartões? Isso substitui os dados atuais (em todos os aparelhos, se a sincronização estiver ligada).`)) return;
+    if (!confirm(`Importar ${data.cards.length} tarefas? Isso substitui os dados atuais (em todos os aparelhos, se a sincronização estiver ligada).`)) return;
     const now = Date.now();
     const keep = new Set(data.cards.map(c => c.id));
     for (const c of state.cards) if (!keep.has(c.id)) data.deleted[c.id] = now;
     data.cards.forEach(c => { c.updated = now; });
-    data.areasAt = now;
+    data.metaAt = now;
     state = data; save(); renderSettings(); render(); toast('Backup importado');
   } catch { toast('Arquivo inválido'); }
 });
@@ -990,7 +1388,7 @@ async function readFile(replace) {
   let data;
   try { data = normalize(JSON.parse(txt)); } catch { toast('Esse arquivo não é um backup válido'); return; }
   state = replace ? data : mergeStates(state, data);
-  if (replace) { const now = Date.now(); state.cards.forEach(c => { c.updated = now; }); state.areasAt = now; }
+  if (replace) { const now = Date.now(); state.cards.forEach(c => { c.updated = now; }); state.metaAt = now; }
   save(); render();
 }
 async function initFile() {
@@ -1090,7 +1488,7 @@ setInterval(() => { if (document.visibilityState === 'visible' && !cardDlg.open)
   document.addEventListener('touchstart', e => {
     if (busy || e.touches.length !== 1 || document.querySelector('dialog[open]')) return;
     if (e.target.closest('input,textarea,select')) return;
-    const list = e.target.closest('.list');
+    const list = e.target.closest('.list, .scrollv');
     if (list && list.scrollTop > 0) return;
     y0 = e.touches[0].clientY; x0 = e.touches[0].clientX; dist = 0; pulling = false;
   }, { passive: true });
