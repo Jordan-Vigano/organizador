@@ -461,6 +461,12 @@ details.hist ul{margin:6px 0 0;padding-left:18px;font-size:12px;color:var(--mute
     </section>
 
     <section class="set-sec">
+      <h3>Notificações no celular</h3>
+      <div class="info-box" id="pushInfo"></div>
+      <div class="row" id="pushActions"></div>
+    </section>
+
+    <section class="set-sec">
       <h3>Aparência</h3>
       <label class="row">Tema
         <select id="themeSel"><option value="auto">Automático (segue o aparelho)</option><option value="light">Claro</option><option value="dark">Escuro</option></select>
@@ -1371,6 +1377,7 @@ function renderSettings() {
   $('#tplSetList').innerHTML = state.templates.map(t =>
     `<div class="area-row" data-kind="templates" data-id="${esc(t.id)}"><input type="text" value="${esc(t.name)}" aria-label="Nome do modelo"><button type="button" class="icon-btn" data-del aria-label="Excluir modelo">${icon('x')}</button></div>`).join('');
   renderSyncSettings();
+  renderPushSettings();
   renderFileSettings();
 }
 $('#themeSel').addEventListener('change', e => { prefs.theme = e.target.value; savePrefs(); applyTheme(); });
@@ -2022,7 +2029,7 @@ function renderSyncSettings() {
 $('#syncForm').addEventListener('click', async e => {
   const act = e.target.closest('[data-s]')?.dataset.s; if (!act) return;
   if (act === 'now') return syncNow();
-  if (act === 'off') { sync.token = ''; syncErr = null; saveSync(); renderSyncSettings(); renderStatus(); return; }
+  if (act === 'off') { sync.token = ''; syncErr = null; saveSync(); renderSyncSettings(); renderPushSettings(); renderStatus(); return; }
   if (act === 'connect') {
     const repo = $('#sRepo').value.trim().replace(/^https?:\/\/github\.com\//, '').replace(/\/$/, '');
     const token = $('#sToken').value.trim();
@@ -2040,10 +2047,102 @@ $('#syncForm').addEventListener('click', async e => {
       saveSync(); syncErr = null;
       await syncNow();
       toast(syncErr ? syncErr : 'Sincronização ligada');
-      renderSyncSettings();
+      renderSyncSettings(); renderPushSettings();
     } catch (err) { sync = prev; msg.textContent = err.message; }
   }
 });
+
+/* ---------- Notificações (Web Push criptografado para cada aparelho) ----------
+   Cada aparelho que ativa grava a sua inscrição em push.json no repositório privado. Todo dia o GitHub Actions
+   desse repositório monta o resumo e envia criptografado (RFC 8291): o serviço de entrega não lê o conteúdo. */
+const VAPID_PUBLIC = 'BLv8dcK1bN3eCZO8CmS_u0BjRMyNhjW91BM4ei-f-TPKVMpwO4sOkoga4a__RJcj89DyDFq5ipUItyav3RdItlc';
+const PUSH_PATH = 'push.json';
+const PUSH_KEY = 'organizador:push';   // { id, name, endpoint } deste aparelho
+const pushSupported = 'serviceWorker' in navigator && 'PushManager' in window && 'Notification' in window && window.isSecureContext && /^https?:$/.test(location.protocol);
+let pushDev = { id: '', name: '', endpoint: '' };
+try { pushDev = { ...pushDev, ...(JSON.parse(lsGet(PUSH_KEY)) || {}) }; } catch {}
+const savePushDev = () => lsSet(PUSH_KEY, JSON.stringify(pushDev));
+const b64uToBytes = s => Uint8Array.from(atob(s.replace(/-/g, '+').replace(/_/g, '/') + '==='.slice((s.length + 3) % 4)), ch => ch.charCodeAt(0));
+const guessDevice = () => /android/i.test(navigator.userAgent) ? 'Celular Android' : /iphone|ipad/i.test(navigator.userAgent) ? 'iPhone' : 'Computador';
+if (pushSupported) navigator.serviceWorker.register('sw.js').catch(() => {});
+
+async function pushUpdate(fn) {
+  for (let i = 0; i < 4; i++) {
+    const r = await gh('/contents/' + PUSH_PATH);
+    let data = { subs: [] }, sha = null;
+    if (r.status === 200) { const j = await r.json(); sha = j.sha; try { data = JSON.parse(b64d(j.content)); } catch {} }
+    else if (r.status !== 404) throw new Error(httpMsg(r.status));
+    if (!Array.isArray(data.subs)) data.subs = [];
+    fn(data);
+    const p = await gh('/contents/' + PUSH_PATH, 'PUT', { message: 'Notificações: aparelhos', content: b64e(JSON.stringify(data, null, 1)), ...(sha ? { sha } : {}) });
+    if (p.status === 200 || p.status === 201) return;
+    if (p.status !== 409 && p.status !== 422) throw new Error(httpMsg(p.status));
+  }
+  throw new Error('Conflito ao salvar, tente de novo');
+}
+async function pushSave(sub) {
+  await pushUpdate(d => {
+    d.subs = d.subs.filter(s => s.id !== pushDev.id && s.sub?.endpoint !== sub.endpoint);
+    d.subs.push({ id: pushDev.id, name: pushDev.name, sub: sub.toJSON(), at: Date.now() });
+  });
+  pushDev.endpoint = sub.endpoint; savePushDev();
+}
+async function renderPushSettings() {
+  const info = $('#pushInfo'), act = $('#pushActions');
+  if (!pushSupported) { info.textContent = 'Este navegador não recebe notificações. No celular Android, abra o app pelo Chrome.'; act.innerHTML = ''; return; }
+  if (!syncOn()) { info.textContent = 'Conecte a sincronização primeiro: os avisos saem do seu repositório privado.'; act.innerHTML = ''; return; }
+  if (Notification.permission === 'denied') { info.textContent = 'As notificações estão bloqueadas para este site. Libere em: cadeado ao lado do endereço › Permissões › Notificações.'; act.innerHTML = ''; return; }
+  const reg = await navigator.serviceWorker.getRegistration();
+  const sub = reg && await reg.pushManager.getSubscription();
+  if (sub && pushDev.id) {
+    info.innerHTML = `Ativadas neste aparelho (<b>${esc(pushDev.name)}</b>). Todo dia às 7h chega um resumo das contas e tarefas do dia, criptografado: só este aparelho consegue ler.`;
+    act.innerHTML = '<button type="button" class="btn" data-p="test">Mostrar um aviso de teste</button><button type="button" class="btn" data-p="off">Desativar neste aparelho</button>';
+  } else {
+    info.innerHTML = 'Receba todo dia às 7h um resumo das contas que vencem e das tarefas com prazo. O aviso sai do seu repositório privado <b>criptografado para este aparelho</b>: nem o Google, que faz a entrega, consegue ler.';
+    act.innerHTML = `<input type="text" id="pName" value="${esc(pushDev.name || guessDevice())}" aria-label="Nome deste aparelho" style="max-width:200px"><button type="button" class="primary" data-p="on">Ativar neste aparelho</button><span class="small muted" id="pMsg"></span>`;
+  }
+}
+$('#pushActions').addEventListener('click', async e => {
+  const a = e.target.closest('[data-p]')?.dataset.p; if (!a) return;
+  const msg = $('#pMsg');
+  try {
+    if (a === 'on') {
+      const name = ($('#pName').value || guessDevice()).trim().slice(0, 40);
+      if (await Notification.requestPermission() !== 'granted') { if (msg) msg.textContent = 'Permissão negada.'; return renderPushSettings(); }
+      if (msg) msg.textContent = 'Ativando…';
+      await navigator.serviceWorker.register('sw.js');
+      const reg = await navigator.serviceWorker.ready;
+      const sub = (await reg.pushManager.getSubscription()) || await reg.pushManager.subscribe({ userVisibleOnly: true, applicationServerKey: b64uToBytes(VAPID_PUBLIC) });
+      pushDev = { id: pushDev.id || uid(), name, endpoint: '' };
+      await pushSave(sub);
+      reg.showNotification('Organizador', { body: 'Notificações ativadas neste aparelho. O resumo chega todo dia às 7h.', icon: 'icon-192.png', tag: 'organizador-ativado' });
+      toast('Notificações ativadas');
+    }
+    if (a === 'test') {
+      const reg = await navigator.serviceWorker.ready;
+      reg.showNotification('Organizador', { body: 'É assim que os avisos vão aparecer.', icon: 'icon-192.png', tag: 'organizador-teste' });
+    }
+    if (a === 'off') {
+      const reg = await navigator.serviceWorker.getRegistration();
+      const sub = reg && await reg.pushManager.getSubscription();
+      const id = pushDev.id;
+      await pushUpdate(d => { d.subs = d.subs.filter(s => s.id !== id && (!sub || s.sub?.endpoint !== sub.endpoint)); });
+      if (sub) await sub.unsubscribe();
+      pushDev = { id: '', name: pushDev.name, endpoint: '' }; savePushDev();
+      toast('Notificações desativadas neste aparelho');
+    }
+  } catch (err) { if (msg) msg.textContent = err.message || String(err); else toast(err.message || String(err)); }
+  renderPushSettings();
+});
+/* Se o navegador trocar a inscrição deste aparelho, atualiza no repositório */
+async function pushRefresh() {
+  if (!pushSupported || !syncOn() || !pushDev.id || Notification.permission !== 'granted') return;
+  try {
+    const reg = await navigator.serviceWorker.ready;
+    const sub = await reg.pushManager.getSubscription();
+    if (sub && sub.endpoint !== pushDev.endpoint) await pushSave(sub);
+  } catch {}
+}
 
 /* ---------- Backup em arquivo local (Chrome/Edge no PC) ---------- */
 const fsSupported = 'showSaveFilePicker' in window && 'indexedDB' in window;
@@ -2211,6 +2310,7 @@ setInterval(() => { if (document.visibilityState === 'visible' && !cardDlg.open)
 render();
 initFile();
 scheduleSync(100);
+setTimeout(pushRefresh, 4000);
 </script>
 </body>
 </html>
