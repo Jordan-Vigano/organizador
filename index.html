@@ -1458,7 +1458,7 @@ function finDefaults() {
     metaAt: 0,
     people: [{ id: 'p1', name: 'Eu' }, { id: 'p2', name: 'Outra pessoa' }],
     cats: ['Mercado', 'Comida fora', 'Transporte', 'Casa', 'Saúde', 'Lazer', 'Pessoal', 'Outros'],
-    dailyDefault: 0, dailyLimit: {}, items: [], debts: [], expenses: [], goals: [], marks: {},
+    dailyDefault: 0, dailyLimit: {}, opening: {}, items: [], debts: [], expenses: [], goals: [], marks: {},
   };
 }
 function normFin(f) {
@@ -1471,6 +1471,7 @@ function normFin(f) {
     cats: arr(f.cats).length ? f.cats : d.cats,
     dailyDefault: +f.dailyDefault || 0,
     dailyLimit: f.dailyLimit && typeof f.dailyLimit === 'object' ? f.dailyLimit : {},
+    opening: f.opening && typeof f.opening === 'object' ? f.opening : {},
     items: arr(f.items).filter(x => x && x.id).map(x => ({ updated: 0, notes: '', who: null, day: null, end: null, kind: 'fixed', ...x, amount: +x.amount || 0 })),
     debts: arr(f.debts).filter(x => x && x.id).map(x => ({ updated: 0, notes: '', lender: '', contract: '', payroll: false, rate: 0, day: null, ...x, installment: +x.installment || 0, count: +x.count || 0 })),
     expenses: arr(f.expenses).filter(x => x && x.id).map(x => ({ updated: 0, cat: 'Outros', who: null, desc: '', pay: 'dinheiro', ...x, amount: +x.amount || 0 })),
@@ -1531,6 +1532,19 @@ function monthData(M) {
   tot.dailyPlan = Math.max(tot.daily, limit || 0);
   tot.outPlan = tot.fixed + tot.variable + tot.debts + tot.dailyPlan;
   tot.leftPlan = tot.income - tot.outPlan;
+  // Saldo dinâmico: começo do mês + o que já foi recebido − o que já foi pago − gastos do dia em dinheiro.
+  // Parcelas descontadas no salário só saem depois que alguma entrada do mês foi marcada como recebida.
+  const got = rows.income.filter(r => r.paid), anyGot = got.length > 0;
+  const paidBills = [...rows.fixed, ...rows.variable].filter(r => r.paid);
+  const paidDebts = debts.filter(r => r.d.payroll ? anyGot : r.paid);
+  tot.opening = f.opening && f.opening[M] != null ? +f.opening[M] : 0;
+  tot.received = got.reduce((s, r) => s + r.amount, 0);
+  tot.paid = paidBills.reduce((s, r) => s + r.amount, 0) + paidDebts.reduce((s, r) => s + r.amount, 0);
+  tot.cashNow = tot.opening + tot.received - tot.paid - tot.daily;
+  tot.toPay = [...rows.fixed, ...rows.variable].filter(r => !r.paid).reduce((s, r) => s + r.amount, 0)
+    + debts.filter(r => !(r.d.payroll ? anyGot : r.paid)).reduce((s, r) => s + r.amount, 0);
+  tot.toPayN = [...rows.fixed, ...rows.variable].filter(r => !r.paid).length + debts.filter(r => !(r.d.payroll ? anyGot : r.paid)).length;
+  tot.toReceive = rows.income.filter(r => !r.paid).reduce((s, r) => s + r.amount, 0);
   return { rows, debts, exp, tot, limit };
 }
 function finMonthKey() { return /^\d{4}-\d{2}$/.test(prefs.finMonth || '') ? prefs.finMonth : mkey(today()); }
@@ -1590,9 +1604,10 @@ function finRow(r, M) {
 function finMonthHTML(M) {
   const { rows, debts, tot, limit } = monthData(M);
   const tiles = `<div class="kpis">
-    ${kpi('Entradas', tot.income)}
-    ${kpi('Saídas previstas', tot.outPlan, '', 'contas, parcelas e gastos do dia')}
-    ${kpi('Sobra prevista', tot.leftPlan, tot.leftPlan < 0 ? 'neg' : 'pos')}
+    ${kpi('Na conta agora (estimado)', tot.cashNow, tot.cashNow < 0 ? 'neg' : '', `começou o mês com ${brl(tot.opening)} · <button type="button" class="link-btn" data-setopening style="padding:0">${tot.opening ? 'alterar' : 'definir'}</button>`)}
+    ${kpi('Falta pagar', tot.toPay, '', tot.toPayN ? (tot.toPayN === 1 ? '1 conta ou parcela' : tot.toPayN + ' contas e parcelas') : 'tudo pago')}
+    ${kpi('Falta receber', tot.toReceive, '', tot.toReceive ? 'entradas não marcadas' : 'tudo recebido')}
+    ${kpi('Sobra prevista', tot.leftPlan, tot.leftPlan < 0 ? 'neg' : 'pos', 'no fim do mês, pelo plano')}
     ${kpi('Gastos do dia', tot.daily, limit && tot.daily > limit ? 'neg' : '', (limit ? 'de ' + brl(limit) + ' planejados' : 'sem limite definido') + ', fora o vale')}
     ${tot.benefit ? kpi('Vale disponível', tot.valeLeft, tot.valeLeft < 0 ? 'neg' : '', 'de ' + brl(tot.benefit) + ', já usou ' + brl(tot.vale)) : ''}
   </div>`;
@@ -1725,7 +1740,7 @@ function finProjectionHTML() {
 /* ---------- Eventos de Finanças ---------- */
 board.addEventListener('click', e => {
   if (prefs.view !== 'fin') return;
-  const t = e.target.closest('[data-fintab],[data-finm],[data-pay],[data-paydebt],[data-edititem],[data-editdebt],[data-additem],[data-adddebt],[data-delexp],[data-setlimit],[data-gomonth],[data-goaladd],[data-goaledit],[data-goaldep],[data-goalwd]');
+  const t = e.target.closest('[data-fintab],[data-finm],[data-pay],[data-paydebt],[data-edititem],[data-editdebt],[data-additem],[data-adddebt],[data-delexp],[data-setlimit],[data-setopening],[data-gomonth],[data-goaladd],[data-goaledit],[data-goaldep],[data-goalwd]');
   if (!t) return;
   const M = finMonthKey();
   if (t.hasAttribute('data-goaladd')) return openGoal(null);
@@ -1754,6 +1769,15 @@ board.addEventListener('click', e => {
   if (t.dataset.editdebt) return openDebt(t.dataset.editdebt);
   if (t.hasAttribute('data-adddebt')) return openDebt(null);
   if (t.dataset.delexp) { if (confirm('Apagar este gasto?')) { finRemove('expenses', t.dataset.delexp); finTouch(); } return; }
+  if (t.hasAttribute('data-setopening')) {
+    const cur = F().opening[M];
+    const v = prompt('Quanto tinha na conta no começo de ' + mlabel(M) + '? (R$)\nSome as contas da casa (sem o vale). Deixe vazio para zerar.', cur ? String(cur).replace('.', ',') : '');
+    if (v === null) return;
+    const n = parseMoney(v);
+    if (v.trim() && !(n >= 0 || n < 0)) return toast('Valor inválido');
+    if (v.trim()) F().opening[M] = n; else delete F().opening[M];
+    F().metaAt = Date.now(); return finTouch();
+  }
   if (t.hasAttribute('data-setlimit')) {
     const cur = F().dailyLimit[M] ?? F().dailyDefault;
     const v = prompt('Limite para gastos do dia em ' + mlabel(M) + ' (R$). Deixe vazio para tirar:', cur ? String(cur).replace('.', ',') : '');
