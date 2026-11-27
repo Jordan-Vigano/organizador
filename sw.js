@@ -9,7 +9,7 @@ self.addEventListener('push', e => {
   e.waitUntil(self.registration.showNotification(d.title || 'Organizador', {
     body: d.body || '',
     icon: 'icon-192.png',
-    badge: 'icon-192.png',
+    badge: 'badge-96.png',   // barra de status do Android: só a silhueta (branco sobre transparente)
     tag: d.tag || 'organizador',
     renotify: true,
     data: { url: d.url || './' },

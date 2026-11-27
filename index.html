@@ -2115,12 +2115,12 @@ $('#pushActions').addEventListener('click', async e => {
       const sub = (await reg.pushManager.getSubscription()) || await reg.pushManager.subscribe({ userVisibleOnly: true, applicationServerKey: b64uToBytes(VAPID_PUBLIC) });
       pushDev = { id: pushDev.id || uid(), name, endpoint: '' };
       await pushSave(sub);
-      reg.showNotification('Organizador', { body: 'Notificações ativadas neste aparelho. O resumo chega todo dia às 7h.', icon: 'icon-192.png', tag: 'organizador-ativado' });
+      reg.showNotification('Organizador', { body: 'Notificações ativadas neste aparelho. O resumo chega todo dia às 7h.', icon: 'icon-192.png', badge: 'badge-96.png', tag: 'organizador-ativado' });
       toast('Notificações ativadas');
     }
     if (a === 'test') {
       const reg = await navigator.serviceWorker.ready;
-      reg.showNotification('Organizador', { body: 'É assim que os avisos vão aparecer.', icon: 'icon-192.png', tag: 'organizador-teste' });
+      reg.showNotification('Organizador', { body: 'É assim que os avisos vão aparecer.', icon: 'icon-192.png', badge: 'badge-96.png', tag: 'organizador-teste' });
     }
     if (a === 'off') {
       const reg = await navigator.serviceWorker.getRegistration();
