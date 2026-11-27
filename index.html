@@ -416,6 +416,7 @@ details.hist ul{margin:6px 0 0;padding-left:18px;font-size:12px;color:var(--mute
       <label>Área<select id="fArea"></select></label>
       <label>Coluna<select id="fCol"></select></label>
       <label>Prazo<input type="date" id="fDue"></label>
+      <label>Repetir<select id="fRepeat"><option value="">Não repete</option><option value="week">Toda semana</option><option value="month">Todo mês</option><option value="year">Todo ano</option></select></label>
       <label id="fBoardWrap">Quadro<select id="fBoard"></select></label>
       <label class="check"><input type="checkbox" id="fPrio"> Prioridade</label>
     </div>
@@ -563,6 +564,19 @@ details.hist ul{margin:6px 0 0;padding-left:18px;font-size:12px;color:var(--mute
   </form>
 </dialog>
 
+<dialog id="goalDlg">
+  <form method="dialog" class="dlg" autocomplete="off">
+    <div class="dlg-head"><h2 id="gTitle" style="flex:1;margin:0;font-size:17px">Nova meta</h2><button class="icon-btn" value="close" aria-label="Fechar" data-ico="x"></button></div>
+    <div class="fields">
+      <label style="grid-column:1/-1">Nome<input id="gName" type="text" placeholder="Ex.: Conserto do carro"></label>
+      <label>Quanto juntar (R$)<input id="gTarget" type="text" inputmode="decimal" placeholder="0,00"></label>
+      <label>Até quando<input id="gDeadline" type="month"></label>
+    </div>
+    <label class="block">Notas<textarea id="gNotes" rows="3"></textarea></label>
+    <div class="dlg-foot"><button type="button" id="gDel" class="danger-btn">Excluir</button><span class="grow"></span><button type="button" class="primary" id="gSave">Salvar</button></div>
+  </form>
+</dialog>
+
 <div id="ptr" aria-hidden="true"><span data-ico="arrowDown"></span></div>
 <div id="toast"></div>
 
@@ -626,7 +640,7 @@ const MAIN_BOARD = 'principal';
 function makeCard(o) {
   const now = Date.now();
   const c = { id: uid(), board: MAIN_BOARD, title: '', notes: '', area: null, labels: [], col: 'entrada', due: null, priority: false,
-    checklist: [], comments: [], log: [], archived: false, created: now, updated: now, doneAt: null, ...o };
+    checklist: [], comments: [], log: [], archived: false, created: now, updated: now, doneAt: null, repeat: null, repeatNext: null, ...o };
   for (const k of ['checklist', 'comments', 'log', 'labels']) if (!Array.isArray(c[k])) c[k] = [];
   if (!c.board) c.board = MAIN_BOARD;
   return c;
@@ -747,6 +761,32 @@ function logCard(c, x) {
   if (c.log.length > 60) c.log.splice(0, c.log.length - 60);
 }
 
+/* Tarefas que se repetem: ao concluir, nasce a próxima com o prazo adiantado */
+const REPEAT = { week: 'toda semana', month: 'todo mês', year: 'todo ano' };
+function nextDue(due, rep) {
+  const T = today();
+  const step = x => {
+    const y = new Date(x);
+    if (rep === 'week') { y.setDate(y.getDate() + 7); return y; }
+    const day = y.getDate(); y.setDate(1); y.setMonth(y.getMonth() + (rep === 'year' ? 12 : 1));
+    y.setDate(Math.min(day, new Date(y.getFullYear(), y.getMonth() + 1, 0).getDate())); return y;
+  };
+  let d = step(due ? parseD(due) : T);
+  while (d < T) d = step(d);
+  return dstr(d);
+}
+function spawnRepeat(c) {
+  if (!REPEAT[c.repeat] || (c.repeatNext && cardById(c.repeatNext))) return null;
+  const n = makeCard({ board: c.board, title: c.title, notes: c.notes, area: c.area, labels: [...c.labels], priority: c.priority,
+    col: colById('proximas') ? 'proximas' : state.columns[0].id, due: nextDue(c.due, c.repeat), repeat: c.repeat,
+    checklist: c.checklist.map(i => ({ id: uid(), text: i.text, done: false })) });
+  logCard(n, 'Criada pela repetição (' + REPEAT[c.repeat] + ')');
+  c.repeatNext = n.id; logCard(c, 'Próxima repetição criada para ' + ddmm(parseD(n.due)));
+  state.cards.push(n);
+  toast('Repete ' + REPEAT[c.repeat] + ': próxima em ' + ddmm(parseD(n.due)));
+  return n;
+}
+
 /* ---------- Toast ---------- */
 let toastT;
 function toast(msg) { const t = $('#toast'); t.textContent = msg; t.classList.add('show'); clearTimeout(toastT); toastT = setTimeout(() => t.classList.remove('show'), 2400); }
@@ -830,7 +870,8 @@ function cardHTML(c) {
     + (c.due ? dueBadge(c) : '')
     + (c.checklist.length ? `<span class="meta ${done === c.checklist.length ? 'ok' : ''}" title="Checklist">${icon('check')}${done}/${c.checklist.length}</span>` : '')
     + (c.comments.length ? `<span class="meta" title="Comentários">${icon('msg')}${c.comments.length}</span>` : '')
-    + (c.notes.trim() ? `<span class="meta" title="Tem notas">${icon('notes')}</span>` : '');
+    + (c.notes.trim() ? `<span class="meta" title="Tem notas">${icon('notes')}</span>` : '')
+    + (REPEAT[c.repeat] ? `<span class="meta" title="Repete ${REPEAT[c.repeat]}">${icon('refresh')}</span>` : '');
   return `<article class="card ${c.col === 'feito' ? 'is-done' : ''}" draggable="true" data-id="${esc(c.id)}" tabindex="0">
     <div class="card-title">${esc(c.title)}</div>
     ${chips || meta ? `<div class="card-row"><div class="labels">${chips}</div><div class="card-meta">${meta}</div></div>` : ''}
@@ -1020,6 +1061,7 @@ function moveCard(id, col, beforeId, noRender) {
     let last = -1; state.cards.forEach((x, k) => { if (x.col === col && x.board === c.board) last = k; });
     state.cards.splice(last + 1, 0, c);
   }
+  if (col === 'feito') spawnRepeat(c);
   save();
   if (!noRender) render();
 }
@@ -1190,6 +1232,7 @@ function openCard(id) {
   $('#fBoard').value = c.board;
   $('#fDue').value = c.due || '';
   $('#fPrio').checked = !!c.priority;
+  $('#fRepeat').value = REPEAT[c.repeat] ? c.repeat : '';
   $('#fNotes').value = c.notes;
   $('#archBtn').innerHTML = c.archived ? icon('restore') + 'Restaurar' : icon('archive') + 'Arquivar';
   const fmt = t => new Date(t).toLocaleDateString('pt-BR');
@@ -1235,6 +1278,11 @@ $('#fBoard').addEventListener('change', e => {
 });
 $('#fDue').addEventListener('change', e => { cur().due = e.target.value || null; touch(); });
 $('#fPrio').addEventListener('change', e => { cur().priority = e.target.checked; touch(); });
+$('#fRepeat').addEventListener('change', e => {
+  const c = cur(); c.repeat = e.target.value || null;
+  logCard(c, c.repeat ? 'Passou a repetir ' + REPEAT[c.repeat] : 'Deixou de repetir'); touch(); renderHistory();
+  if (c.repeat && !c.due) toast('Dica: defina um prazo para a repetição saber a data da próxima');
+});
 $('#fNotes').addEventListener('input', e => { cur().notes = e.target.value; touch(); });
 $('#fLabels').addEventListener('click', e => {
   const b = e.target.closest('[data-lid]'); if (!b) return;
@@ -1395,7 +1443,7 @@ const mdiff = (a, b) => { const A = mparse(a), B = mparse(b); return (B.getFullY
 const mlabel = (k, short) => { const d = mparse(k); const n = MONTHS[d.getMonth()]; return short ? n.slice(0, 3) + '/' + String(d.getFullYear()).slice(2) : n[0].toUpperCase() + n.slice(1) + ' de ' + d.getFullYear(); };
 const FIN_KINDS = { income: 'Entradas', fixed: 'Contas fixas', variable: 'Variáveis e parcelados', benefit: 'Benefícios (vale)' };
 const noBill = k => k === 'income' || k === 'benefit';
-const FIN_TABS = [{ id: 'mes', name: 'Mês' }, { id: 'dividas', name: 'Dívidas' }, { id: 'gastos', name: 'Gastos do dia' }, { id: 'projecao', name: 'Próximos meses' }];
+const FIN_TABS = [{ id: 'mes', name: 'Mês' }, { id: 'dividas', name: 'Dívidas' }, { id: 'gastos', name: 'Gastos do dia' }, { id: 'metas', name: 'Metas' }, { id: 'projecao', name: 'Próximos meses' }];
 const parseMoney = s => { const t = String(s).replace(/\s/g, '').replace(/r\$/i, ''); if (!t) return NaN; return +(t.includes(',') ? t.replace(/\./g, '').replace(',', '.') : t); };
 
 function finDefaults() {
@@ -1403,7 +1451,7 @@ function finDefaults() {
     metaAt: 0,
     people: [{ id: 'p1', name: 'Eu' }, { id: 'p2', name: 'Outra pessoa' }],
     cats: ['Mercado', 'Comida fora', 'Transporte', 'Casa', 'Saúde', 'Lazer', 'Pessoal', 'Outros'],
-    dailyDefault: 0, dailyLimit: {}, items: [], debts: [], expenses: [], marks: {},
+    dailyDefault: 0, dailyLimit: {}, items: [], debts: [], expenses: [], goals: [], marks: {},
   };
 }
 function normFin(f) {
@@ -1419,6 +1467,8 @@ function normFin(f) {
     items: arr(f.items).filter(x => x && x.id).map(x => ({ updated: 0, notes: '', who: null, day: null, end: null, kind: 'fixed', ...x, amount: +x.amount || 0 })),
     debts: arr(f.debts).filter(x => x && x.id).map(x => ({ updated: 0, notes: '', lender: '', contract: '', payroll: false, rate: 0, day: null, ...x, installment: +x.installment || 0, count: +x.count || 0 })),
     expenses: arr(f.expenses).filter(x => x && x.id).map(x => ({ updated: 0, cat: 'Outros', who: null, desc: '', pay: 'dinheiro', ...x, amount: +x.amount || 0 })),
+    goals: arr(f.goals).filter(x => x && x.id).map(x => ({ updated: 0, notes: '', deadline: null, ...x, target: +x.target || 0,
+      deposits: arr(x.deposits).filter(p => p && p.id).map(p => ({ note: '', ...p, amount: +p.amount || 0 })) })),
     marks: f.marks && typeof f.marks === 'object' ? f.marks : {},
   };
 }
@@ -1431,7 +1481,7 @@ function mergeFin(l, r, deleted) {
   const meta = r.metaAt > l.metaAt ? r : l;
   const marks = { ...l.marks };
   for (const [k, v] of Object.entries(r.marks)) if (!marks[k] || (v.t || 0) > (marks[k].t || 0)) marks[k] = v;
-  return { ...meta, metaAt: Math.max(l.metaAt, r.metaAt), items: mergeById(l.items, r.items, deleted), debts: mergeById(l.debts, r.debts, deleted), expenses: mergeById(l.expenses, r.expenses, deleted), marks };
+  return { ...meta, metaAt: Math.max(l.metaAt, r.metaAt), items: mergeById(l.items, r.items, deleted), debts: mergeById(l.debts, r.debts, deleted), expenses: mergeById(l.expenses, r.expenses, deleted), goals: mergeById(l.goals || [], r.goals || [], deleted), marks };
 }
 
 const F = () => state.fin;
@@ -1508,8 +1558,9 @@ function renderFinance() {
   if (tab === 'dividas') body = finDebtsHTML();
   else if (tab === 'gastos') body = nav + finDailyHTML(M);
   else if (tab === 'projecao') body = finProjectionHTML();
+  else if (tab === 'metas') body = finGoalsHTML();
   else body = nav + finMonthHTML(M);
-  const empty = !F().items.length && !F().debts.length && !F().expenses.length
+  const empty = !F().items.length && !F().debts.length && !F().expenses.length && !F().goals.length
     ? '<div class="info-box">Ainda não há dados financeiros. Use os botões "Adicionar" ou importe o arquivo de dados em Configurações › Backup › Importar finanças.</div>' : '';
   $('#board').innerHTML = `<div class="scrollv fin">${tabs}${empty}${body}</div>`;
 }
@@ -1622,6 +1673,36 @@ function finDailyHTML(M) {
       ${list.map(e => `<div class="fin-row"><div class="nm static">${esc(e.desc || e.cat)}<span class="sub">${esc(e.cat)}${e.pay === 'vale' ? ', vale' : ''}${e.who ? ', ' + esc(personName(e.who)) : ''}</span></div><div class="amt">${brl(e.amount)}</div><button type="button" class="icon-btn" data-delexp="${esc(e.id)}" aria-label="Apagar gasto">${icon('x')}</button></div>`).join('')}</div>`).join('') : '<p class="empty">Nenhum gasto lançado neste mês. Digite o valor e o que foi, por exemplo "32 lanche".</p>'}</div>`;
 }
 
+const goalSaved = g => g.deposits.reduce((s, p) => s + p.amount, 0);
+function finGoalsHTML() {
+  const M = mkey(today()), gs = F().goals;
+  const fmtD = p => (p.date || dstr(new Date(p.t))).split('-').reverse().join('/');
+  const card = g => {
+    const s = goalSaved(g), left = Math.max(0, g.target - s), pct = g.target ? Math.min(100, Math.max(0, s / g.target * 100)) : 0;
+    const months = g.deadline ? mdiff(M, g.deadline) + 1 : 0;
+    const when = !g.deadline ? 'Sem prazo definido.'
+      : !left ? 'Prazo: ' + mlabel(g.deadline, true) + '.'
+      : months > 0 ? `Para chegar até ${mlabel(g.deadline, true)}: guardar ${brl(left / months)} por mês (${months} ${months === 1 ? 'mês' : 'meses'}).`
+      : 'O prazo (' + mlabel(g.deadline, true) + ') já passou.';
+    return `<div class="debt goal">
+      <div class="debt-top"><b>${esc(g.name)}</b><button type="button" class="link-btn" style="padding:0" data-goaledit="${esc(g.id)}">editar</button></div>
+      <div class="debt-nums"><span>${brl(s)} de ${brl(g.target)}</span><span>${left ? 'faltam ' + brl(left) : 'meta alcançada'}</span></div>
+      <div class="prog"><i style="width:${pct}%"></i></div>
+      <div class="sub">${when}</div>
+      ${g.notes ? `<div class="sub">${esc(g.notes)}</div>` : ''}
+      <div class="row"><button type="button" class="btn" data-goaldep="${esc(g.id)}">${icon('plus')}Guardar</button><button type="button" class="btn" data-goalwd="${esc(g.id)}">Retirar</button></div>
+      ${g.deposits.length ? `<details class="hist"><summary>Movimentos (${g.deposits.length})</summary><ul>${[...g.deposits].reverse().map(p =>
+        `<li>${fmtD(p)}: ${p.amount < 0 ? 'retirou' : 'guardou'} ${brl(Math.abs(p.amount))}${p.note ? ' (' + esc(p.note) + ')' : ''}</li>`).join('')}</ul></details>` : ''}
+    </div>`;
+  };
+  const tot = gs.reduce((s, g) => s + goalSaved(g), 0);
+  return `${gs.length ? `<div class="kpis">${kpi('Guardado nas metas', tot)}${kpi('Falta para todas', gs.reduce((s, g) => s + Math.max(0, g.target - goalSaved(g)), 0))}</div>` : ''}
+    <div class="debts">${gs.map(card).join('')}</div>
+    ${gs.length ? '' : '<p class="empty">Nenhuma meta ainda. Uma meta é uma "caixinha": quanto vocês querem juntar para algo, como o conserto do carro.</p>'}
+    <button class="btn" data-goaladd>${icon('plus')}Nova meta</button>
+    <p class="small muted">O que você guarda numa meta é só um registro: não sai da conta da sobra do mês. Guarde o dinheiro de verdade numa conta separada (ex.: caixinha do banco) e anote aqui.</p>`;
+}
+
 function finProjectionHTML() {
   const start = mkey(today());
   const rows = Array.from({ length: 12 }, (_, i) => { const k = maddK(start, i); return { k, ...monthData(k).tot }; });
@@ -1637,9 +1718,23 @@ function finProjectionHTML() {
 /* ---------- Eventos de Finanças ---------- */
 board.addEventListener('click', e => {
   if (prefs.view !== 'fin') return;
-  const t = e.target.closest('[data-fintab],[data-finm],[data-pay],[data-paydebt],[data-edititem],[data-editdebt],[data-additem],[data-adddebt],[data-delexp],[data-setlimit],[data-gomonth]');
+  const t = e.target.closest('[data-fintab],[data-finm],[data-pay],[data-paydebt],[data-edititem],[data-editdebt],[data-additem],[data-adddebt],[data-delexp],[data-setlimit],[data-gomonth],[data-goaladd],[data-goaledit],[data-goaldep],[data-goalwd]');
   if (!t) return;
   const M = finMonthKey();
+  if (t.hasAttribute('data-goaladd')) return openGoal(null);
+  if (t.dataset.goaledit) return openGoal(t.dataset.goaledit);
+  if (t.dataset.goaldep || t.dataset.goalwd) {
+    const g = F().goals.find(x => x.id === (t.dataset.goaldep || t.dataset.goalwd)); if (!g) return;
+    const out = !!t.dataset.goalwd;
+    const v = prompt((out ? 'Quanto retirar de "' : 'Quanto guardar em "') + g.name + '"? (R$)\nPode escrever um motivo depois do valor, ex.: 150 venda da bicicleta', '');
+    if (v === null) return;
+    const m = v.trim().match(/^(?:r\$\s*)?(\d{1,3}(?:\.\d{3})*(?:,\d{1,2})?|\d+(?:[.,]\d{1,2})?)\s*(.*)$/i);
+    const n = m ? parseMoney(m[1]) : NaN;
+    if (!(n > 0)) return toast('Valor inválido');
+    g.deposits.push({ id: uid(), t: Date.now(), date: dstr(today()), amount: out ? -n : n, note: m[2].trim() });
+    g.updated = Date.now(); finTouch();
+    return toast((out ? 'Retirado ' : 'Guardado ') + brl(n) + (out ? ' de ' : ' em ') + g.name);
+  }
   if (t.dataset.fintab) { prefs.finTab = t.dataset.fintab; savePrefs(); return renderMain(); }
   if (t.dataset.finm != null) {
     const s = +t.dataset.finm; prefs.finMonth = s === 0 ? mkey(today()) : maddK(M, s); savePrefs(); return renderMain();
@@ -1782,6 +1877,35 @@ $('#dDel').addEventListener('click', () => {
   finRemove('debts', debtEditId); debtDlg.close(); finTouch();
 });
 
+/* Janela: meta (caixinha) */
+const goalDlg = $('#goalDlg');
+let goalEditId = null;
+function openGoal(id) {
+  const g = id ? F().goals.find(x => x.id === id) : null;
+  goalEditId = id;
+  $('#gTitle').textContent = g ? 'Editar meta' : 'Nova meta';
+  $('#gName').value = g?.name || '';
+  $('#gTarget').value = g ? num(g.target) : '';
+  $('#gDeadline').value = g?.deadline || '';
+  $('#gNotes').value = g?.notes || '';
+  $('#gDel').style.display = g ? '' : 'none';
+  goalDlg.showModal();
+  if (!g) $('#gName').focus();
+}
+$('#gSave').addEventListener('click', () => {
+  const name = $('#gName').value.trim(), target = parseMoney($('#gTarget').value);
+  if (!name) return toast('Dê um nome');
+  if (!(target > 0)) return toast('Quanto quer juntar?');
+  const data = { name, target, deadline: $('#gDeadline').value || null, notes: $('#gNotes').value, updated: Date.now() };
+  const g = goalEditId ? F().goals.find(x => x.id === goalEditId) : null;
+  if (g) Object.assign(g, data); else F().goals.push({ id: uid(), deposits: [], ...data });
+  goalDlg.close(); finTouch();
+});
+$('#gDel').addEventListener('click', () => {
+  if (!goalEditId || !confirm('Excluir esta meta e os movimentos dela?')) return;
+  finRemove('goals', goalEditId); goalDlg.close(); finTouch();
+});
+
 /* Importar finanças (arquivo .json gerado fora do app) */
 $('#importFinBtn').addEventListener('click', () => $('#importFinFile').click());
 $('#importFinFile').addEventListener('change', async e => {
@@ -1790,12 +1914,12 @@ $('#importFinFile').addEventListener('change', async e => {
     const raw = JSON.parse(await file.text());
     const inc = normFin(raw.fin || raw);
     const remove = (raw.fin || raw).remove || [];
-    const n = inc.items.length + inc.debts.length + inc.expenses.length;
+    const n = inc.items.length + inc.debts.length + inc.expenses.length + inc.goals.length;
     if (!n && !remove.length) return toast('Nenhum dado financeiro no arquivo');
     if (!confirm(`Importar ${inc.items.length} entradas/contas, ${inc.debts.length} dívidas e ${inc.expenses.length} gastos? Itens com o mesmo código são atualizados.`)) return;
     const now = Date.now();
-    for (const id of remove) for (const kind of ['items', 'debts', 'expenses']) if (F()[kind].some(x => x.id === id)) finRemove(kind, id);
-    for (const kind of ['items', 'debts', 'expenses']) for (const x of inc[kind]) {
+    for (const id of remove) for (const kind of ['items', 'debts', 'expenses', 'goals']) if (F()[kind].some(x => x.id === id)) finRemove(kind, id);
+    for (const kind of ['items', 'debts', 'expenses', 'goals']) for (const x of inc[kind]) {
       x.updated = now; delete state.deleted[x.id];
       const i = F()[kind].findIndex(y => y.id === x.id);
       if (i >= 0) F()[kind][i] = x; else F()[kind].push(x);
